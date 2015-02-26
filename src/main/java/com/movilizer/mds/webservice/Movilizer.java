@@ -1,8 +1,9 @@
 package com.movilizer.mds.webservice;
 
+import com.movilizer.mds.webservice.services.MovilizerConfBuilder;
 import com.movilizer.mds.webservice.services.MovilizerDistributionService;
 
-public abstract class Movilizer {
+public class Movilizer {
 
     public static MovilizerDistributionService getService() {
         return new MovilizerConfBuilder().getService();
@@ -12,4 +13,5 @@ public abstract class Movilizer {
         return new MovilizerConfBuilder();
     }
 
+    private Movilizer() {}
 }

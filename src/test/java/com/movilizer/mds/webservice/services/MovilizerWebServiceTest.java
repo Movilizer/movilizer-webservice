@@ -2,7 +2,8 @@ package com.movilizer.mds.webservice.services;
 
 import com.movilitas.movilizer.v12.MovilizerRequest;
 import com.movilitas.movilizer.v12.MovilizerResponse;
-import com.movilizer.mds.webservice.EndPoint;
+import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
+import com.movilitas.movilizer.v12.MovilizerWebServiceV12Service;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,7 +23,8 @@ public class MovilizerWebServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        webService = new MovilizerWebService(EndPoint.DEMO.getMdsUrl().toString());
+        MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
+        webService = new MovilizerWebService(movilizerCloud);
     }
 
     @Ignore

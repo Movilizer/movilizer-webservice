@@ -2,6 +2,8 @@ package com.movilizer.mds.webservice.defaults;
 
 import com.movilizer.mds.webservice.EndPoint;
 
+import java.nio.charset.Charset;
+
 public class DefaultValues {
     public static final EndPoint MOVILIZER_ENDPOINT = EndPoint.DEMO;
     public static final String MOVILIZER_FOLDER = "movilizer/";
@@ -10,5 +12,5 @@ public class DefaultValues {
     public static final String REQUEST_FILE_NAME = "default" + MOVILIZER_XML_EXTENSION;
     public static final String CUSTOMIZING_FOLDER = MOVILIZER_FOLDER + "customizing/";
     public static final String DOCUMENTS_FOLDER = MOVILIZER_FOLDER + "documents/";
-    public static final String OUTPUT_ENCODING = "UTF-8";
+    public static final Charset OUTPUT_ENCODING = Charset.forName("UTF-8");
 }

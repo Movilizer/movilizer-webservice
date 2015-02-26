@@ -7,27 +7,25 @@ import com.movilizer.mds.webservice.messages.MovilizerCloudMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Response;
 import javax.xml.ws.http.HTTPException;
 import javax.xml.ws.soap.SOAPFaultException;
+import java.net.URL;
+import java.util.concurrent.Future;
 
 class MovilizerWebService {
     private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
     private MovilizerWebServiceV12 movilizerCloud;
 
-    protected MovilizerWebService(String webServiceAddress) {
-        movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
-        setEndpoint(this.movilizerCloud, webServiceAddress);
-    }
-
-    protected MovilizerWebService(MovilizerWebServiceV12 movilizerCloud, String webServiceAddress) {
+    protected MovilizerWebService(MovilizerWebServiceV12 movilizerCloud) {
         this.movilizerCloud = movilizerCloud;
-        setEndpoint(this.movilizerCloud, webServiceAddress);
     }
 
-    protected static void setEndpoint(MovilizerWebServiceV12 movilizerCloud, String webServiceAddress) {
+    protected void setEndpoint(URL webServiceAddress) {
         BindingProvider provider = (BindingProvider) movilizerCloud;
-        provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, webServiceAddress);
+        provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, webServiceAddress.toString());
     }
 
     protected MovilizerRequest prepareUploadRequest(Long systemId, String password, MovilizerRequest request) {
@@ -50,6 +48,28 @@ class MovilizerWebService {
             throw new MovilizerWebServiceException(e);
         }
         logger.debug(String.format(EN.RESPONSE_RECEIVED, response.getSystemId()));
+        return response;
+    }
+
+    protected Response<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) {
+        Response<MovilizerResponse> response;
+        try {
+            response = movilizerCloud.movilizerAsync(request);
+        } catch (SOAPFaultException | HTTPException e) {
+            logger.error(e.getMessage());
+            throw new MovilizerWebServiceException(e);
+        }
+        return response;
+    }
+
+    protected Future<?> getReplyFromCloudAsync(MovilizerRequest request, AsyncHandler<MovilizerResponse> asyncHandler) {
+        Future<?> response;
+        try {
+            response = movilizerCloud.movilizerAsync(request, asyncHandler);
+        } catch (SOAPFaultException | HTTPException e) {
+            logger.error(e.getMessage());
+            throw new MovilizerWebServiceException(e);
+        }
         return response;
     }
 

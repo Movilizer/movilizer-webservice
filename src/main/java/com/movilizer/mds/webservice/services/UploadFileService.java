@@ -5,15 +5,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 
 
 class UploadFileService {
     private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
 
-    private String html5UploadAddress;
+    private URL html5UploadAddress;
 
-    protected UploadFileService(String html5UploadAddress) {
+    protected UploadFileService(URL html5UploadAddress) {
+        this.html5UploadAddress = html5UploadAddress;
+    }
+
+    public URL getHtml5UploadAddress() {
+        return html5UploadAddress;
+    }
+
+    public void setHtml5UploadAddress(URL html5UploadAddress) {
         this.html5UploadAddress = html5UploadAddress;
     }
 

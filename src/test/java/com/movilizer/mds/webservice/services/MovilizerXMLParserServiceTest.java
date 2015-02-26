@@ -7,8 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.File;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,7 +26,7 @@ public class MovilizerXMLParserServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        xmlParserService = new MovilizerXMLParserService(Charset.forName(DefaultValues.OUTPUT_ENCODING));
+        xmlParserService = new MovilizerXMLParserService(DefaultValues.OUTPUT_ENCODING);
     }
 
     @Test

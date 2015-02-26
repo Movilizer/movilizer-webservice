@@ -5,8 +5,11 @@ import com.movilitas.movilizer.v12.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
 
+import javax.xml.ws.AsyncHandler;
+import javax.xml.ws.Response;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.concurrent.Future;
 
 class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
 
@@ -28,6 +31,16 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MovilizerResponse getReplyFromCloud(MovilizerRequest request) throws MovilizerWebServiceException {
         return webService.getReplyFromCloud(request);
+    }
+
+    @Override
+    public Response<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) throws MovilizerWebServiceException {
+        return webService.getReplyFromCloudAsync(request);
+    }
+
+    @Override
+    public Future<?> getReplyFromCloudAsync(MovilizerRequest request, AsyncHandler<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
+        return webService.getReplyFromCloudAsync(request, asyncHandler);
     }
 
     @Override
