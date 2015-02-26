@@ -13,4 +13,6 @@ public class EN {
     public static final String UNMARSHALL_XML_ERROR = "Cannot unmarshall Movilizer request: ";
     public static final String REQUEST_FILE_NOT_FOUND = "Request file not found for path: ";
     public static final String CANNOT_CLOSE_FILE = "Cannot close file writer for file: ";
+    public static final String MISSING_FILE_EXTENSION = "Invalid filename '%s'. Missing file extension";
+    public static final String FAILE_FILE_UPLOAD = "Failed upload request with status '%d' with reason '%s'";
 }

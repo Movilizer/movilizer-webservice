@@ -13,4 +13,5 @@ public class DefaultValues {
     public static final String CUSTOMIZING_FOLDER = MOVILIZER_FOLDER + "customizing/";
     public static final String DOCUMENTS_FOLDER = MOVILIZER_FOLDER + "documents/";
     public static final Charset OUTPUT_ENCODING = Charset.forName("UTF-8");
+    public static final String USER_AGENT = "MovilizerJavaConnector/0.1";
 }

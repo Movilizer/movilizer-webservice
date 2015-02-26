@@ -4,11 +4,14 @@ import com.movilitas.movilizer.v12.MovilizerRequest;
 import com.movilitas.movilizer.v12.MovilizerResponse;
 import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
 import com.movilitas.movilizer.v12.MovilizerWebServiceV12Service;
+import com.movilizer.mds.webservice.defaults.DefaultValues;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.concurrent.Future;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -25,6 +28,7 @@ public class MovilizerWebServiceTest {
     public void setUp() throws Exception {
         MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
         webService = new MovilizerWebService(movilizerCloud);
+        webService.setEndpoint(DefaultValues.MOVILIZER_ENDPOINT.getMdsUrl());
     }
 
     @Ignore
@@ -35,5 +39,19 @@ public class MovilizerWebServiceTest {
         MovilizerResponse response = webService.getReplyFromCloud(request);
         assertThat(response, is(notNullValue()));
         assertThat(webService.responseHasErrors(response), is(false));
+    }
+
+    @Ignore
+    @Test
+    public void testPerformEmptyRequestAsync() throws Exception {
+        MovilizerRequest request = new MovilizerRequest();
+        request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
+        Future<MovilizerResponse> response = webService.getReplyFromCloudAsync(request);
+        while(!response.isDone()){
+            //let's block!
+        }
+        MovilizerResponse movilizerResponse = response.get();
+        assertThat(movilizerResponse, is(notNullValue()));
+        assertThat(webService.responseHasErrors(movilizerResponse), is(false));
     }
 }

@@ -5,7 +5,7 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>12.11.0.1</version><!-- Movilizer version v12 WSDL version 11 then internal java version 0.1 -->
+    <version>12.11.1.0</version><!-- Movilizer version v12 WSDL version 11 then internal java version 0.1 -->
 
 	<name>Movilizer Web Service</name>
 	<description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
@@ -142,6 +142,16 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
             <version>${httpclient.version}</version>
         </dependency>
         <!-- Test -->

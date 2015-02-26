@@ -4,17 +4,16 @@ import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
 import com.movilitas.movilizer.v12.MovilizerWebServiceV12Service;
 import com.movilizer.mds.webservice.EndPoint;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
+import com.movilizer.mds.webservice.models.MovilizerUploadForm;
 
 import java.net.URL;
 import java.nio.charset.Charset;
 
 public class MovilizerConfBuilder {
-
-
     private Charset outputEncoding = DefaultValues.OUTPUT_ENCODING;
     private EndPoint endpoint = EndPoint.DEMO;
     private URL endpointAddress;
-    private URL html5UploadAddress;
+    private URL documentUploadAddress;
 
     public MovilizerConfBuilder() {
     }
@@ -24,11 +23,11 @@ public class MovilizerConfBuilder {
         MovilizerWebService webService = new MovilizerWebService(movilizerCloud);
         webService.setEndpoint(endpoint.getMdsUrl());
         MovilizerXMLParserService parserService = new MovilizerXMLParserService(outputEncoding);
-        UploadFileService uploadFileService = new UploadFileService(endpoint.getUploadUrl());
+        UploadFileService uploadFileService = new UploadFileService(endpoint.getUploadUrl(), new MovilizerUploadForm());
 
-        if (endpointAddress != null && html5UploadAddress != null) {
+        if (endpointAddress != null && documentUploadAddress != null) {
             webService.setEndpoint(endpointAddress);
-            uploadFileService.setHtml5UploadAddress(html5UploadAddress);
+            uploadFileService.setDocumentUploadAddress(documentUploadAddress);
         }
 
         return new MovilizerDistributionServiceImpl(
@@ -43,9 +42,9 @@ public class MovilizerConfBuilder {
         return this;
     }
 
-    public MovilizerConfBuilder setEndpoint(URL endpointAddress, URL html5UploadAddress) {
+    public MovilizerConfBuilder setEndpoint(URL endpointAddress, URL documentUploadAddress) {
         this.endpointAddress = endpointAddress;
-        this.html5UploadAddress = html5UploadAddress;
+        this.documentUploadAddress = documentUploadAddress;
         return this;
     }
 
@@ -53,5 +52,4 @@ public class MovilizerConfBuilder {
         this.outputEncoding = outputEncoding;
         return this;
     }
-
 }

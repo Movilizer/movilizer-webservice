@@ -20,7 +20,7 @@ public class MovilizerXMLParserServiceTest {
     private static final String testRequestDir = "/requests";
     private static final String testEmptyRequestFilename = "ping-request.mxml";
     private static final String testMoveletRequestFilename = "create-movelet-request.mxml";
-    private static final String testMoveletKey = "com.movilizer.plugins.maven.createMoveletTest";
+    private static final String testMoveletKey = "com.movilizer.mds.webservice.createMoveletTest";
 
     private MovilizerXMLParserService xmlParserService;
 

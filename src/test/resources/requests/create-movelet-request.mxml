@@ -1,7 +1,7 @@
 <MovilizerRequest systemId="3" systemPassword="from-maven-properties" xmlns="http://movilitas.com/movilizer/v12" numResponses="0">
     <moveletDelete moveletKey="com.movilizer.plugins.maven.createMoveletTest" moveletKeyExtension="DEV" ignoreExtensionKey="false"/>
     <moveletSet>
-        <movelet moveletKey="com.movilizer.plugins.maven.createMoveletTest" moveletVersion="1" moveletKeyExtension="DEV" moveletType="MULTI" initialQuestionKey="#1">
+        <movelet moveletKey="com.movilizer.mds.webservice.createMoveletTest" moveletVersion="1" moveletKeyExtension="DEV" moveletType="MULTI" initialQuestionKey="#1">
             <question type="0" key="#1" title="Create simple movelet test request">
                 <answer key="#1_1" nextQuestionKey="END" position="0" action="NONE">
                     <text>This is a paragraph for the test movelet.</text>

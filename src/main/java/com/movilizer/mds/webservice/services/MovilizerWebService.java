@@ -1,13 +1,14 @@
 package com.movilizer.mds.webservice.services;
 
 import com.movilitas.movilizer.v12.*;
+import com.movilizer.mds.webservice.adapters.AsynHandlerAdapter;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
 import com.movilizer.mds.webservice.messages.EN;
 import com.movilizer.mds.webservice.messages.MovilizerCloudMessages;
+import com.movilizer.mds.webservice.models.FutureCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Response;
 import javax.xml.ws.http.HTTPException;
@@ -51,7 +52,7 @@ class MovilizerWebService {
         return response;
     }
 
-    protected Response<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) {
+    protected Future<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) {
         Response<MovilizerResponse> response;
         try {
             response = movilizerCloud.movilizerAsync(request);
@@ -62,15 +63,13 @@ class MovilizerWebService {
         return response;
     }
 
-    protected Future<?> getReplyFromCloudAsync(MovilizerRequest request, AsyncHandler<MovilizerResponse> asyncHandler) {
-        Future<?> response;
+    protected void getReplyFromCloudAsync(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) {
         try {
-            response = movilizerCloud.movilizerAsync(request, asyncHandler);
+            movilizerCloud.movilizerAsync(request, new AsynHandlerAdapter<>(asyncHandler));
         } catch (SOAPFaultException | HTTPException e) {
             logger.error(e.getMessage());
             throw new MovilizerWebServiceException(e);
         }
-        return response;
     }
 
     protected boolean responseHasErrors(MovilizerResponse response) {

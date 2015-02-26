@@ -4,9 +4,9 @@ import com.movilitas.movilizer.v12.MovilizerRequest;
 import com.movilitas.movilizer.v12.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
+import com.movilizer.mds.webservice.models.FutureCallback;
+import com.movilizer.mds.webservice.models.UploadResponse;
 
-import javax.xml.ws.AsyncHandler;
-import javax.xml.ws.Response;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.concurrent.Future;
@@ -34,23 +34,43 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     }
 
     @Override
-    public Response<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) throws MovilizerWebServiceException {
+    public Future<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) throws MovilizerWebServiceException {
         return webService.getReplyFromCloudAsync(request);
     }
 
     @Override
-    public Future<?> getReplyFromCloudAsync(MovilizerRequest request, AsyncHandler<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
-        return webService.getReplyFromCloudAsync(request, asyncHandler);
+    public void getReplyFromCloudAsync(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
+        webService.getReplyFromCloudAsync(request, asyncHandler);
     }
 
     @Override
-    public void uploadDocument(InputStream documentInputStream, String systemId, String password, String documentPool, String documentKey, String language, String suffix, String ackKey) throws MovilizerWebServiceException {
-        uploadFileService.uploadDocument(documentInputStream, systemId, password, documentPool, documentKey, language, suffix, ackKey);
+    public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+        uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
     }
 
     @Override
-    public void uploadDocument(Path documentFilePath, String systemId, String password, String documentPool, String documentKey, String language, String suffix, String ackKey) throws MovilizerWebServiceException {
-        uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, suffix, ackKey);
+    public Future<UploadResponse> uploadDocumentAsync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+        return uploadFileService.uploadDocumentAsync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
+    }
+
+    @Override
+    public void uploadDocumentAsync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+        uploadFileService.uploadDocumentAsync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
+    }
+
+    @Override
+    public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+        uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
+    }
+
+    @Override
+    public Future<UploadResponse> uploadDocumentAsync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+        return uploadFileService.uploadDocumentAsync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
+    }
+
+    @Override
+    public void uploadDocumentAsync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+        uploadFileService.uploadDocumentAsync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
     }
 
     @Override
