@@ -1,6 +1,7 @@
 package com.movilizer.mds.webservice.services;
 
 import com.movilizer.mds.webservice.defaults.DefaultValues;
+import com.movilizer.mds.webservice.models.FutureCallback;
 import com.movilizer.mds.webservice.models.MovilizerUploadForm;
 import com.movilizer.mds.webservice.models.UploadResponse;
 import org.junit.Before;
@@ -11,7 +12,6 @@ import org.junit.runners.JUnit4;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.Future;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,7 +40,7 @@ public class UploadServiceTest {
     public void testSavePdf() throws Exception {
         Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
         Path filePath = folderPath.resolve(pdfFilename);
-        uploadService.uploadDocument(filePath, SYSTEM_ID, PASSWORD,DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
+        uploadService.uploadDocumentSync(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
     }
 
     @Ignore
@@ -48,12 +48,21 @@ public class UploadServiceTest {
     public void testSavePdfAsync() throws Exception {
         Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
         Path filePath = folderPath.resolve(pdfFilename);
-        Future<UploadResponse> responseFuture = uploadService.uploadDocumentAsync(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
-        while(!responseFuture.isDone()){
-            //let's block!
-        }
-        UploadResponse response = responseFuture.get();
-        assertThat(response, is(notNullValue()));
-        assertThat(response.wasSucceful(), is(true));
+        uploadService.uploadDocument(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK,
+                new FutureCallback<UploadResponse>() {
+                    @Override
+                    public void onSuccess(UploadResponse response) {
+                    }
+
+                    @Override
+                    public void onComplete(UploadResponse response, Exception e) {
+                        assertThat(response, is(notNullValue()));
+                        assertThat(response.wasSuccessful(), is(true));
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                    }
+                });
     }
 }

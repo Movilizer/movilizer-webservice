@@ -1,9 +1,25 @@
+/*
+ * Copyright 2015 Movilizer GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.movilizer.mds.webservice.services;
 
 import com.movilitas.movilizer.v12.MovilizerRequest;
 import com.movilitas.movilizer.v12.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
-import com.movilizer.mds.webservice.messages.EN;
+import com.movilizer.mds.webservice.messages.MESSAGES;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +52,7 @@ class MovilizerXMLParserService {
             movilizerRequestUnmarshaller.setEventHandler(new ValidationEventHandler() {
                 @Override
                 public boolean handleEvent(ValidationEvent event) {
-                    logger.error(EN.UNMARSHALL_XML_ERROR + event.getMessage());
+                    logger.error(MESSAGES.UNMARSHALLING_XML_ERROR + event.getMessage());
                     return true;
                 }
             });
@@ -51,11 +67,12 @@ class MovilizerXMLParserService {
 
     protected MovilizerRequest getRequestFromFile(Path filePath) {
         if (!Files.exists(filePath)) {
-            logger.error(EN.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
+            logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
         }
         JAXBElement<MovilizerRequest> root;
         try {
             root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
+            logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
         } catch (JAXBException e) {
             throw new MovilizerXMLException(e);
         }
@@ -92,13 +109,14 @@ class MovilizerXMLParserService {
         }
         try {
             movilizerRequestMarshaller.marshal(request, fileWriter);
+            logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
         } catch (JAXBException e) {
             throw new MovilizerXMLException(e);
         } finally {
             try {
                 fileWriter.close();
             } catch (IOException e) {
-                logger.error(EN.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
+                logger.error(MESSAGES.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
             }
         }
     }

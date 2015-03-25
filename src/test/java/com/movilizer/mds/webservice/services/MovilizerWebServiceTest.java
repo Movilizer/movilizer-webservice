@@ -5,13 +5,12 @@ import com.movilitas.movilizer.v12.MovilizerResponse;
 import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
 import com.movilitas.movilizer.v12.MovilizerWebServiceV12Service;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
+import com.movilizer.mds.webservice.models.FutureCallback;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.util.concurrent.Future;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -36,7 +35,7 @@ public class MovilizerWebServiceTest {
     public void testPerformEmptyRequest() throws Exception {
         MovilizerRequest request = new MovilizerRequest();
         request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
-        MovilizerResponse response = webService.getReplyFromCloud(request);
+        MovilizerResponse response = webService.getReplyFromCloudSync(request);
         assertThat(response, is(notNullValue()));
         assertThat(webService.responseHasErrors(response), is(false));
     }
@@ -46,12 +45,22 @@ public class MovilizerWebServiceTest {
     public void testPerformEmptyRequestAsync() throws Exception {
         MovilizerRequest request = new MovilizerRequest();
         request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
-        Future<MovilizerResponse> response = webService.getReplyFromCloudAsync(request);
-        while(!response.isDone()){
-            //let's block!
-        }
-        MovilizerResponse movilizerResponse = response.get();
-        assertThat(movilizerResponse, is(notNullValue()));
-        assertThat(webService.responseHasErrors(movilizerResponse), is(false));
+        webService.getReplyFromCloud(request, new FutureCallback<MovilizerResponse>() {
+            @Override
+            public void onSuccess(MovilizerResponse movilizerResponse) {
+
+            }
+
+            @Override
+            public void onComplete(MovilizerResponse movilizerResponse, Exception e) {
+                assertThat(movilizerResponse, is(notNullValue()));
+                assertThat(webService.responseHasErrors(movilizerResponse), is(false));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 }

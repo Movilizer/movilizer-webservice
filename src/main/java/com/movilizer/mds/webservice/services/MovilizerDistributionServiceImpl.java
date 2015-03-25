@@ -1,21 +1,40 @@
+/*
+ * Copyright 2015 Movilizer GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.movilizer.mds.webservice.services;
 
 import com.movilitas.movilizer.v12.MovilizerRequest;
 import com.movilitas.movilizer.v12.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
+import com.movilizer.mds.webservice.messages.MESSAGES;
 import com.movilizer.mds.webservice.models.FutureCallback;
 import com.movilizer.mds.webservice.models.UploadResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.concurrent.Future;
 
 class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
+    private static final Logger logger = LoggerFactory.getLogger(MovilizerDistributionService.class);
 
-    MovilizerWebService webService;
-    MovilizerXMLParserService parserService;
-    UploadFileService uploadFileService;
+    private MovilizerWebService webService;
+    private MovilizerXMLParserService parserService;
+    private UploadFileService uploadFileService;
 
     public MovilizerDistributionServiceImpl(MovilizerWebService webService, MovilizerXMLParserService parserService, UploadFileService uploadFileService) {
         this.webService = webService;
@@ -25,71 +44,65 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
 
     @Override
     public MovilizerRequest prepareUploadRequest(Long systemId, String password, MovilizerRequest request) {
+        logger.info(String.format(MESSAGES.PREPARE_UPLOAD_REQUEST, systemId));
         return webService.prepareUploadRequest(systemId, password, request);
     }
 
     @Override
-    public MovilizerResponse getReplyFromCloud(MovilizerRequest request) throws MovilizerWebServiceException {
-        return webService.getReplyFromCloud(request);
+    public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) throws MovilizerWebServiceException {
+        logger.info(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+        return webService.getReplyFromCloudSync(request);
     }
 
     @Override
-    public Future<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) throws MovilizerWebServiceException {
-        return webService.getReplyFromCloudAsync(request);
+    public void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
+        logger.info(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+        webService.getReplyFromCloud(request, asyncHandler);
     }
 
     @Override
-    public void getReplyFromCloudAsync(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
-        webService.getReplyFromCloudAsync(request, asyncHandler);
+    public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+        logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        return uploadFileService.uploadDocumentSync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
     }
 
     @Override
-    public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
-        uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
+    public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+        logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
     }
 
     @Override
-    public Future<UploadResponse> uploadDocumentAsync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
-        return uploadFileService.uploadDocumentAsync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
+    public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+        logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        return uploadFileService.uploadDocumentSync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
     }
 
     @Override
-    public void uploadDocumentAsync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
-        uploadFileService.uploadDocumentAsync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
-    }
-
-    @Override
-    public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
-        uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
-    }
-
-    @Override
-    public Future<UploadResponse> uploadDocumentAsync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
-        return uploadFileService.uploadDocumentAsync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
-    }
-
-    @Override
-    public void uploadDocumentAsync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
-        uploadFileService.uploadDocumentAsync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
+    public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+        logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        uploadFileService.uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
     }
 
     @Override
     public MovilizerRequest getRequestFromFile(Path filePath) throws MovilizerXMLException {
+        logger.info(String.format(MESSAGES.READING_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
         return parserService.getRequestFromFile(filePath);
     }
 
     @Override
-    public String printRequest(MovilizerRequest request) throws MovilizerXMLException {
+    public String requestToString(MovilizerRequest request) throws MovilizerXMLException {
         return parserService.printRequest(request);
     }
 
     @Override
-    public String printResponse(MovilizerResponse response) throws MovilizerXMLException {
+    public String requestToString(MovilizerResponse response) throws MovilizerXMLException {
         return parserService.printResponse(response);
     }
 
     @Override
     public void saveRequestToFile(MovilizerRequest request, Path filePath) throws MovilizerXMLException {
+        logger.info(String.format(MESSAGES.SAVING_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
         saveRequestToFile(request, filePath);
     }
 }

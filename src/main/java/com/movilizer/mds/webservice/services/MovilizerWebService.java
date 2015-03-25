@@ -1,20 +1,34 @@
+/*
+ * Copyright 2015 Movilizer GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.movilizer.mds.webservice.services;
 
 import com.movilitas.movilizer.v12.*;
-import com.movilizer.mds.webservice.adapters.AsynHandlerAdapter;
+import com.movilizer.mds.webservice.adapters.AsyncHandlerAdapter;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.EN;
+import com.movilizer.mds.webservice.messages.MESSAGES;
 import com.movilizer.mds.webservice.messages.MovilizerCloudMessages;
 import com.movilizer.mds.webservice.models.FutureCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Response;
 import javax.xml.ws.http.HTTPException;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.URL;
-import java.util.concurrent.Future;
 
 class MovilizerWebService {
     private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
@@ -30,6 +44,7 @@ class MovilizerWebService {
     }
 
     protected MovilizerRequest prepareUploadRequest(Long systemId, String password, MovilizerRequest request) {
+        logger.trace(String.format(MESSAGES.PREPARE_UPLOAD_REQUEST, systemId));
         // Load system credentials
         request.setSystemId(systemId);
         request.setSystemPassword(password);
@@ -40,7 +55,7 @@ class MovilizerWebService {
         return request;
     }
 
-    protected MovilizerResponse getReplyFromCloud(MovilizerRequest request) {
+    protected MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) {
         MovilizerResponse response;
         try {
             response = movilizerCloud.movilizer(request);
@@ -48,24 +63,14 @@ class MovilizerWebService {
             logger.error(e.getMessage());
             throw new MovilizerWebServiceException(e);
         }
-        logger.debug(String.format(EN.RESPONSE_RECEIVED, response.getSystemId()));
+        logger.info(String.format(MESSAGES.RESPONSE_RECEIVED, response.getSystemId()));
         return response;
     }
 
-    protected Future<MovilizerResponse> getReplyFromCloudAsync(MovilizerRequest request) {
-        Response<MovilizerResponse> response;
+    protected void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) {
         try {
-            response = movilizerCloud.movilizerAsync(request);
-        } catch (SOAPFaultException | HTTPException e) {
-            logger.error(e.getMessage());
-            throw new MovilizerWebServiceException(e);
-        }
-        return response;
-    }
-
-    protected void getReplyFromCloudAsync(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) {
-        try {
-            movilizerCloud.movilizerAsync(request, new AsynHandlerAdapter<>(asyncHandler));
+            logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            movilizerCloud.movilizerAsync(request, new AsyncHandlerAdapter<>(asyncHandler));
         } catch (SOAPFaultException | HTTPException e) {
             logger.error(e.getMessage());
             throw new MovilizerWebServiceException(e);
@@ -78,7 +83,7 @@ class MovilizerWebService {
         if (!response.getMoveletError().isEmpty()) return true;
         if (!response.getStatusMessage().isEmpty()) {
             for (MovilizerStatusMessage message : response.getStatusMessage()) {
-                if (MovilizerCloudMessages.fromType(message.getType()).isError()) { //System id failed to authenticate
+                if (MovilizerCloudMessages.fromType(message.getType()).isError()) { //System id onFailure to authenticate
                     return true;
                 }
             }
@@ -88,9 +93,9 @@ class MovilizerWebService {
 
     protected String prettyPrintErrors(MovilizerResponse response) {
         StringBuilder sb = new StringBuilder();
-        sb.append(EN.RESPONSE_HAS_ERRORS).append("\n");
+        sb.append(MESSAGES.RESPONSE_HAS_ERRORS).append("\n");
         if (!response.getDocumentError().isEmpty()) {
-            sb.append(EN.DOCUMENT_ERRORS)
+            sb.append(MESSAGES.DOCUMENT_ERRORS)
                     .append(" (")
                     .append(String.valueOf(response.getDocumentError().size()))
                     .append(")\n");
@@ -103,7 +108,7 @@ class MovilizerWebService {
             }
         }
         if (!response.getMasterdataError().isEmpty()) {
-            sb.append(EN.MASTERDATA_ERRORS)
+            sb.append(MESSAGES.MASTERDATA_ERRORS)
                     .append(" (")
                     .append(String.valueOf(response.getMasterdataError().size()))
                     .append(")\n");
@@ -116,7 +121,7 @@ class MovilizerWebService {
             }
         }
         if (!response.getMoveletError().isEmpty()) {
-            sb.append(EN.MOVELET_ERRORS)
+            sb.append(MESSAGES.MOVELET_ERRORS)
                     .append(" (")
                     .append(String.valueOf(response.getMoveletError().size()))
                     .append(")\n");
@@ -131,11 +136,11 @@ class MovilizerWebService {
         if (!response.getStatusMessage().isEmpty()) {
             for (MovilizerStatusMessage cloudMessage : response.getStatusMessage()) {
                 if (MovilizerCloudMessages.isError(cloudMessage.getType())) {
-                    sb.append(EN.MESSAGES_ERROR)
+                    sb.append(MESSAGES.MESSAGES_ERROR)
                             .append("\n")
                             .append("  - ")
                             .append(cloudMessage.getMessage())
-                            .append(EN.SYSTEMID_IN_MESSAGE)
+                            .append(MESSAGES.SYSTEM_ID_IN_MESSAGE)
                             .append("'")
                             .append(response.getSystemId())
                             .append("'");

@@ -9,12 +9,31 @@
 
 	<name>Movilizer Web Service</name>
 	<description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
-    <url>https://www.movilizer.com</url>
+    <url>http://demula.github.io/movilizer-webservice</url>
 
 	<organization>
 		<name>Movilizer GhmB</name>
 		<url>http://www.movilizer.com</url>
 	</organization>
+
+    <issueManagement>
+        <url>https://github.com/demula/movilizer-webservice/issues</url>
+        <system>GitHub</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/demula/movilizer-webservice</url>
+        <connection>scm:git:git://github.com/demula/movilizer-webservice.git</connection>
+        <developerConnection>scm:git:git@github.com:demula/movilizer-webservice.git</developerConnection>
+    </scm>
 
     <developers>
         <developer>
