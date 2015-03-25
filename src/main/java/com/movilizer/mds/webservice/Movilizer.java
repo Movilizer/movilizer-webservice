@@ -49,7 +49,8 @@ public class Movilizer {
     /**
      * This class in not meant to be instaciated.
      */
-    private Movilizer() {}
+    private Movilizer() {
+    }
 
     /**
      * Provides the webservice instance with the default configuration.

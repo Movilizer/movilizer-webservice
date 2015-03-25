@@ -193,5 +193,5 @@ public interface MovilizerDistributionService {
      * @throws MovilizerXMLException if there's parsing problems.
      * @since 12.11.1.0
      */
-    String requestToString(MovilizerResponse response) throws MovilizerXMLException;
+    String responseToString(MovilizerResponse response) throws MovilizerXMLException;
 }

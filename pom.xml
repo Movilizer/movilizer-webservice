@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
     <version>12.11.1.0</version><!-- Movilizer version v12 WSDL version 11 then internal java version 0.1 -->
 
-	<name>Movilizer Web Service</name>
-	<description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
+    <name>Movilizer Web Service</name>
+    <description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
     <url>http://demula.github.io/movilizer-webservice</url>
 
-	<organization>
-		<name>Movilizer GhmB</name>
-		<url>http://www.movilizer.com</url>
-	</organization>
+    <organization>
+        <name>Movilizer GhmB</name>
+        <url>http://www.movilizer.com</url>
+    </organization>
 
     <issueManagement>
         <url>https://github.com/demula/movilizer-webservice/issues</url>
@@ -46,27 +46,27 @@
         <cxf.version>3.0.4</cxf.version>
         <java.version>1.7</java.version>
         <maven-plugins.version>3.2</maven-plugins.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
-		<movilizer.wsdl.folder>com/movilizer/mds/webservice/wsdl/</movilizer.wsdl.folder>
-		<movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV12Wsdl11.wsdl</movilizer.wsdl.file>
-		<movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding.xml</movilizer.wsdl.binding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
+        <movilizer.wsdl.folder>com/movilizer/mds/webservice/wsdl/</movilizer.wsdl.folder>
+        <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV12Wsdl11.wsdl</movilizer.wsdl.file>
+        <movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding.xml</movilizer.wsdl.binding>
         <!-- Logging -->
-		<slf4j-api.version>1.7.10</slf4j-api.version>
-		<logback.version>1.1.2</logback.version>
+        <slf4j-api.version>1.7.10</slf4j-api.version>
+        <logback.version>1.1.2</logback.version>
         <!-- Upload documents -->
         <httpclient.version>4.4</httpclient.version>
         <!-- Test -->
-		<junit.version>4.12</junit.version>
-		<mockito.version>2.0.4-beta</mockito.version>
-		<hamcrest.version>1.3</hamcrest.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>2.0.4-beta</mockito.version>
+        <hamcrest.version>1.3</hamcrest.version>
     </properties>
 
     <reporting>
         <outputDirectory>target/site</outputDirectory>
     </reporting>
 
-	<build>
+    <build>
         <finalName>${project.artifactId}</finalName>
         <filters>
             <filter>src/main/resources/${config.location}</filter>
@@ -93,7 +93,7 @@
             </resource>
         </resources>
 
-		<plugins>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -137,8 +137,8 @@
                     </execution>
                 </executions>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- Logging -->
@@ -174,22 +174,22 @@
             <version>${httpclient.version}</version>
         </dependency>
         <!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-			<version>${hamcrest.version}</version>
+            <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

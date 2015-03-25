@@ -96,7 +96,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     }
 
     @Override
-    public String requestToString(MovilizerResponse response) throws MovilizerXMLException {
+    public String responseToString(MovilizerResponse response) throws MovilizerXMLException {
         return parserService.printResponse(response);
     }
 

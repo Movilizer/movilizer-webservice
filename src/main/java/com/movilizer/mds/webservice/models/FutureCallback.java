@@ -29,7 +29,7 @@ package com.movilizer.mds.webservice.models;
  *     void onSuccess(Integer myExternalNumber){
  *         service.save(2 + myExternalNumber);
  *     }
- *     void onComplete(T futureVar, Exception futureException) {}
+ *     void onComplete(Integer myExternalNumber, Exception futureException) {}
  *     void onFailure(Exception futureException) {}
  * });
  * </pre>
