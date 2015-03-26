@@ -3,11 +3,13 @@
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
 at https://devtools.movilizer.com/confluence/display/DOC22/Introduction+to+the+Movilizer+Web+Service
 
+![Continous integration Circle CI](https://circleci.com/gh/demula/movilizer-webservice.svg?style=shield&circle-token=:circle-token)
+
 ## Adding it into your project
 
 Either use is a `jar` in your libs folder or add it using maven as follows:
 
-```maven
+```xml
 <dependencies>
     <dependency>
         <groupId>com.movilizer.mds</groupId>
