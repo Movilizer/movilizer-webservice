@@ -16,6 +16,8 @@
 
 package com.movilizer.mds.webservice;
 
+import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -33,9 +35,14 @@ public enum EndPoint {
     private final URL mdsUrl;
     private final URL uploadUrl;
 
-    EndPoint(final String mdsUrl, final String uploadUrl) throws MalformedURLException {
-        this.mdsUrl = URI.create(mdsUrl).toURL();
-        this.uploadUrl = URI.create(uploadUrl).toURL();
+    EndPoint(final String mdsUrl, final String uploadUrl) throws MovilizerWebServiceException {
+        try {
+            this.mdsUrl = URI.create(mdsUrl).toURL();
+            this.uploadUrl = URI.create(uploadUrl).toURL();
+        } catch (MalformedURLException e) {
+            throw new MovilizerWebServiceException(e);
+        }
+
     }
 
     @Override
