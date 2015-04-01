@@ -48,6 +48,8 @@ public class Movilizer {
     public static final String SCHEMA = "META-INF/movilizer/wsdl/MovilizerTypesV12.xsd";
     public static final String WSDL = "META-INF/movilizer/wsdl/MovilizerV12Wsdl11.wsdl";
     public static final String ONLINE_WSDL = "META-INF/movilizer/wsdl/MovilizerOnlineV12Wsdl11.wsdl";
+    public static final String ONLINE_INTERFACE = "com.movilitas.movilizer.v12.MovilizerOnlineWebServiceV12";
+    public static final String ONLINE_OPERATION = "MovilizerOnlineCallback";
 
     /**
      * This class in not meant to be instaciated.
