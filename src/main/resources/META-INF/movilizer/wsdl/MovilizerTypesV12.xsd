@@ -1,0 +1,2759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Movilizer GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+            xmlns:movilizer="http://movilitas.com/movilizer/v12" elementFormDefault="qualified"
+            jaxb:version="2.0"
+            targetNamespace="http://movilitas.com/movilizer/v12">
+
+    <!-- Datatype definitions -->
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="nativeKey">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="192"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="clientKey">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="128"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="5"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="128"/>
+            <xsd:pattern
+                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    value="(\+[1-9][0-9]+)|(#[0-9a-zA-Z#\.]*)|(@[a-zA-Z0-9\._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,4})"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="SINGLE">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Single Movelet defines that a
+                        movelet can be answered only once on a mobile device, but can be deployed to multiple mobiles.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="MULTI">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Multi Movelet defines that a movelet
+                        can be answered multiple times on multiple devices.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="DEVICE">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Device defines that a Movelet can be
+                        answered once per Client-installation.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="DEF">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Defines that a Movelet is used as
+                        meta information for forming Movelet grid columns.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaMoveletType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NONE">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">All assigned devices can answer
+                        it.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="UNIQUE">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Unique Movelets can only be answered
+                        by one mobile device.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="syncPriority">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NONE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NOTIFY"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="LAZYSYNC"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ONLINE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="TRIGGERSYNCMOVELET"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="TRIGGERSYNC"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!--
+    Question types:
+
+    MESSAGE                       = 0 (since V1)
+    IMAGE                         = 1 (since V7)
+    SELECTSINGLE                  = 2 (since V1)
+    TEXTFULL                      = 3 (since V1)
+    SELECTMULTI                   = 4 (since V1)
+    TEXTMULTI                     = 5 (since V1)
+    MENU                          = 6 (since V5)
+    IMAGEMENU                     = 7 (since V7)
+
+    CAPTURE_IMAGE                 = 10 (since V7)
+    CAPTURE_SIGNATURE             = 11 (since V7)
+
+    CAPTURE_LOCATION              = 20 (since V4)
+    CAPTURE_RFID                  = 21 (since V5)
+    CAPTURE_BARCODE_1D            = 22 (since V5)
+    CAPTURE_BARCODE_2D_DATAMATRIX = 23 (since V5)
+    CAPTURE_BARCODE_2D_QR         = 24 (since V5)
+
+    INTERMOVELET                  = 40 (since V5)
+    EPSILON                       = 41 (since V7)
+
+    CUSTOMER1                     = 50 (since V5)
+    CUSTOMER2                     = 51 (since V5)
+    CUSTOMER3                     = 52 (since V5)
+    -->
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="parameterType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ANSWERID"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ANSWERVALUE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="TIMESTAMP"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="CLEAR"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="MELEXPRESSION"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="actionType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NONE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="FULLSYNC"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="FULLSYNCSILENT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="UPLOADONLY"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="DOWNLOADONLY"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="UPLOADONLYSILENT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="DOWNLOADONLYSILENT"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaActionType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ACCEPT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="REJECT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="CANCEL"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validationType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="WARNING"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ERROR"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="answerColumnSizeType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="EQUAL"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ROWS"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="LEFT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="RIGHT"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="string1">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="string7">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="7"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="string15">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="15"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="string31">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="31"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="string255">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="255"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="string1023">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:minLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="0"/>
+            <xsd:maxLength xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="1023"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="binary">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:base64Binary"/>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="alignment">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="LEFT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="RIGHT"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="CENTER"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="fontSize">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="SMALL"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NORMAL"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="LARGE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="VERYLARGE"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="fontStyle">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ITALIC"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NORMAL"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="BOLD"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="BOLDITALIC"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchPositionType">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NONE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="HEADER"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="FOOTER"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="columnSorting">
+        <xsd:restriction xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="xsd:string">
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="NONE"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="ASC"/>
+            <xsd:enumeration xmlns:xsd="http://www.w3.org/2001/XMLSchema" value="DESC"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- Generic Container structure -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerGenericDataContainer"
+                 type="movilizer:MovilizerGenericDataContainer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerGenericDataContainer">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="entry"
+                         type="movilizer:MovilizerGenericDataContainerEntry"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerGenericDataContainerEntry"
+                 type="movilizer:MovilizerGenericDataContainerEntry"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerGenericDataContainerEntry">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="entry"
+                         type="movilizer:MovilizerGenericDataContainerEntry"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="valstr"
+                         type="xsd:string"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="valb64"
+                         type="movilizer:binary"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="name" type="movilizer:string1023"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <!-- Generic Upload-Container structure -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerGenericUploadDataContainer"
+                 type="movilizer:MovilizerGenericUploadDataContainer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerGenericUploadDataContainer">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="data"
+                         type="movilizer:MovilizerGenericDataContainer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:nativeKey"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="creationTimestamp" type="xsd:dateTime"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The client-time when the container was
+                    created on the mobile device.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="syncTimestamp" type="xsd:dateTime"
+                       use="required">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The server-time when the container was
+                    synced to the server.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timedif" type="xsd:int" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The time difference between Server and
+                    Client in seconds: timedif = serverTime - clientTime
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- REQUEST -->
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerRequestAbstract">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                The Movilizer request defines a request a backend system/third party system issues against the
+                SynchronisationService.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="moveletAssignmentDelete"
+                         type="movilizer:MovilizerMoveletAssignmentDelete"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="moveletDelete" type="movilizer:MovilizerMoveletDelete"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="masterdataPoolUpdate" type="movilizer:MovilizerMasterdataPoolUpdate"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="documentPoolUpdate" type="movilizer:MovilizerDocumentPoolUpdate"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="moveletSet"
+                         type="movilizer:MovilizerMoveletSet"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="moveletAssignment" type="movilizer:MovilizerMoveletAssignment"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="moveletReset"
+                         type="movilizer:MovilizerMoveletReset"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="participantReset" type="movilizer:MovilizerParticipantReset"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="participantConfiguration"
+                         type="movilizer:MovilizerParticipantConfiguration"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="statusMessage" type="movilizer:MovilizerUploadStatusMessage"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="onlineContainerReply"
+                         type="movilizer:MovilizerOnlineDataContainerReply"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="requestTrackingKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="systemId" type="xsd:long" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="responseQueue" type="movilizer:string7"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="systemPassword" type="movilizer:string31"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Authorized or internal systems may not
+                    be required to specify a password.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="useAutoAcknowledge" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">If set to true, every request will be
+                    acknowledged automatically. Should only be used for testing purposes!
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="requestAcknowledgeKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">This field is used by the backend to
+                    acknowledge the last request: This field must be filled with the key of the last request.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="1000" name="numResponses" type="xsd:int"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">if set to a positive number, Responses
+                    are being sent to this request. If set to zero, only the request is processed.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="5242880" name="responseSize" type="xsd:int"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Limits the size of the response.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="synchronousResponse" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">If set to true, all acknowledges
+                    generated for the request will be returned directly, bypassing the Response-Queue. False will enqeue
+                    all acknowledges for the Request.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+
+    <!-- Participant -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAssignment"
+                 type="movilizer:MovilizerMoveletAssignment"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAssignment">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="participant"
+                         type="movilizer:MovilizerParticipant"/>
+            <!-- INTERNAL_ATTRIBUTE -->
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="ignoreExtensionKey" type="xsd:boolean"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipant"
+                 type="movilizer:MovilizerParticipant"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipant">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="required">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    Due to the fact that it is very very very unlikely that the phoneNumber is a primary key for mobile
+                    users in a backend system, another
+                    participantKey is specified that identifies the mobile user. Furthermore it might be desired that
+                    multiple users use one device.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="name" type="movilizer:string31"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="responseQueue" type="movilizer:string7"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- DOCUMENT -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentPoolUpdate"
+                 type="movilizer:MovilizerDocumentPoolUpdate"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentPoolUpdate">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="delete"
+                         type="movilizer:MovilizerDocumentDelete"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="update"
+                         type="movilizer:MovilizerDocumentUpdate"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+    </xsd:complexType>
+
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentDelete"
+                 type="movilizer:MovilizerDocumentDelete"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentDelete">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentUpdate"
+                 type="movilizer:MovilizerDocumentUpdate"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentUpdate">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="data"
+                         type="movilizer:binary"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filesuffix" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="language" type="xsd:string" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- MASTERDATA -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataPoolUpdate"
+                 type="movilizer:MovilizerMasterdataPoolUpdate"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataPoolUpdate">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="delete"
+                         type="movilizer:MovilizerMasterdataDelete"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="update"
+                         type="movilizer:MovilizerMasterdataUpdate"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="reference" type="movilizer:MovilizerMasterdataReference"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataDelete"
+                 type="movilizer:MovilizerMasterdataDelete"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataDelete">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataUpdate"
+                 type="movilizer:MovilizerMasterdataUpdate"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataUpdate">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="data"
+                         type="movilizer:MovilizerGenericDataContainer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="description"
+                         type="movilizer:string255"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="language"
+                         type="movilizer:MovilizerMasterdataUpdateLanguage"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter1" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter2" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter3" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter4" type="xsd:long" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter5" type="xsd:long" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter6" type="xsd:long" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validTillDate" type="xsd:dateTime"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataUpdateLanguage"
+                 type="movilizer:MovilizerMasterdataUpdateLanguage"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataUpdateLanguage">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="data"
+                         type="movilizer:MovilizerGenericDataContainer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="description"
+                         type="movilizer:string255"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="language" type="xsd:string" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter1" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter2" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filter3" type="movilizer:string31"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataReference"
+                 type="movilizer:MovilizerMasterdataReference"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataReference">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validTillDate" type="xsd:dateTime"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- ONLINE -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerOnlineDataContainerReply"
+                 type="movilizer:MovilizerOnlineDataContainerReply"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerOnlineDataContainerReply">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="data"
+                         type="movilizer:MovilizerGenericDataContainer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:nativeKey"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <!-- MOVELET -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletSet"
+                 type="movilizer:MovilizerMoveletSet"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletSet">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="1" name="movelet"
+                         type="movilizer:MovilizerMovelet"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="participant"
+                         type="movilizer:MovilizerParticipant"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMovelet"
+                 type="movilizer:MovilizerMovelet"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMovelet">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="metaMovelet"
+                         type="movilizer:MovilizerMetaMovelet"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="1" name="question"
+                         type="movilizer:MovilizerQuestion"/>
+
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="syncDeleteAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL assignment that is triggered
+                        right before the Movelet gets deleted from the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="syncDownloadAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL assignment that is triggered
+                        right after the Movelet was downloaded on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="moveletStartAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL expression that is executed
+                        whenever the Movelet is started or resumed.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="clientStartAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL expression that is executed
+                        whenever the Movilizer client starts.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="name"
+                         type="movilizer:string255">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Movelet name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="nameExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows
+                        a dynamic representation of the Movelet name in the list of Movelets on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="iconExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows
+                        a dynamic representation of the Movelet icon in the list of Movelets on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="visibleExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that
+                        controlls if the Movelet will be displayed in the Movelet list on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="priorityExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">An dynamic MEL expression that
+                        allows a dynamic ordering of the Movelets in the Movelet list on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="category"
+                         type="movilizer:MovilizerMoveletCategory"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0"
+                         name="tableColumnDefinition"
+                         type="movilizer:MovilizerMoveletTableColumnDefinition">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Table column definition if the
+                        movelet is of type DEF.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="tableRow"
+                         type="movilizer:MovilizerMoveletTableRow">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Meta information that comes with the
+                        movelet - presented in movelet grid.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="8" minOccurs="0" name="masterdata"
+                         type="movilizer:MovilizerMoveletMasterdata"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="8" minOccurs="0" name="document"
+                         type="movilizer:MovilizerMoveletDocument"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0"
+                         name="onMasterdataChange"
+                         type="movilizer:MovilizerMoveletMasterdataChange"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="responseQueue" type="movilizer:string7"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="namespace" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="privateNamespace" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">If set to true, the namespace will only
+                    be available within the same system.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="icon" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="hotkey" type="movilizer:string15"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletType" type="movilizer:moveletType"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaMoveletType" type="movilizer:metaMoveletType"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="initialQuestionKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="transactional" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validTillDate" type="xsd:dateTime"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="priority" type="xsd:short" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="moveletDownloadPriority" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Priority that controls the order of
+                    Movelet-download. Higher value means higher priority.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="replyUploadPriority" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Priority that controls the order of
+                    Reply-upload. Higher value means higher priority.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="syncPriority" type="movilizer:syncPriority"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="syncCategory" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="appGroup" type="xsd:int" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="visible" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filterValue" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="autoExecuteTimeout" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Timeout for this Movelet in seconds.
+                    Positive values mean that the Movelet is automatically started when the Mainmenu is active for the
+                    specified time. Zero means no autostart. Negative values specify that the Movelet timer will only be
+                    set up once after sync.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="callbackEndpoint" type="movilizer:string1023"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">If set, the Movilizer infrastructure
+                    will this URL for a callback to the WebService behind this URL.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="notificationCenter" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchPosition" type="movilizer:quickLaunchPositionType"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specifies the bar (header, footer,
+                    searchbar) that offers a quicklaunch. The Movelet is then added to this quicklaunch
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchIcon" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specifies the icon to be displayed in
+                    the quickLaunch (header, footer, searchbar) for this Movelet
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchLabel" type="movilizer:string255"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Defines the label of the quickLaunch
+                    menu which is displayed on top of the quickLaunch popup menu in case it is displayed.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletMasterdata"
+                 type="movilizer:MovilizerMoveletMasterdata"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletMasterdata">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataPool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataGroup" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataSystemId" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="masterdataOrphanTTL" type="xsd:int"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletDocument"
+                 type="movilizer:MovilizerMoveletDocument"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletDocument">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentPool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentSystemId" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="documentOrphanTTL" type="xsd:int"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletMasterdataChange"
+                 type="movilizer:MovilizerMoveletMasterdataChange"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletMasterdataChange">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="1"
+                         name="filter"
+                         type="movilizer:MovilizerMoveletMasterdataChangeFilter"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="trigger"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression defining a
+                        function with 4 arguments: ($masterdata:poolId, poolGroupName, key, op),
+                        e.g.:
+                        function ($masterdata:poolId, groupName, key, op) {
+                        if (op == 0) { <!-- Update -->
+
+                        } else if (op == 1) { <!-- Delete key -->
+
+                        } else if (op == 2) { <!-- Delete group -->
+                        <!-- Key is empty -->
+                        }
+                        }
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletMasterdataChangeFilter"
+                 type="movilizer:MovilizerMoveletMasterdataChangeFilter"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletMasterdataChangeFilter">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="systemId" type="xsd:long" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletCategory"
+                 type="movilizer:MovilizerMoveletCategory"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletCategory">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="name"
+                         type="movilizer:string255">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="index" type="xsd:short" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="icon" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="hotkey" type="movilizer:string1"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchPosition" type="movilizer:quickLaunchPositionType"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specifies the bar (header, footer,
+                    searchbar) that offers a quicklaunch. The Category is then added to this quicklaunch
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchIcon" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specifies the icon to be displayed in
+                    the quickLaunch (header, footer, searchbar) for this Category
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="quickLaunchLabel" type="movilizer:string255"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Defines the label of the quickLaunch
+                    menu which is displayed on top of the quickLaunch popup menu in case it is displayed.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMetaMovelet"
+                 type="movilizer:MovilizerMetaMovelet"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMetaMovelet">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="1" name="answer"
+                         type="movilizer:MovilizerMetaAnswer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="descriptionText"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="failedMessage"
+                         type="movilizer:string1023"/>
+
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIVDescription"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIVMetaAnswers"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMACMetaMovelet"
+                         type="movilizer:nativeKey"/>
+
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="category"
+                         type="movilizer:MovilizerMoveletCategory"/>
+
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="nameExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows
+                        a dynamic representation of the MetaMovelet name in the list of Movelets on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="iconExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows
+                        a dynamic representation of the Movelet icon in the list of Movelets on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="visibleExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that
+                        controlls if the Movelet will be displayed in the Movelet list on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="priorityExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">An dynamic MEL expression that
+                        allows a dynamic ordering of the Movelets in the Movelet list on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="syncDeleteAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL assignment that is triggered
+                        right before the Movelet gets deleted from the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="syncDownloadAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL assignment that is triggered
+                        right after the Movelet was downloaded on the client.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="moveletStartAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL expression that is executed
+                        whenever the Movelet is started or resumed.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="clientStartAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A MEL expression that is executed
+                        whenever the Movilizer client starts.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="descriptionOnEnterAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when entering the Question.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="descriptionOnLeaveOkPrepareAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing OK. This OK
+                        expression is being executed at the beginning of the question-transition, before the transition
+                        can be cancelled via a Validation.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="descriptionOnLeaveOkPersistAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing OK. This OK
+                        expression is being executed at the end of the question-transition, after all Validations
+                        succeeded.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="descriptionOnLeaveBackAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing back.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="metaAnswerOnEnterAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when entering the Question.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="metaAnswerOnLeaveOkPrepareAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing OK. This OK
+                        expression is being executed at the beginning of the question-transition, before the transition
+                        can be cancelled via a Validation.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="metaAnswerOnLeaveOkPersistAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing OK. This OK
+                        expression is being executed at the end of the question-transition, after all Validations
+                        succeeded.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="metaAnswerOnLeaveBackAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing back.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="name" type="movilizer:string255"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="icon" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="hotkey" type="movilizer:string1"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validTillDate" type="xsd:dateTime"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="descriptionTitle" type="movilizer:string255"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaAnswerTitle" type="movilizer:string255"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaAnswerText" type="movilizer:string1023"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="priority" type="xsd:short" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="filterValue" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="autoExecuteTimeout" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Timeout for this Movelet in seconds.
+                    Positive values mean that the Movelet is automatically started when the Mainmenu is active for the
+                    specified time. Zero means no autostart. Negative values specify that the Movelet timer will only be
+                    set up once after sync.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMetaAnswer"
+                 type="movilizer:MovilizerMetaAnswer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMetaAnswer">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="text" type="movilizer:string1023"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="action" type="movilizer:actionType"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaAction" type="movilizer:metaActionType"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="position" type="xsd:short" use="optional"/>
+    </xsd:complexType>
+
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerQuestion"
+                 type="movilizer:MovilizerQuestion"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerQuestion">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="1" name="answer"
+                         type="movilizer:MovilizerAnswer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="text"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="64" minOccurs="0" name="useParameter"
+                         type="movilizer:nativeKey">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specify which parameters to use in
+                        the reply. Allows 8 parameters max.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0"
+                         name="defineParameter" type="movilizer:MovilizerParameterDescriptor">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Initiates a cyclic question. The
+                        parameter that has to be filled with the selected answers value. Works only with
+                        SingleSelectQuestions(type=2).
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="restriction"
+                         type="movilizer:MovilizerRestriction">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Prevents the user from leaving the
+                        screen while the Restriction is not satisfied. Can also be used to perform operations using MEL.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="validation"
+                         type="movilizer:MovilizerValidation">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Ensures that the user enters valid
+                        data on a screen. Validations allow either to be warnings or errors.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="onEnterAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when entering the Question.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="onLeaveOkPrepareAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing OK. This OK
+                        expression is being executed at the beginning of the question-transition, before the transition
+                        can be cancelled via a Validation.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="onLeaveOkPersistAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing OK. This OK
+                        expression is being executed at the end of the question-transition, after all Validations
+                        succeeded.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="onLeaveBackAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which is executed when leaving the Question by pressing back.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="onScreenValueChangeEvent"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        MEL function that is called on value changes on the screen. Function signature must be:
+                        function(answerKey, clientkey, value)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="onExternalEvent"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        MEL function that is called by external events. Function signature must be: function(evttype,
+                        data)
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="search"
+                         type="movilizer:MovilizerQuestionSearch"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="complex"
+                         type="movilizer:MovilizerQuestionComplexDescriptor"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="title" type="movilizer:string255"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="type" type="xsd:byte" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="timeout" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Timeout for this question (in seconds).
+                    A positive value will trigger an OK Event, a negative value a Back Event.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="backNavigationAllowed" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="sortAnswersByClientKey" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="sortColumnIndex" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">When using table questions, this will
+                    specify the initial sorting of the rows, using the column default sorting. If not specified, rows
+                    will
+                    follow the initial sorting by position.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="groupColumnIndex" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    When using table questions, this will specify the column which will be used for grouping rows. This
+                    is automatically indicate that the table is grouped and will respond to methods like
+                    isGroupMode=true, isGroupingRow(index). Grouping column will not be presented in table column UI
+                    structure
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="tableRowDetailsEnabled" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="tableOptionsEnabled" type="xsd:boolean"
+                       use="optional"/>
+
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="intermoveletSystemId" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="intermoveletMoveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="" name="intermoveletMoveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="intermoveletType" type="xsd:byte"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="icon" type="xsd:byte" use="optional"/>
+
+        <!-- Formatting attributes that if not specified on answer level - will be set with questions -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="LEFT" name="labelAlignment" type="movilizer:alignment"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="LEFT" name="valueAlignment" type="movilizer:alignment"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="NORMAL" name="labelFontSize" type="movilizer:fontSize"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="NORMAL" name="labelFontStyle" type="movilizer:fontStyle"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="NORMAL" name="valueFontSize" type="movilizer:fontSize"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="NORMAL" name="valueFontStyle" type="movilizer:fontStyle"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="portalMayDelete" type="xsd:boolean"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="portalMayEdit" type="xsd:boolean"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="portalMayMove" type="xsd:boolean"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+    </xsd:complexType>
+
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerQuestionSearch">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                Defines if the Question should enable the search feature and sets the mode of the search.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="spacerMode" type="xsd:byte"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="caseSensitive" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="textCondition" type="xsd:byte"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerQuestionComplexDescriptor">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                Defines if the Question should be part of a ComplexUI Screen.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="linearGroupId" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="gridGroupId" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="groupTitle" type="movilizer:string255"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="linearInnerScrollbar" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="gridInnerScrollbar" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="gridHorizontalLayout" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="linearPos" type="xsd:byte" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="gridPosX" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="gridPosY" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="1" name="gridWidth" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The relative-width of this question on
+                    the screen. The value must be in the range of 1-15.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="1" name="gridHeight" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The relative-height of this question on
+                    the screen. The value must be in the range of 1-15.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="1" name="linearHeight" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The relative-height of this question on
+                    the screen. The value must be in the range of 1-15.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParameterDescriptor"
+                 type="movilizer:MovilizerParameterDescriptor"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParameterDescriptor">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="paramExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The MEL expression which sets the parameter as a string that starts a cycle.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="parameterKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="ANSWERID" name="parameterType" type="movilizer:parameterType"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerValidation"
+                 type="movilizer:MovilizerValidation"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerValidation">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="condition"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The validation rule, which when evaluated has to result to true. A
+                        validation rule is a MEL expression that returns a boolean.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="text"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="matchingAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        A MEL assignemnt which is executed if condition matches.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="position" type="xsd:short" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The sequence number in which all
+                    restrictions will be checked.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="type" type="movilizer:validationType"
+                       use="required"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerRestriction"
+                 type="movilizer:MovilizerRestriction"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerRestriction">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                A restriction can be attached to a question to either check the user input
+                or control the navigation flow. For checking user input, a restriction has
+                to be set as 'required' and an error message should be defined that can be
+                shown to the user, while their input is not valid. The user will not be
+                able to continue to the next question until all required restrictions
+                evaluate to true. Further, for optional restrictions it is possible
+                to set an alternative follow up question. In this case, all restrictions
+                will be checked ordered by their position and for the first one to evaluate
+                to true, the follow up question will be used as the actual next question in
+                the navigation flow.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="condition"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        The validation rule, which when evaluated has to result to true. A
+                        validation rule is a MEL expression that returns a boolean.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="matchingAssignment"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                        A MEL assignemnt which is executed if condition matches.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="position" type="xsd:short" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The sequence number in which all
+                    restrictions will be checked.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="nextQuestionKey" type="movilizer:nativeKey"
+                       use="required">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    The next question to which the navigation flow will jump, if the rule
+                    evaluates to true. If no follow up is defined, the follow up of the
+                    selected answer will be taken.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerAnswer" type="movilizer:MovilizerAnswer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerAnswer">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="item"
+                         type="movilizer:MovilizerAnswerItem"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="text"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="predefinedValue"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="data"
+                         type="movilizer:binary"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="attributeType" type="xsd:byte"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="EQUAL" name="columnSizeType" type="movilizer:answerColumnSizeType"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="hotkey" type="movilizer:string1"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="clientKey" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="nextQuestionKey" type="movilizer:nativeKey"
+                       use="required">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    nextQuestionKey specifies the key of the followup question. To mark a screen as an end of movelet
+                    screen, simply specify the nextQuestionKey
+                    as "END" or "CANCEL".
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="position" type="xsd:short" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    Position specifies the positioning of the answers within the question. If not specified, the
+                    answerKey is used for sorting. When using Table type
+                    of question, this specifies the row position and is mandatory for all answers. Row 0 is mandatory a
+                    dummy row, containing the column type
+                    definitions.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="groupId" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    When using Multi Text Screen questions, this is mandatory field for constraint type
+                    CONSTRAINT_GROUP. This attribute is used to group fields on the screen
+                    in expandable/collapsable sets.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="colIndex" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    When using table questions, this is mandatory field that specifies the column position in the grid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="colWidth" type="xsd:byte"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    Table Column width in characters
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="colSortDesc" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    When using table questions, this defines the intial sorting of the column (if not specified - uses
+                    Asc sorting). This is only
+                    considered in ordering the rows initially if sorting field is specified on Question level.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="colSearchable" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    When using table questions, this defines if the column that is defined by this dummy answer is
+                    searchable or not. The default value is true.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="colSortable" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    When using table questions, this defines if the column that is defined by this dummy answer is
+                    manually sortable or not. The default value is true.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="colPriority" type="xsd:byte" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    Column layout measurement priority
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="NONE" name="action" type="movilizer:actionType"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="connectionTimeout" type="xsd:int"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Timeout that is applied only if the
+                    action is of type that triggers sync.
+                    This timeout will replace the default connection timeout when executing sync. The default value is
+                    set to -1 which means that the default value will be taken
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="readTimeout" type="xsd:int"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Timeout that is applied only if the
+                    action is of type that triggers sync.
+                    This timeout will replace the default connection read timeout when executing sync. The default value
+                    is set to -1 which means that the default value will be taken
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="triggerScreenValueChangedEvent" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specifies if the change expression
+                    should be executed when the value of this answer changes.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="timerBasedScreenValueChangedEvent" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Specifies if the change event should be
+                    triggered on focus change (true) or on timed event (e.g every 100ms after value is changed).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="dummyAnswer" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Dummy answers are not visible on the
+                    client. Use a dummy answer if you want to use the MEL functions addAnswer or addAnswers. These
+                    functions replace the dummy answer with dynamically created new, visible answers
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="icon" type="xsd:byte" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Referenced icon ID. For standard icons
+                    positive values, for custom icons negative values. If no value is set, then the client will also
+                    look into the data field of the answer to find some image data there
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="sortAnswerItemsByClientKey" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">If set to true then answer items will be
+                    sorted by client key - not by value.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="labelAlignment" type="movilizer:alignment"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="valueAlignment" type="movilizer:alignment"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="labelFontSize" type="movilizer:fontSize"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="labelFontStyle" type="movilizer:fontStyle"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="valueFontSize" type="movilizer:fontSize"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="valueFontStyle" type="movilizer:fontStyle"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="portalMayDelete" type="xsd:boolean"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="portalMayEdit" type="xsd:boolean"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="portalMayMove" type="xsd:boolean"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="portalDataMimeType" type="movilizer:string255"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerAnswerItem"
+                 type="movilizer:MovilizerAnswerItem"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerAnswerItem">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="value"
+                         type="movilizer:string1023"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="clientKey" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="dummyAnswerItem" type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Required for 1.8 clients and earlier.
+                    Obsolete when using 1.9+ clients.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+
+    <!-- Request: Movelet Reset -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletReset"
+                 type="movilizer:MovilizerMoveletReset"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletReset">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                A MoveletReset can reset a movelet for a single device, a movelet for all devices or all movelets for
+                one device, depending on the combination
+                of phoneNo and moveletKey. At least one of both parameters must be set!
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="ignoreExtensionKey" type="xsd:boolean"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- Request: Participant Reset -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantReset"
+                 type="movilizer:MovilizerParticipantReset"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantReset">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                A ParticipantReset resets the state of a mobile device in the Movilizer System. This will cause the
+                deployment of the MovilizerClient
+                Application to be triggered again. The state of the assigned movelets will not be changed.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Request: Participant Update -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantConfiguration"
+                 type="movilizer:MovilizerParticipantConfiguration"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantConfiguration">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                A ParticipantConfiguration is used to create a new participant or to update a participant which is
+                already in the system
+                Currently only the timeAllignment can be set!
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="name" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="isTimeAligned" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="resetSecret" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="-1" name="passwordHashType" type="xsd:int"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    Specifies the password hash type for a participants password.
+                    -1 = Dont change password
+                    0 = Disable password
+                    1 = Set plaintext password
+                    2 = Set MD5 with 8 bytes of salt and 1000 iterations
+                    3 = Set SHA256 with 8 bytes of salt and 1000 iterations
+                    4 = Set SHA512 with 16 bytes of salt and 1000 iterations
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="passwordHashValue" type="xsd:string"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The hash value for the specified
+                    password hash type. See: PKCS#5 / rfc2898 /
+                    http://www.jasypt.org/api/jasypt/1.9.2/org/jasypt/digest/StandardStringDigester.html
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="isPrivateForSystemID" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="language" type="xsd:string" use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="alternativeDeploymentAddress" type="movilizer:deviceAddress"
+                       use="optional"/>
+        <!-- INTERNAL_ATTRIBUTE -->
+    </xsd:complexType>
+
+
+    <!-- Request: Movelet Delete -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletDelete"
+                 type="movilizer:MovilizerMoveletDelete"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletDelete">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                A MoveletDelete deletes an entire Movelet from the cloud or all Movelets matching a moveletKey when
+                ignoring the extensionKey.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="ignoreExtensionKey" type="xsd:boolean"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <!-- Request: MoveletAssignment Delete -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAssignmentDelete"
+                 type="movilizer:MovilizerMoveletAssignmentDelete"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAssignmentDelete">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                A MoveletAssignmentDelete can delete assignments for a single participant or for a single movelet,
+                depending on the combination
+                of deviceAddress and moveletKey. At least one of both parameters must be set!
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="hardDelete" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="ignoreExtensionKey" type="xsd:boolean"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- Request: Upload Status message -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerUploadStatusMessage"
+                 type="movilizer:MovilizerUploadStatusMessage"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerUploadStatusMessage">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                Enables any backend to send status-messages to the MovilizerMonitoring.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="rootXml"
+                         type="xsd:string"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="additional"
+                         type="xsd:string"/>
+        </xsd:sequence>
+        <!-- Type is set to BACKEND_MESSAGE in Monitoring -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="severity" type="xsd:byte" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="message" type="xsd:string" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="requestTrackingKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletName" type="movilizer:string255"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantName" type="movilizer:string31"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataPool" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataGroup" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataKey" type="movilizer:clientKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletTableColumnDefinition"
+                 type="movilizer:MovilizerMoveletTableColumnDefinition"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletTableColumnDefinition">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="columnID" type="movilizer:string255"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="columnWidth" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="columnType" type="xsd:byte" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="columnSearchable" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="true" name="columnSortable" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="NONE" name="columnSortDefaultOrder" type="movilizer:columnSorting"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="LEFT" name="labelAlignment" type="movilizer:alignment"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="labelTextWrap" type="xsd:boolean"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="LEFT" name="valueAlignment" type="movilizer:alignment"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="false" name="valueTextWrap" type="xsd:boolean"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletTableRow"
+                 type="movilizer:MovilizerMoveletTableRow"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletTableRow">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="1" name="tableCell"
+                         type="movilizer:MovilizerMoveletTableCell"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletTableCell"
+                 type="movilizer:MovilizerMoveletTableCell"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletTableCell">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="value"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="valueExpression"
+                         type="xsd:string">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows
+                        a dynamic representation of the Movelet table cell value.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="columnID" type="movilizer:string255"
+                       use="required"/>
+    </xsd:complexType>
+
+
+    <!-- Movilizer Container structure to exchange data outside the Movelet / Response cycle -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerUploadDataContainer"
+                 type="movilizer:MovilizerUploadDataContainer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerUploadDataContainer">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1"
+                         name="container"
+                         type="movilizer:MovilizerGenericUploadDataContainer"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="containerUploadPriority" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Priority that controls the order of
+                    Container-upload. Higher value means higher priority.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+
+    <!-- RESPONSE -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerResponse">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                The MovilizerResponse defines the return data for the request. Please note that the internal processing
+                of the Movilizer platform works
+                asynchronous. Therefore the Movilizer platform never returns a the MovilizerResponse for issues
+                MovilizerRequest within the same request.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="masterdataAck" type="movilizer:MovilizerMasterdataAck"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="masterdataError" type="movilizer:MovilizerMasterdataError"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="masterdataDeleted" type="movilizer:MovilizerMasterdataDeleted"/>
+
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="documentAck" type="movilizer:MovilizerDocumentAck"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="documentError" type="movilizer:MovilizerDocumentError"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="documentDeleted" type="movilizer:MovilizerDocumentDeleted"/>
+
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="moveletAck"
+                             type="movilizer:MovilizerMoveletAck"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="moveletError" type="movilizer:MovilizerMoveletError"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="moveletDeleted" type="movilizer:MovilizerMoveletDeleted"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="moveletAssignmentDeleted"
+                             type="movilizer:MovilizerMoveletAssignmentDeleted"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="moveletSynced" type="movilizer:MovilizerMoveletSynced"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="metaMoveletReply" type="movilizer:MovilizerMetaMoveletReply"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="replyMovelet" type="movilizer:MovilizerReplyMovelet"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="uploadContainer"
+                             type="movilizer:MovilizerUploadDataContainer"/>
+
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="participantAck" type="movilizer:MovilizerParticipantAck"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="participantDeploymentSmsSent"
+                             type="movilizer:MovilizerParticipantDeploymentSmsSent"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="participantInstall" type="movilizer:MovilizerParticipantInstall"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="participantInstallAck"
+                             type="movilizer:MovilizerParticipantInstallAck"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="participantInstallError"
+                             type="movilizer:MovilizerParticipantInstallError"/>
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="participantDeleted" type="movilizer:MovilizerParticipantDeleted"/>
+
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="statusMessage" type="movilizer:MovilizerStatusMessage"/>
+            </xsd:sequence>
+            <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="systemId" type="xsd:long" use="required"/>
+            <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="responseQueue" type="movilizer:string7"
+                           use="optional"/>
+            <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="currentServerTime" type="xsd:dateTime"
+                           use="required"/>
+
+            <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="requestAcknowledgeKey" type="movilizer:nativeKey"
+                           use="optional">
+                <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">This field is used by the backend to
+                        acknowledge the last request: The value given in this field must be given along with the next
+                        request.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Response: Masterdata Ack -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataAck"
+                 type="movilizer:MovilizerMasterdataAck"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataAck">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="isReference" type="xsd:boolean"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: Masterdata Error -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataError"
+                 type="movilizer:MovilizerMasterdataError"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataError">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="message" type="xsd:string" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validationErrorCode" type="xsd:string"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <!-- Response: Masterdata Deleted -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataDeleted"
+                 type="movilizer:MovilizerMasterdataDeleted"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMasterdataDeleted">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="group" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestampMasterdata" type="xsd:dateTime"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- Response: Document Ack -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentAck"
+                 type="movilizer:MovilizerDocumentAck"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentAck">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <!-- Response: Document Error -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentError"
+                 type="movilizer:MovilizerDocumentError"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentError">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="message" type="xsd:string" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validationErrorCode" type="xsd:string"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <!-- Response: Document Deleted -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentDeleted"
+                 type="movilizer:MovilizerDocumentDeleted"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerDocumentDeleted">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="pool" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="key" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestampDocument" type="xsd:dateTime"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="documentAckKey" type="movilizer:nativeKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- Response: Status message -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerStatusMessage"
+                 type="movilizer:MovilizerStatusMessage"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerStatusMessage">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                MovilizerStatusMessage allows the Movilizer System to
+                give feedback for any actions performed by the
+                Backend/third party system.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="rootXml"
+                         type="xsd:string"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="additional"
+                         type="xsd:string"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="type" type="xsd:short" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="severity" type="xsd:byte" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="message" type="xsd:string" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="requestTrackingKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+
+        <!-- Movelet -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletName" type="movilizer:string255"
+                       use="optional"/>
+
+        <!-- Participant -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantName" type="movilizer:string31"
+                       use="optional"/>
+
+        <!-- Internal Movilizer IDs -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletId" type="xsd:int" use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantIdGlobal" type="xsd:long"
+                       use="optional"/>
+
+        <!-- Masterdata -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataPool" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataGroup" type="movilizer:clientKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="masterdataKey" type="movilizer:clientKey"
+                       use="optional"/>
+
+    </xsd:complexType>
+
+    <!-- Response: Movelet Ack -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAck"
+                 type="movilizer:MovilizerMoveletAck"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAck">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: Movelet Error -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletError"
+                 type="movilizer:MovilizerMoveletError"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletError">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="message" type="xsd:string" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="validationErrorCode" type="xsd:string"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: Movelet Deleted -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletDeleted"
+                 type="movilizer:MovilizerMoveletDeleted"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletDeleted">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="manual" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: MoveletAssignment Deleted -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAssignmentDeleted"
+                 type="movilizer:MovilizerMoveletAssignmentDeleted"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletAssignmentDeleted">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="manual" type="xsd:boolean" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="hard" type="xsd:boolean" use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- Response: Movelet Synced -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletSynced"
+                 type="movilizer:MovilizerMoveletSynced"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMoveletSynced">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="isMetaMovelet" type="xsd:boolean"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="isAcknowledge" type="xsd:boolean"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: Movelet accepted message  -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMetaMoveletReply"
+                 type="movilizer:MovilizerMetaMoveletReply"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerMetaMoveletReply">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaAnswerKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ipAddress" type="movilizer:string15"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="failed" type="xsd:boolean" use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="metaAction" type="movilizer:metaActionType"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timedif" type="xsd:int" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The time difference between Server and
+                    Client in seconds.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+    </xsd:complexType>
+
+
+    <!-- Response: Wakeup info -->
+    <!--
+    <xsd:element name="MovilizerParticipantWakeupSmsSent" type="movilizer:MovilizerParticipantWakeupSmsSent" />
+    <xsd:complexType name="MovilizerParticipantWakeupSmsSent">
+        <xsd:attribute name="participantKey" type="movilizer:nativeKey" use="optional"/>
+        <xsd:attribute name="deviceAddress" type="movilizer:deviceAddress" use="required" />
+        <xsd:attribute name="messageId" type="movilizer:nativeKey" use="optional" />
+        <xsd:attribute name="timestamp" type="xsd:dateTime" use="required" />
+    </xsd:complexType>
+
+    <xsd:element name="MovilizerParticipantWakeupSmsAck" type="movilizer:MovilizerParticipantWakeupSmsAck" />
+    <xsd:complexType name="MovilizerParticipantWakeupSmsAck">
+        <xsd:attribute name="participantKey" type="movilizer:nativeKey" use="optional"/>
+        <xsd:attribute name="deviceAddress" type="movilizer:deviceAddress" use="required" />
+        <xsd:attribute name="messageId" type="movilizer:nativeKey" use="optional" />
+        <xsd:attribute name="timestamp" type="xsd:dateTime" use="required" />
+    </xsd:complexType>
+    -->
+
+    <!-- Response: Participant Ack -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantAck"
+                 type="movilizer:MovilizerParticipantAck"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantAck">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The participantKey can be empty if
+                    assigned outside the context of a movelet via a standalone participant command.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantIdGlobal" type="xsd:long"
+                       use="required">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The global id is an Movilizer-internal
+                    ID assigned for a participant and is not required to run the Movilizer! But this ID is used by the
+                    mobile devices.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: Participant Deleted -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantDeleted"
+                 type="movilizer:MovilizerParticipantDeleted"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantDeleted">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The participantKey can be empty if
+                    assigned outside the context of a movelet via a standalone participant command.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantIdGlobal" type="xsd:long"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The global id is an Movilizer-internal
+                    ID assigned for a participant and is not required to run the Movilizer! But this ID is used by the
+                    mobile devices.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+    </xsd:complexType>
+
+    <!-- Response: Participant deployment info -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantDeploymentSmsSent"
+                 type="movilizer:MovilizerParticipantDeploymentSmsSent"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantDeploymentSmsSent">
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="messageId" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="isMail" type="xsd:boolean" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantInstall"
+                 type="movilizer:MovilizerParticipantInstall"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantInstall">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Indicates that the mobile phone downloaded
+                the application.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The participantKey can be empty if
+                    assigned outside the context of a movelet via a standalone participant command.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ipAddress" type="movilizer:string15"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="userAgent" type="movilizer:string1023"
+                       use="required"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantInstallAck"
+                 type="movilizer:MovilizerParticipantInstallAck"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantInstallAck">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Indicates that the mobile phone downloaded
+                the application.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The participantKey can be empty if
+                    assigned outside the context of a movelet via a standalone participant command.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ipAddress" type="movilizer:string15"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="userAgent" type="movilizer:string1023"
+                       use="required"/>
+    </xsd:complexType>
+
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantInstallError"
+                 type="movilizer:MovilizerParticipantInstallError"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerParticipantInstallError">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Indicates that the mobile phone downloaded
+                the application.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The participantKey can be empty if
+                    assigned outside the context of a movelet via a standalone participant command.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ipAddress" type="movilizer:string15"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="errorCode" type="movilizer:string15"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="userAgent" type="movilizer:string1023"
+                       use="required"/>
+    </xsd:complexType>
+
+
+    <!-- Response: Reply -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyMovelet"
+                 type="movilizer:MovilizerReplyMovelet"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyMovelet">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                         name="replyQuestion" type="movilizer:MovilizerReplyQuestion"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionHMAC"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="moveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="moveletVersion" type="xsd:long"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="count" type="xsd:int" use="required"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="parentMoveletKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="parentMoveletKeyExtension" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="parentMoveletVersion" type="xsd:long"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="parentReplySetCount" type="xsd:int"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="encryptionAlgorithm" type="movilizer:string15"
+                       use="optional"/>
+
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="participantKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="deviceAddress" type="movilizer:deviceAddress"
+                       use="required"/>
+
+        <!-- <xsd:attribute name="isComplete" type="xsd:boolean" use="required" /> -->
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="creationTimestamp" type="xsd:dateTime"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The client-time when the replySet was
+                    created on the mobile device.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="syncTimestamp" type="xsd:dateTime"
+                       use="required">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The server-time when the replySet was
+                    synced to the server.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="timedif" type="xsd:int" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The time difference between Server and
+                    Client in seconds: timedif = serverTime - clientTime
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" default="0" name="replyUploadPriority" type="xsd:short"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Priority that controls the order of
+                    reply-upload. Higher value means higher priority.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyQuestion"
+                 type="movilizer:MovilizerReplyQuestion"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyQuestion">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0" name="replyAnswer"
+                         type="movilizer:MovilizerReplyAnswer"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="64" minOccurs="0"
+                         name="parameterValue" type="movilizer:MovilizerReplyParameterValue"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="encryptionIV"
+                         type="movilizer:nativeKey"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="questionKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="previousQuestionKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="nextQuestionKey" type="movilizer:nativeKey"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="creationTimestamp" type="xsd:dateTime"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="questionCountNormalized" type="xsd:int"
+                       use="optional"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="questionCountAbsolute" type="xsd:int"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyAnswer"
+                 type="movilizer:MovilizerReplyAnswer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyAnswer">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="value"
+                         type="movilizer:string1023"/>
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="data"
+                         type="movilizer:binary"/>
+        </xsd:sequence>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="answerKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The answerkey might be empty for certain
+                    questiontypes. E.g. if nothing is selected in a multiselect question
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="attributeType" type="xsd:byte" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The attribute type might be empty for
+                    certain questiontypes. E.g. if the question is not of type multi text item screen
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="position" type="xsd:short" use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Contains the answers position.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="clientKey" type="movilizer:clientKey"
+                       use="optional"/>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyParameterValue"
+                 type="movilizer:MovilizerReplyParameterValue"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerReplyParameterValue">
+        <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Only one value can be set at a time,
+                depending on which parameterType has been selected in the Movelet-definition.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="parameterKey" type="movilizer:nativeKey"
+                       use="required"/>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="valueAnswerKey" type="movilizer:nativeKey"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The value field that is being used if
+                    the ParameterType is set to AnswerKey.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="valueFreeText" type="movilizer:string1023"
+                       use="optional">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">The value field that is being used if
+                    the ParameterType is set to any other type.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerRequest">
+        <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:complexContent xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:extension xmlns:xsd="http://www.w3.org/2001/XMLSchema" base="movilizer:MovilizerRequestAbstract">
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Movilizer Online-Container structure to exchange data outside the Movelet / Response cycle -->
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerOnlineResponse">
+        <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:complexContent xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:extension xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                               base="movilizer:MovilizerRequestAbstract">
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerOnlineDataContainer"
+                 type="movilizer:MovilizerOnlineDataContainer"/>
+    <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerOnlineDataContainer">
+        <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1"
+                         name="container"
+                         type="movilizer:MovilizerGenericUploadDataContainer"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MovilizerOnlineCallbackRequest">
+        <xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    Movilizer Online Request which is send from within a Movelet. Is retrieving a response a of
+                    type
+                    MovilizerRequest which may process all kind of objects as a normal request coming in
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                <xsd:element xmlns:xsd="http://www.w3.org/2001/XMLSchema" maxOccurs="unbounded" minOccurs="0"
+                             name="onlineContainer"
+                             type="movilizer:MovilizerOnlineDataContainer"/>
+            </xsd:sequence>
+            <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="systemId" type="xsd:long"
+                           use="required"/>
+            <xsd:attribute xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="category" type="movilizer:string31"
+                           use="optional"/>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

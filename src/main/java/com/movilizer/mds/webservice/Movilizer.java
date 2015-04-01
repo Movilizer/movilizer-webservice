@@ -45,6 +45,9 @@ import com.movilizer.mds.webservice.services.MovilizerDistributionService;
  * @since 12.11.1.0
  */
 public class Movilizer {
+    public static final String SCHEMA = "META-INF/movilizer/wsdl/MovilizerTypesV12.xsd";
+    public static final String WSDL = "META-INF/movilizer/wsdl/MovilizerV12Wsdl11.wsdl";
+    public static final String ONLINE_WSDL = "META-INF/movilizer/wsdl/MovilizerOnlineV12Wsdl11.wsdl";
 
     /**
      * This class in not meant to be instaciated.

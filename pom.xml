@@ -5,7 +5,8 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>12.11.1.0</version><!-- Movilizer version v12 WSDL version 11 then internal java version 0.1 -->
+    <version>12.11.1.1</version>
+    <!-- Movilizer version v12 WSDL version 11 then internal java version 1.1 -->
 
     <name>Movilizer Web Service</name>
     <description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
@@ -48,8 +49,9 @@
         <maven-plugins.version>3.2</maven-plugins.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
-        <movilizer.wsdl.folder>com/movilizer/mds/webservice/wsdl/</movilizer.wsdl.folder>
+        <movilizer.wsdl.folder>META-INF/movilizer/wsdl/</movilizer.wsdl.folder>
         <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV12Wsdl11.wsdl</movilizer.wsdl.file>
+        <movilizer.wsdl.online.file>${movilizer.wsdl.folder}MovilizerOnlineV12Wsdl11.wsdl</movilizer.wsdl.online.file>
         <movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding.xml</movilizer.wsdl.binding>
         <!-- Logging -->
         <slf4j-api.version>1.7.10</slf4j-api.version>
@@ -129,6 +131,10 @@
                                         <bindingFile>src/main/resources/${movilizer.wsdl.binding}</bindingFile>
                                     </bindingFiles>
                                 </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/${movilizer.wsdl.online.file}</wsdl>
+                                    <wsdlLocation>classpath:${movilizer.wsdl.online.file}</wsdlLocation>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals>
@@ -146,32 +152,38 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Upload documents -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${httpclient.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
             <version>${httpclient.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Test -->
         <dependency>
