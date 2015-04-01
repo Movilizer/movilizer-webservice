@@ -40,11 +40,15 @@ public abstract class ResponseHandlerAdapter<T> implements ResponseHandler<T> {
 
     @Override
     public T handleResponse(HttpResponse httpResponse) throws IOException {
-        logger.trace(MESSAGES.HANDLING_HTTP_RESPONSE);
+        if (logger.isTraceEnabled()) {
+            logger.trace(MESSAGES.HANDLING_HTTP_RESPONSE);
+        }
         if (!wasSuccessful(httpResponse)) {
-            logger.error(String.format(MESSAGES.FAILED_REQUEST_ERROR,
-                    httpResponse.getStatusLine().getStatusCode(),
-                    httpResponse.getStatusLine().getReasonPhrase()));
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format(MESSAGES.FAILED_REQUEST_ERROR,
+                        httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.getStatusLine().getReasonPhrase()));
+            }
             Exception e = new MovilizerWebServiceException(
                     String.format(MESSAGES.FAILED_REQUEST_ERROR,
                             httpResponse.getStatusLine().getStatusCode(),
@@ -53,7 +57,9 @@ public abstract class ResponseHandlerAdapter<T> implements ResponseHandler<T> {
             futureCallback.onComplete(null, e);
             return null;
         } else {
-            logger.debug(String.format(MESSAGES.SUCCESSFUL_HTTP_RESPONSE, httpResponse.getStatusLine().getStatusCode()));
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format(MESSAGES.SUCCESSFUL_HTTP_RESPONSE, httpResponse.getStatusLine().getStatusCode()));
+            }
         }
         return convertHttpResponse(httpResponse);
     }

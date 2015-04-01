@@ -44,7 +44,9 @@ class MovilizerWebService {
     }
 
     protected MovilizerRequest prepareUploadRequest(Long systemId, String password, MovilizerRequest request) {
-        logger.trace(String.format(MESSAGES.PREPARE_UPLOAD_REQUEST, systemId));
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.PREPARE_UPLOAD_REQUEST, systemId));
+        }
         // Load system credentials
         request.setSystemId(systemId);
         request.setSystemPassword(password);
@@ -55,24 +57,44 @@ class MovilizerWebService {
         return request;
     }
 
+    protected MovilizerRequest prepareDownloadRequest(Long systemId, String password, Integer numResponses, MovilizerRequest request) {
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.PREPARE_DOWNLOAD_REQUEST, systemId, numResponses));
+        }
+        // Load system credentials
+        request.setSystemId(systemId);
+        request.setSystemPassword(password);
+        request.setNumResponses(numResponses);
+        request.setUseAutoAcknowledge(true);
+        return request;
+    }
+
     protected MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) {
         MovilizerResponse response;
         try {
             response = movilizerCloud.movilizer(request);
         } catch (SOAPFaultException | HTTPException e) {
-            logger.error(e.getMessage());
+            if (logger.isErrorEnabled()) {
+                logger.error(e.getMessage());
+            }
             throw new MovilizerWebServiceException(e);
         }
-        logger.info(String.format(MESSAGES.RESPONSE_RECEIVED, response.getSystemId()));
+        if (logger.isInfoEnabled()) {
+            logger.info(String.format(MESSAGES.RESPONSE_RECEIVED, response.getSystemId()));
+        }
         return response;
     }
 
     protected void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) {
         try {
-            logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            }
             movilizerCloud.movilizerAsync(request, new AsyncHandlerAdapter<>(asyncHandler));
         } catch (SOAPFaultException | HTTPException e) {
-            logger.error(e.getMessage());
+            if (logger.isErrorEnabled()) {
+                logger.error(e.getMessage());
+            }
             throw new MovilizerWebServiceException(e);
         }
     }

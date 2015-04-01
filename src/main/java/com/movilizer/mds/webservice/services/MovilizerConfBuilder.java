@@ -68,20 +68,28 @@ public class MovilizerConfBuilder {
      * @since 12.11.1.0
      */
     public MovilizerDistributionService getService() {
-        logger.trace(MESSAGES.BUILDING_CONFIG);
+        if (logger.isTraceEnabled()) {
+            logger.trace(MESSAGES.BUILDING_CONFIG);
+        }
         MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
         MovilizerWebService webService = new MovilizerWebService(movilizerCloud);
         webService.setEndpoint(endpoint.getMdsUrl());
-        logger.trace(String.format(MESSAGES.USING_ENCODING, outputEncoding.displayName()));
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.USING_ENCODING, outputEncoding.displayName()));
+        }
         MovilizerXMLParserService parserService = new MovilizerXMLParserService(outputEncoding);
         UploadFileService uploadFileService = new UploadFileService(endpoint.getUploadUrl(), new MovilizerUploadForm());
 
         if (endpointAddress != null && documentUploadAddress != null) {
-            logger.trace(String.format(MESSAGES.USING_PRIVATE_CONFIG, endpointAddress.toString(), documentUploadAddress.toString()));
+            if (logger.isTraceEnabled()) {
+                logger.trace(String.format(MESSAGES.USING_PRIVATE_CONFIG, endpointAddress.toString(), documentUploadAddress.toString()));
+            }
             webService.setEndpoint(endpointAddress);
             uploadFileService.setDocumentUploadAddress(documentUploadAddress);
         } else {
-            logger.trace(String.format(MESSAGES.USING_PUBLIC_CONFIG, endpoint.name()));
+            if (logger.isTraceEnabled()) {
+                logger.trace(String.format(MESSAGES.USING_PUBLIC_CONFIG, endpoint.name()));
+            }
         }
 
         return new MovilizerDistributionServiceImpl(
@@ -101,7 +109,9 @@ public class MovilizerConfBuilder {
      */
     public MovilizerConfBuilder setEndpoint(EndPoint endpoint) {
         this.endpoint = endpoint;
-        logger.trace(String.format(MESSAGES.SET_ENDPOINT, endpoint.name()));
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_ENDPOINT, endpoint.name()));
+        }
         return this;
     }
 
@@ -117,7 +127,9 @@ public class MovilizerConfBuilder {
     public MovilizerConfBuilder setEndpoint(URL endpointAddress, URL documentUploadAddress) {
         this.endpointAddress = endpointAddress;
         this.documentUploadAddress = documentUploadAddress;
-        logger.trace(String.format(MESSAGES.SET_PRIVATE_ENDPOINT, endpointAddress.toString(), documentUploadAddress.toString()));
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_PRIVATE_ENDPOINT, endpointAddress.toString(), documentUploadAddress.toString()));
+        }
         return this;
     }
 
@@ -144,7 +156,9 @@ public class MovilizerConfBuilder {
      * @since 12.11.1.0
      */
     public MovilizerConfBuilder setOutputEncoding(Charset outputEncoding) {
-        logger.trace(String.format(MESSAGES.SET_ENCODING, outputEncoding.displayName()));
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_ENCODING, outputEncoding.displayName()));
+        }
         this.outputEncoding = outputEncoding;
         return this;
     }

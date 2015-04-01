@@ -54,27 +54,39 @@ class UploadFileService {
     }
 
     protected UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
-        logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        }
         UploadResponse result = uploadSync(movilizerUpload.getForm(documentInputStream, filename, systemId, password, documentPool, documentKey, language, getSuffixFromFilename(filename), ackKey));
-        logger.info(MESSAGES.UPLOAD_COMPLETE);
+        if (logger.isInfoEnabled()) {
+            logger.info(MESSAGES.UPLOAD_COMPLETE);
+        }
         return result;
     }
 
     protected void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
-        logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        }
         upload(movilizerUpload.getForm(documentInputStream, filename, systemId, password, documentPool, documentKey, language, getSuffixFromFilename(filename), ackKey), asyncHandler);
     }
 
     protected UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
-        logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        }
         UploadResponse result = uploadSync(movilizerUpload.getForm(documentFilePath.toFile(), systemId, password, documentPool, documentKey, language, getSuffixFromFilename(documentFilePath.getFileName().toString()), ackKey));
-        logger.info(MESSAGES.UPLOAD_COMPLETE);
+        if (logger.isInfoEnabled()) {
+            logger.info(MESSAGES.UPLOAD_COMPLETE);
+        }
         return result;
     }
 
     protected void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
         String suffix = getSuffixFromFilename(documentFilePath.getFileName().toString());
-        logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+        }
         upload(movilizerUpload.getForm(documentFilePath.toFile(), systemId, password, documentPool, documentKey, language, suffix, ackKey), asyncHandler);
     }
 
@@ -102,7 +114,9 @@ class UploadFileService {
                     response.getStatusLine().getStatusCode(),
                     response.getStatusLine().getReasonPhrase());
         } catch (IOException | URISyntaxException e) {
-            logger.error(String.format(MESSAGES.UPLOAD_ERROR, e.getMessage()));
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format(MESSAGES.UPLOAD_ERROR, e.getMessage()));
+            }
             throw new MovilizerWebServiceException(e);
         }
     }
@@ -121,7 +135,9 @@ class UploadFileService {
                         }
                     });
         } catch (URISyntaxException e) {
-            logger.error(String.format(MESSAGES.UPLOAD_ERROR, e.getMessage()));
+            if (logger.isErrorEnabled()) {
+                logger.error(String.format(MESSAGES.UPLOAD_ERROR, e.getMessage()));
+            }
             asyncHandler.onFailure(new MovilizerWebServiceException(e));
         }
     }

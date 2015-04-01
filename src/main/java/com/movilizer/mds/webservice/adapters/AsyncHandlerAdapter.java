@@ -38,7 +38,9 @@ public class AsyncHandlerAdapter<T> implements AsyncHandler<T> {
     @Override
     public void handleResponse(Response<T> response) {
         if (response.isCancelled()) {
-            logger.error(MESSAGES.WEB_RESPONSE_CANCELED);
+            if (logger.isErrorEnabled()) {
+                logger.error(MESSAGES.WEB_RESPONSE_CANCELED);
+            }
             Exception e = new MovilizerWebServiceException(MESSAGES.REQUEST_CANCELLED_ERROR);
             futureCallback.onFailure(e);
             futureCallback.onComplete(null, e);
@@ -46,9 +48,13 @@ public class AsyncHandlerAdapter<T> implements AsyncHandler<T> {
         }
         if (response.isDone()) {
             try {
-                logger.trace(MESSAGES.HANDLING_WEB_RESPONSE);
+                if (logger.isTraceEnabled()) {
+                    logger.trace(MESSAGES.HANDLING_WEB_RESPONSE);
+                }
                 T resInstance = response.get();
-                logger.debug(String.format(MESSAGES.SUCCESSFUL_WEB_RESPONSE, resInstance.getClass().toString()));
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format(MESSAGES.SUCCESSFUL_WEB_RESPONSE, resInstance.getClass().toString()));
+                }
                 futureCallback.onSuccess(resInstance);
                 futureCallback.onComplete(resInstance, null);
             } catch (ExecutionException | InterruptedException e) {
@@ -56,7 +62,9 @@ public class AsyncHandlerAdapter<T> implements AsyncHandler<T> {
                 futureCallback.onComplete(null, e);
             }
         } else {
-            logger.error(MESSAGES.WEB_RESPONSE_NOT_DONE);
+            if (logger.isErrorEnabled()) {
+                logger.error(MESSAGES.WEB_RESPONSE_NOT_DONE);
+            }
         }
     }
 }
