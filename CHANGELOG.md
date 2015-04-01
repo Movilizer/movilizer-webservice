@@ -9,3 +9,10 @@ Initial public release
 - Convenient method for upload only request
 - File access and persistence to load and save Movilizer requests
 - toString methods for Movilizer requests
+
+## 12.11.1.1 (2015-04-01)
+
+Add missing features
+
+- Compiled Online WSDL to Java classes for Movilizer Online Sync Cloud Feature
+- Convenient method to marshall requests from String for Velocity and other template engines integration
