@@ -25,9 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.*;
 import javax.xml.transform.stream.StreamSource;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,7 +50,9 @@ class MovilizerXMLParserService {
             movilizerRequestUnmarshaller.setEventHandler(new ValidationEventHandler() {
                 @Override
                 public boolean handleEvent(ValidationEvent event) {
-                    logger.error(MESSAGES.UNMARSHALLING_XML_ERROR + event.getMessage());
+                    if (logger.isErrorEnabled()) {
+                        logger.error(MESSAGES.UNMARSHALLING_XML_ERROR + event.getMessage());
+                    }
                     return true;
                 }
             });
@@ -67,12 +67,35 @@ class MovilizerXMLParserService {
 
     protected MovilizerRequest getRequestFromFile(Path filePath) {
         if (!Files.exists(filePath)) {
-            logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
+            if (logger.isErrorEnabled()) {
+                logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
+            }
         }
         JAXBElement<MovilizerRequest> root;
         try {
             root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
-            logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
+            if (logger.isInfoEnabled()) {
+                logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
+            }
+        } catch (JAXBException e) {
+            throw new MovilizerXMLException(e);
+        }
+        return root.getValue();
+    }
+
+    protected MovilizerRequest getRequestFromString(String requestString) {
+        if (requestString == null) {
+            if (logger.isErrorEnabled()) {
+                logger.error(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+            }
+            throw new MovilizerXMLException(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+        }
+        JAXBElement<MovilizerRequest> root;
+        try {
+            root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(requestString))), MovilizerRequest.class);
+            if (logger.isInfoEnabled()) {
+                logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
+            }
         } catch (JAXBException e) {
             throw new MovilizerXMLException(e);
         }
@@ -109,14 +132,18 @@ class MovilizerXMLParserService {
         }
         try {
             movilizerRequestMarshaller.marshal(request, fileWriter);
-            logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
+            if (logger.isInfoEnabled()) {
+                logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
+            }
         } catch (JAXBException e) {
             throw new MovilizerXMLException(e);
         } finally {
             try {
                 fileWriter.close();
             } catch (IOException e) {
-                logger.error(MESSAGES.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
+                if (logger.isErrorEnabled()) {
+                    logger.error(MESSAGES.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
+                }
             }
         }
     }

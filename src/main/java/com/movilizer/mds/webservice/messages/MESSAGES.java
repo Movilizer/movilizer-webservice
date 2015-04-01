@@ -32,9 +32,9 @@ public class MESSAGES {
     public static final String FAILED_REQUEST_ERROR = "Failed upload request with status '%d' with reason '%s'";
     public static final String UNMARSHALLING_XML_ERROR = "The unmarshaller could not process Movilizer request: ";
     public static final String READING_REQUEST_FROM_FILE = "Reading request from file %s";
-    public static final String SUCCESSFUL_REQUEST_FROM_FILE = "Request from file %s read successfuly";
+    public static final String SUCCESSFUL_REQUEST_FROM_FILE = "Request from file %s read successfully";
     public static final String SAVING_REQUEST_TO_FILE = "Saving request to file %s";
-    public static final String SUCCESSFUL_REQUEST_TO_FILE = "Request saved to file %s successfuly";
+    public static final String SUCCESSFUL_REQUEST_TO_FILE = "Request saved to file %s successfully";
     public static final String REQUEST_FILE_NOT_FOUND = "Request file not found for path: ";
     public static final String CANNOT_CLOSE_FILE = "Cannot close file writer for file: ";
     public static final String MISSING_FILE_EXTENSION = "Invalid filename '%s'. Missing file extension";
@@ -53,4 +53,8 @@ public class MESSAGES {
     public static final String SET_PRIVATE_ENDPOINT = "Set endpoint to webservice '%s' and upload '%s'";
     public static final String SET_ENCODING = "Set encoding '%s'";
     public static final String PREPARE_UPLOAD_REQUEST = "Preparing request for upload for system id %d";
+    public static final String PREPARE_DOWNLOAD_REQUEST = "Preparing request for download for system id %d with %d responses";
+    public static final String REQUEST_STRING_MUST_NOT_BE_NULL = "Request String must not be null";
+    public static final String SUCCESSFUL_REQUEST_FROM_STRING = "Request from String created successfully";
+    public static final String READING_REQUEST_FROM_STRING = "Reading request from string";
 }

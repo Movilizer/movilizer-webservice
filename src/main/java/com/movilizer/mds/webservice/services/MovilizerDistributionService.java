@@ -55,6 +55,18 @@ public interface MovilizerDistributionService {
     MovilizerRequest prepareUploadRequest(Long systemId, String password, MovilizerRequest request);
 
     /**
+     * Sets systemd Id and password for the request and set the number of replies replies from next response.
+     *
+     * @param systemId     the system id to be set in the request.
+     * @param password     the password to be set in the request.
+     * @param numResponses the number of responses to receive in the response.
+     * @param request      request to be modified for upload.
+     * @return the same request entered in the method parameters but with the credentials and number of replies changed.
+     * @since 12.11.1.0
+     */
+    MovilizerRequest prepareDownloadRequest(Long systemId, String password, Integer numResponses, MovilizerRequest request);
+
+    /**
      * Performs a synchronous request the Movilizer cloud.
      *
      * @param request request to be used in the call.
@@ -76,6 +88,15 @@ public interface MovilizerDistributionService {
      * @since 12.11.1.0
      */
     void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException;
+
+    /**
+     * Generates a string from the response java instance errors.
+     *
+     * @param response the response to be transformed into string.
+     * @return the string representation of the response errors.
+     * @since 12.11.1.0
+     */
+    String responseErrorsToString(MovilizerResponse response);
 
     // ------------------------------------------------------------------------------------------------- Document upload
 
@@ -164,6 +185,16 @@ public interface MovilizerDistributionService {
      * @since 12.11.1.0
      */
     MovilizerRequest getRequestFromFile(Path filePath) throws MovilizerXMLException;
+
+    /**
+     * Reads and parses a Movilizer Request from the given String.
+     *
+     * @param requestString non null string with a valid xml request.
+     * @return the java instance parsed from the file.
+     * @throws MovilizerXMLException when there's parsing or string problems.
+     * @since 12.11.1.1
+     */
+    MovilizerRequest getRequestFromString(String requestString) throws MovilizerXMLException;
 
     /**
      * Persists a request java instance to a file.
