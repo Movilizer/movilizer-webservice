@@ -14,7 +14,7 @@ Either use is a `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>12.11.1.2</version>
+        <version>12.11.1.3-SNAPSHOT</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
