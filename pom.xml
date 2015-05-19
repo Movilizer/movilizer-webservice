@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>12.11.1.2-SNAPSHOT</version>
+    <version>12.11.1.2</version>
     <!-- Movilizer version v12 WSDL version 11 then internal java version 1.1 -->
 
     <name>Movilizer Web Service</name>
@@ -13,7 +14,7 @@
     <url>http://demula.github.io/movilizer-webservice</url>
 
     <organization>
-        <name>Movilizer GhmB</name>
+        <name>Movilizer GmbH</name>
         <url>http://www.movilizer.com</url>
     </organization>
 
@@ -51,8 +52,10 @@
         <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
         <movilizer.wsdl.folder>META-INF/movilizer/wsdl/</movilizer.wsdl.folder>
         <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV12Wsdl11.wsdl</movilizer.wsdl.file>
+        <movilizer.xsd.file>${movilizer.wsdl.folder}MovilizerTypesV12.xsd</movilizer.xsd.file>
         <movilizer.wsdl.online.file>${movilizer.wsdl.folder}MovilizerOnlineV12Wsdl11.wsdl</movilizer.wsdl.online.file>
-        <movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding.xml</movilizer.wsdl.binding>
+        <movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding_wsdl.xml</movilizer.wsdl.binding>
+        <movilizer.jaxb.binding>${movilizer.wsdl.folder}movilizer_binding_serializable.xml</movilizer.jaxb.binding>
         <!-- Logging -->
         <slf4j-api.version>1.7.10</slf4j-api.version>
         <logback.version>1.1.2</logback.version>
@@ -130,10 +133,19 @@
                                     <bindingFiles>
                                         <bindingFile>src/main/resources/${movilizer.wsdl.binding}</bindingFile>
                                     </bindingFiles>
+                                    <extraargs>
+                                        <extraarg>-xjc-b,${basedir}/src/main/resources/${movilizer.jaxb.binding}</extraarg>
+                                    </extraargs>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/${movilizer.wsdl.online.file}</wsdl>
                                     <wsdlLocation>classpath:${movilizer.wsdl.online.file}</wsdlLocation>
+                                    <bindingFiles>
+                                        <bindingFile>src/main/resources/${movilizer.wsdl.binding}</bindingFile>
+                                    </bindingFiles>
+                                    <extraargs>
+                                        <extraarg>-xjc-b,${basedir}/src/main/resources/${movilizer.jaxb.binding}</extraarg>
+                                    </extraargs>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
@@ -164,6 +176,19 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Web Service Access -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-core</artifactId>
+            <version>${cxf.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-databinding-jaxb</artifactId>
+            <version>${cxf.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Upload documents -->
