@@ -3,7 +3,7 @@
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
 at https://devtools.movilizer.com/confluence/display/DOC22/Introduction+to+the+Movilizer+Web+Service
 
-![Continous integration Circle CI](https://circleci.com/gh/demula/movilizer-webservice.svg?style=shield&circle-token=:circle-token)
+![Continous integration Circle CI](https://circleci.com/gh/movilizer/movilizer-webservice.svg?style=shield&circle-token=:circle-token)
 
 ## Adding it into your project
 
@@ -14,7 +14,7 @@ Either use is a `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>12.11.1.1</version>
+        <version>12.11.1.2</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -92,7 +92,7 @@ MovilizerDistributionService mds = Movilizer.buildConf()
 Asynchronous calls are also possible:
 
 ```java
-// Perform a synchronous call to the Movilizer Cloud
+// Perform a asynchronous call to the Movilizer Cloud
 MovilizerResponse response = mds.getReplyFromCloud(request, new FutureCallback<MovilizerResponse> {
     void onSuccess(MovilizerResponse response){
         logger.info("Yay! I got my response!");
@@ -103,7 +103,7 @@ MovilizerResponse response = mds.getReplyFromCloud(request, new FutureCallback<M
     }
 });
 
-// Perform a synchronous upload of a document to the Movilizer Cloud
+// Perform a asynchronous upload of a document to the Movilizer Cloud
 UploadResponse uploadResponse = mds.uploadDocument(Paths.get("myCatalogue1.pdf"), 1234L, "super-secret-password", 
                                                    "cataloguePool", "myCatalogue1", "EN", null, new FutureCallback<UploadResponse> {
     void onSuccess(UploadResponse response){
@@ -115,10 +115,3 @@ UploadResponse uploadResponse = mds.uploadDocument(Paths.get("myCatalogue1.pdf")
     }
 });
 ```
-
-## Dependencies
-
-This lib comes with the following dependencies included (futures changes may require you include them yourself):
-- SLF4J 1.7.10
-- Apache httpcomponents (httpclient, httpmime, fluent-hc) 4.4
-- Apache CXF for calling and compiling the WSDL 3.0.4
