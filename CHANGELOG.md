@@ -16,3 +16,12 @@ Add missing features
 
 - Compiled Online WSDL to Java classes for Movilizer Online Sync Cloud Feature
 - Convenient method to marshall requests from String for Velocity and other template engines integration
+
+## 12.11.1.2 (2015-05-19)
+
+Refactor messages
+
+Add features
+
+- Movilizer OnlineSync manages asynchronously
+- Serializable artifacts compiled from the wsdl
