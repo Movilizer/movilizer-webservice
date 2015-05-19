@@ -19,50 +19,51 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(JUnit4.class)
 public class UploadServiceTest {
-    private static final String documentsDir = "/documents";
-    private static final String pdfFilename = "movilizer_days.pdf";
-    private static long SYSTEM_ID = 1L; //Put your own here
-    private static String PASSWORD = "pass"; //Put your own here
-    private static String DOCUMENT_POOL = "testMovilizerWebservicePdfPool";
-    private static String DOCUMENT_KEY = "testMovilizerWebservicePdfKey";
-    private static String LANG = "";
-    private static String ACK = "";
+  private static final String documentsDir = "/documents";
+  private static final String pdfFilename = "movilizer_days.pdf";
+  private static long SYSTEM_ID = 1L; //Put your own here
+  private static String PASSWORD = "pass"; //Put your own here
+  private static String DOCUMENT_POOL = "testMovilizerWebservicePdfPool";
+  private static String DOCUMENT_KEY = "testMovilizerWebservicePdfKey";
+  private static String LANG = "";
+  private static String ACK = "";
 
-    private UploadFileService uploadService;
+  private UploadFileService uploadService;
 
-    @Before
-    public void setUp() throws Exception {
-        uploadService = new UploadFileService(DefaultValues.MOVILIZER_ENDPOINT.getUploadUrl(), new MovilizerUploadForm());
-    }
+  @Before
+  public void setUp() throws Exception {
+    uploadService = new UploadFileService(DefaultValues.MOVILIZER_ENDPOINT.getUploadUrl(), new MovilizerUploadForm(),
+        DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS);
+  }
 
-    @Ignore
-    @Test
-    public void testSavePdf() throws Exception {
-        Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
-        Path filePath = folderPath.resolve(pdfFilename);
-        uploadService.uploadDocumentSync(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
-    }
+  @Ignore
+  @Test
+  public void testSavePdf() throws Exception {
+    Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
+    Path filePath = folderPath.resolve(pdfFilename);
+    uploadService.uploadDocumentSync(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
+  }
 
-    @Ignore
-    @Test
-    public void testSavePdfAsync() throws Exception {
-        Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
-        Path filePath = folderPath.resolve(pdfFilename);
-        uploadService.uploadDocument(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK,
-                new FutureCallback<UploadResponse>() {
-                    @Override
-                    public void onSuccess(UploadResponse response) {
-                    }
+  @Ignore
+  @Test
+  public void testSavePdfAsync() throws Exception {
+    Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
+    Path filePath = folderPath.resolve(pdfFilename);
+    uploadService.uploadDocument(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK,
+        new FutureCallback<UploadResponse>() {
+          @Override
+          public void onSuccess(UploadResponse response) {
+          }
 
-                    @Override
-                    public void onComplete(UploadResponse response, Exception e) {
-                        assertThat(response, is(notNullValue()));
-                        assertThat(response.wasSuccessful(), is(true));
-                    }
+          @Override
+          public void onComplete(UploadResponse response, Exception e) {
+            assertThat(response, is(notNullValue()));
+            assertThat(response.wasSuccessful(), is(true));
+          }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                    }
-                });
-    }
+          @Override
+          public void onFailure(Exception e) {
+          }
+        });
+  }
 }

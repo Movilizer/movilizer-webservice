@@ -23,128 +23,140 @@ import com.movilizer.mds.webservice.messages.MESSAGES;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.ValidationEvent;
+import javax.xml.bind.ValidationEventHandler;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 class MovilizerXMLParserService {
-    private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
+  private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
+  private final Charset outputEncoding;
+  private final Unmarshaller movilizerRequestUnmarshaller;
+  private final Marshaller movilizerRequestMarshaller;
+  private final Marshaller movilizerResponseMarshaller;
 
-    private Unmarshaller movilizerRequestUnmarshaller;
-    private Marshaller movilizerRequestMarshaller;
-    private Marshaller movilizerResponseMarshaller;
-    private Charset outputEncoding;
-
-    protected MovilizerXMLParserService(Charset outputEncoding) {
-        this.outputEncoding = outputEncoding;
-        try {
-            JAXBContext movilizerRequestContext = JAXBContext.newInstance(MovilizerRequest.class);
-            movilizerRequestMarshaller = movilizerRequestContext.createMarshaller();
-            movilizerRequestMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            movilizerRequestMarshaller.setProperty(Marshaller.JAXB_ENCODING, outputEncoding.name());
-            movilizerRequestUnmarshaller = movilizerRequestContext.createUnmarshaller();
-//        ValidationEventHandler validationEventHandler = new javax.xml.bind.helpers.DefaultValidationEventHandler();
-            movilizerRequestUnmarshaller.setEventHandler(new ValidationEventHandler() {
-                @Override
-                public boolean handleEvent(ValidationEvent event) {
-                    if (logger.isErrorEnabled()) {
-                        logger.error(MESSAGES.UNMARSHALLING_XML_ERROR + event.getMessage());
-                    }
-                    return true;
-                }
-            });
-
-            JAXBContext movilizerResponseContext = JAXBContext.newInstance(MovilizerResponse.class);
-            movilizerResponseMarshaller = movilizerResponseContext.createMarshaller();
-            movilizerResponseMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        } catch (JAXBException e) {
-            throw new MovilizerXMLException(e);
+  protected MovilizerXMLParserService(final Charset outputEncoding) {
+    this.outputEncoding = outputEncoding;
+    try {
+      final JAXBContext movilizerRequestContext = JAXBContext.newInstance(MovilizerRequest.class);
+      movilizerRequestMarshaller = movilizerRequestContext.createMarshaller();
+      movilizerRequestMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      movilizerRequestMarshaller.setProperty(Marshaller.JAXB_ENCODING, outputEncoding.name());
+      movilizerRequestUnmarshaller = movilizerRequestContext.createUnmarshaller();
+      movilizerRequestUnmarshaller.setEventHandler(new ValidationEventHandler() {
+        @Override
+        public boolean handleEvent(final ValidationEvent event) {
+          if (logger.isErrorEnabled()) {
+            logger.error(MESSAGES.UNMARSHALLING_XML_ERROR + event.getMessage());
+          }
+          return true;
         }
+      });
+
+      final JAXBContext movilizerResponseContext = JAXBContext.newInstance(MovilizerResponse.class);
+      movilizerResponseMarshaller = movilizerResponseContext.createMarshaller();
+      movilizerResponseMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
     }
+  }
 
-    protected MovilizerRequest getRequestFromFile(Path filePath) {
-        if (!Files.exists(filePath)) {
-            if (logger.isErrorEnabled()) {
-                logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
-            }
-        }
-        JAXBElement<MovilizerRequest> root;
-        try {
-            root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
-            if (logger.isInfoEnabled()) {
-                logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
-            }
-        } catch (JAXBException e) {
-            throw new MovilizerXMLException(e);
-        }
-        return root.getValue();
+  protected MovilizerRequest getRequestFromFile(final Path filePath) {
+    if (!Files.exists(filePath)) {
+      if (logger.isErrorEnabled()) {
+        logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
+      }
+      throw new MovilizerXMLException(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
     }
+    JAXBElement<MovilizerRequest> root;
+    try {
+      root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
+      if (logger.isInfoEnabled()) {
+        logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
+      }
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
+    }
+    return root.getValue();
+  }
 
-    protected MovilizerRequest getRequestFromString(String requestString) {
-        if (requestString == null) {
-            if (logger.isErrorEnabled()) {
-                logger.error(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
-            }
-            throw new MovilizerXMLException(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
-        }
-        JAXBElement<MovilizerRequest> root;
-        try {
-            root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(requestString))), MovilizerRequest.class);
-            if (logger.isInfoEnabled()) {
-                logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
-            }
-        } catch (JAXBException e) {
-            throw new MovilizerXMLException(e);
-        }
-        return root.getValue();
+  protected MovilizerRequest getRequestFromString(final String requestString) {
+    if (requestString == null) {
+      if (logger.isErrorEnabled()) {
+        logger.error(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+      }
+      throw new MovilizerXMLException(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
     }
+    JAXBElement<MovilizerRequest> root;
+    try {
+      root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(requestString))), MovilizerRequest.class);
+      if (logger.isInfoEnabled()) {
+        logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
+      }
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
+    }
+    return root.getValue();
+  }
 
-    protected String printRequest(MovilizerRequest request) {
-        StringWriter writer = new StringWriter();
-        try {
-            movilizerRequestMarshaller.marshal(request, writer);
-        } catch (JAXBException e) {
-            throw new MovilizerXMLException(e);
-        }
-        return writer.toString();
+  protected String printRequest(final MovilizerRequest request) {
+    final StringWriter writer = new StringWriter();
+    try {
+      movilizerRequestMarshaller.marshal(request, writer);
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
     }
+    return writer.toString();
+  }
 
-    protected String printResponse(MovilizerResponse response) {
-        StringWriter writer = new StringWriter();
-        try {
-            movilizerResponseMarshaller.marshal(response, writer);
-        } catch (JAXBException e) {
-            throw new MovilizerXMLException(e);
-        }
-        return writer.toString();
+  protected String printResponse(final MovilizerResponse response) {
+    final StringWriter writer = new StringWriter();
+    try {
+      movilizerResponseMarshaller.marshal(response, writer);
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
     }
+    return writer.toString();
+  }
 
-    protected void saveRequestToFile(MovilizerRequest request, Path filePath) {
-        filePath.toFile().getParentFile().mkdirs();
-        BufferedWriter fileWriter;
-        try {
-            fileWriter = Files.newBufferedWriter(filePath, outputEncoding);
-        } catch (IOException e) {
-            throw new MovilizerXMLException(e);
-        }
-        try {
-            movilizerRequestMarshaller.marshal(request, fileWriter);
-            if (logger.isInfoEnabled()) {
-                logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
-            }
-        } catch (JAXBException e) {
-            throw new MovilizerXMLException(e);
-        } finally {
-            try {
-                fileWriter.close();
-            } catch (IOException e) {
-                if (logger.isErrorEnabled()) {
-                    logger.error(MESSAGES.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
-                }
-            }
-        }
+  protected void saveRequestToFile(final MovilizerRequest request, final Path filePath) {
+    final boolean foldersHaveBeenCreated = filePath.toFile().getParentFile().mkdirs();
+    if (foldersHaveBeenCreated && logger.isTraceEnabled()) {
+      logger.trace(String.format(MESSAGES.FOLDERS_CREATED, filePath));
     }
+    BufferedWriter fileWriter;
+    try {
+      fileWriter = Files.newBufferedWriter(filePath, outputEncoding);
+    } catch (IOException e) {
+      throw new MovilizerXMLException(e);
+    }
+    try {
+      movilizerRequestMarshaller.marshal(request, fileWriter);
+      if (logger.isInfoEnabled()) {
+        logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
+      }
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
+    } finally {
+      try {
+        fileWriter.close();
+      } catch (IOException e) {
+        if (logger.isErrorEnabled()) {
+          logger.error(MESSAGES.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
+        }
+      }
+    }
+  }
 }

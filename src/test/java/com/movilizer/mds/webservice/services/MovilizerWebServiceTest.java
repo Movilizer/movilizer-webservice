@@ -18,49 +18,50 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(JUnit4.class)
 public class MovilizerWebServiceTest {
-    private static long SYSTEM_ID = 1L; //Put your own here
-    private static String PASSWORD = "pass"; //Put your own here
+  private static long SYSTEM_ID = 1L; //Put your own here
+  private static String PASSWORD = "pass"; //Put your own here
 
-    private MovilizerWebService webService;
+  private MovilizerWebService webService;
 
-    @Before
-    public void setUp() throws Exception {
-        MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
-        webService = new MovilizerWebService(movilizerCloud);
-        webService.setEndpoint(DefaultValues.MOVILIZER_ENDPOINT.getMdsUrl());
-    }
+  @Before
+  public void setUp() throws Exception {
+    MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
+    webService = new MovilizerWebService(movilizerCloud, DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS,
+        DefaultValues.RECEIVE_TIMEOUT_IN_MILLIS, DefaultValues.AGENT_ID, DefaultValues.AGENT_VERSION);
+    webService.setEndpoint(DefaultValues.MOVILIZER_ENDPOINT.getMdsUrl());
+  }
 
-    @Ignore
-    @Test
-    public void testPerformEmptyRequest() throws Exception {
-        MovilizerRequest request = new MovilizerRequest();
-        request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
-        MovilizerResponse response = webService.getReplyFromCloudSync(request);
-        assertThat(response, is(notNullValue()));
-        assertThat(webService.responseHasErrors(response), is(false));
-    }
+  @Ignore
+  @Test
+  public void testPerformEmptyRequest() throws Exception {
+    MovilizerRequest request = new MovilizerRequest();
+    request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
+    MovilizerResponse response = webService.getReplyFromCloudSync(request);
+    assertThat(response, is(notNullValue()));
+    assertThat(webService.responseHasErrors(response), is(false));
+  }
 
-    @Ignore
-    @Test
-    public void testPerformEmptyRequestAsync() throws Exception {
-        MovilizerRequest request = new MovilizerRequest();
-        request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
-        webService.getReplyFromCloud(request, new FutureCallback<MovilizerResponse>() {
-            @Override
-            public void onSuccess(MovilizerResponse movilizerResponse) {
+  @Ignore
+  @Test
+  public void testPerformEmptyRequestAsync() throws Exception {
+    MovilizerRequest request = new MovilizerRequest();
+    request = webService.prepareUploadRequest(SYSTEM_ID, PASSWORD, request);
+    webService.getReplyFromCloud(request, new FutureCallback<MovilizerResponse>() {
+      @Override
+      public void onSuccess(MovilizerResponse movilizerResponse) {
 
-            }
+      }
 
-            @Override
-            public void onComplete(MovilizerResponse movilizerResponse, Exception e) {
-                assertThat(movilizerResponse, is(notNullValue()));
-                assertThat(webService.responseHasErrors(movilizerResponse), is(false));
-            }
+      @Override
+      public void onComplete(MovilizerResponse movilizerResponse, Exception e) {
+        assertThat(movilizerResponse, is(notNullValue()));
+        assertThat(webService.responseHasErrors(movilizerResponse), is(false));
+      }
 
-            @Override
-            public void onFailure(Exception e) {
+      @Override
+      public void onFailure(Exception e) {
 
-            }
-        });
-    }
+      }
+    });
+  }
 }
