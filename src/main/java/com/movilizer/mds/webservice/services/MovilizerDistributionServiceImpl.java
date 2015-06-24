@@ -88,6 +88,11 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
+  public Boolean responseHasErrors(MovilizerResponse response) {
+    return webService.responseHasErrors(response);
+  }
+
+  @Override
   public String responseErrorsToString(MovilizerResponse response) {
     return webService.prettyPrintErrors(response);
   }
@@ -154,6 +159,22 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
     uploadFileService.uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis, asyncHandler);
+  }
+
+  @Override
+  public <T> T getElementFromString(String elementString, Class<T> movilizerElementClass) throws MovilizerXMLException {
+    if (logger.isDebugEnabled()) {
+      logger.debug(String.format(MESSAGES.PARSING_XML, movilizerElementClass.getName()));
+    }
+    return parserService.getMovilizerElementFromString(elementString, movilizerElementClass);
+  }
+
+  @Override
+  public <T> String printMovilizerElementToString(T movilizerElement, Class<T> movilizerElementClass) {
+    if (logger.isDebugEnabled()) {
+      logger.debug(String.format(MESSAGES.PRINTING_XML, movilizerElementClass.getName()));
+    }
+    return parserService.printMovilizerElementToString(movilizerElement, movilizerElementClass);
   }
 
   @Override

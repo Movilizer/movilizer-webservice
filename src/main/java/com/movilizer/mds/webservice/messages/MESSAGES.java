@@ -62,4 +62,6 @@ public class MESSAGES {
   public static final String READING_REQUEST_FROM_STRING = "Reading request from string";
   public static final String MARSHALLING_ERROR = "There was an error marshalling %s";
   public static final String FOLDERS_CREATED = "Created folders for file: %s";
+  public static final String PARSING_XML = "Parsing instance of class %s from XML";
+  public static final String PRINTING_XML = "Printing instance of class %s to XML";
 }

@@ -30,6 +30,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
+import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -43,19 +44,24 @@ import java.nio.file.Path;
 class MovilizerXMLParserService {
   private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
   private final Charset outputEncoding;
-  private final Unmarshaller movilizerRequestUnmarshaller;
-  private final Marshaller movilizerRequestMarshaller;
-  private final Marshaller movilizerResponseMarshaller;
+  private final Unmarshaller movilizerXMLUnmarshaller;
+  private final Marshaller movilizerXMLMarshaller;
 
   protected MovilizerXMLParserService(final Charset outputEncoding) {
     this.outputEncoding = outputEncoding;
     try {
-      final JAXBContext movilizerRequestContext = JAXBContext.newInstance(MovilizerRequest.class);
-      movilizerRequestMarshaller = movilizerRequestContext.createMarshaller();
-      movilizerRequestMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      movilizerRequestMarshaller.setProperty(Marshaller.JAXB_ENCODING, outputEncoding.name());
-      movilizerRequestUnmarshaller = movilizerRequestContext.createUnmarshaller();
-      movilizerRequestUnmarshaller.setEventHandler(new ValidationEventHandler() {
+      /*
+        see: http://stackoverflow.com/questions/14162159/supplying-a-different-version-of-jaxb-for-jax-ws-in-java-1-6
+       */
+      System.setProperty("javax.xml.bind.JAXBContext",
+          "com.sun.xml.internal.bind.v2.ContextFactory");
+
+      final JAXBContext movilizerXMLContext = JAXBContext.newInstance(MovilizerRequest.class, MovilizerResponse.class);
+      movilizerXMLMarshaller = movilizerXMLContext.createMarshaller();
+      movilizerXMLMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      movilizerXMLMarshaller.setProperty(Marshaller.JAXB_ENCODING, outputEncoding.name());
+      movilizerXMLUnmarshaller = movilizerXMLContext.createUnmarshaller();
+      movilizerXMLUnmarshaller.setEventHandler(new ValidationEventHandler() {
         @Override
         public boolean handleEvent(final ValidationEvent event) {
           if (logger.isErrorEnabled()) {
@@ -64,10 +70,6 @@ class MovilizerXMLParserService {
           return true;
         }
       });
-
-      final JAXBContext movilizerResponseContext = JAXBContext.newInstance(MovilizerResponse.class);
-      movilizerResponseMarshaller = movilizerResponseContext.createMarshaller();
-      movilizerResponseMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
     } catch (JAXBException e) {
       throw new MovilizerXMLException(e);
     }
@@ -82,7 +84,7 @@ class MovilizerXMLParserService {
     }
     JAXBElement<MovilizerRequest> root;
     try {
-      root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
+      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
       if (logger.isInfoEnabled()) {
         logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
       }
@@ -101,7 +103,26 @@ class MovilizerXMLParserService {
     }
     JAXBElement<MovilizerRequest> root;
     try {
-      root = movilizerRequestUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(requestString))), MovilizerRequest.class);
+      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(requestString))), MovilizerRequest.class);
+      if (logger.isInfoEnabled()) {
+        logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
+      }
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
+    }
+    return root.getValue();
+  }
+
+  protected <T> T getMovilizerElementFromString(final String elementString, final Class<T> movilizerElementClass) {
+    if (elementString == null) {
+      if (logger.isErrorEnabled()) {
+        logger.error(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+      }
+      throw new MovilizerXMLException(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+    }
+    JAXBElement<T> root;
+    try {
+      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(elementString))), movilizerElementClass);
       if (logger.isInfoEnabled()) {
         logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
       }
@@ -114,7 +135,7 @@ class MovilizerXMLParserService {
   protected String printRequest(final MovilizerRequest request) {
     final StringWriter writer = new StringWriter();
     try {
-      movilizerRequestMarshaller.marshal(request, writer);
+      movilizerXMLMarshaller.marshal(request, writer);
     } catch (JAXBException e) {
       throw new MovilizerXMLException(e);
     }
@@ -124,7 +145,18 @@ class MovilizerXMLParserService {
   protected String printResponse(final MovilizerResponse response) {
     final StringWriter writer = new StringWriter();
     try {
-      movilizerResponseMarshaller.marshal(response, writer);
+      movilizerXMLMarshaller.marshal(response, writer);
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
+    }
+    return writer.toString();
+  }
+
+  protected <T> String printMovilizerElementToString(final T movilizerElement, final Class<T> movilizerElementClass) {
+    final StringWriter writer = new StringWriter();
+    try {
+      JAXBElement<T> element = new JAXBElement<>(QName.valueOf(movilizerElementClass.getSimpleName()), movilizerElementClass, movilizerElement);
+      movilizerXMLMarshaller.marshal(element, writer);
     } catch (JAXBException e) {
       throw new MovilizerXMLException(e);
     }
@@ -143,7 +175,7 @@ class MovilizerXMLParserService {
       throw new MovilizerXMLException(e);
     }
     try {
-      movilizerRequestMarshaller.marshal(request, fileWriter);
+      movilizerXMLMarshaller.marshal(request, fileWriter);
       if (logger.isInfoEnabled()) {
         logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
       }

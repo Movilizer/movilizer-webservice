@@ -52,7 +52,7 @@ public class Movilizer {
     public static final String ONLINE_OPERATION = "MovilizerOnlineCallback";
 
     /**
-     * This class in not meant to be instaciated.
+     * This class in not meant to be instantiated.
      */
     private Movilizer() {
     }

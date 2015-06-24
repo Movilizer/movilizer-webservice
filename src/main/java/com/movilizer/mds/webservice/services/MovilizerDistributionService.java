@@ -117,6 +117,15 @@ public interface MovilizerDistributionService {
   void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException;
 
   /**
+   * Indicates if the response java instance has errors.
+   *
+   * @param response the response to be analyzed.
+   * @return true in case response has errors else false.
+   * @since 12.11.1.3
+   */
+  Boolean responseHasErrors(MovilizerResponse response);
+
+  /**
    * Generates a string from the response java instance errors.
    *
    * @param response the response to be transformed into string.
@@ -278,6 +287,31 @@ public interface MovilizerDistributionService {
    * @since 12.11.1.2
    */
   void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException;
+
+  // -------------------------------------------------------------------------------------------------- File XML utils
+
+  /**
+   * Reads a Movilizer element from the webservice name space (MovilizerMovelet, MovilizerReply, etc...) and creates a
+   * java object instance of the class indicated.
+   *
+   * @param elementString string value of the serialization of the object.
+   * @param movilizerElementClass class of the Movilizer object to create from the string.
+   * @return the java instance parsed from the string.
+   * @throws MovilizerXMLException when there are parsing problems.
+   * @since 12.11.1.3
+   */
+  <T> T getElementFromString(final String elementString, final Class<T> movilizerElementClass) throws MovilizerXMLException;
+
+  /**
+   * Prints a Movilizer element from the webservice name space (MovilizerMovelet, MovilizerReply, etc...) to string.
+   *
+   * @param movilizerElement java instance of the Movilizer element.
+   * @param movilizerElementClass class of the Movilizer element to use.
+   * @return XML string representation for the Movilizer element given.
+   * @throws MovilizerXMLException when there are parsing problems.
+   * @since 12.11.1.3
+   */
+  <T> String printMovilizerElementToString(final T movilizerElement, final Class<T> movilizerElementClass);
 
   // -------------------------------------------------------------------------------------------------- File XML utils
 
