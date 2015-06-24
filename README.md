@@ -3,18 +3,18 @@
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
 at https://devtools.movilizer.com/confluence/display/DOC22/Introduction+to+the+Movilizer+Web+Service
 
-![Continous integration Circle CI](https://circleci.com/gh/movilizer/movilizer-webservice.svg?style=shield&circle-token=:circle-token)
+[![Circle CI](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master.svg?style=svg)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
 
 ## Adding it into your project
 
-Either use is a `jar` in your libs folder or add it using maven as follows:
+Either use this as `jar` in your libs folder or add it using maven as follows:
 
 ```xml
 <dependencies>
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>12.11.1.3-SNAPSHOT</version>
+        <version>12.11.1.3</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -37,7 +37,7 @@ Either use is a `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-frontend-jaxws</artifactId>
-        <version>3.0.4</version>
+        <version>3.1.1</version>
     </dependency>
 </dependencies>
 ```
@@ -46,7 +46,7 @@ It may happen that the latest version is not in the public maven repo. In this c
 maven install in the root of the cloned repository.
 
 ```bash
-git clone https://github.com/demula/movilizer-webservice.git
+git clone https://github.com/Movilizer/movilizer-webservice.git
 cd movilizer-webservice
 mvn install
 ```

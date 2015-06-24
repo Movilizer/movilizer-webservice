@@ -32,7 +32,7 @@ public class DefaultValues {
   public static final Integer CONNECTION_TIMEOUT_IN_MILLIS = 30000;
   public static final Integer RECEIVE_TIMEOUT_IN_MILLIS = 60000;
   public static final String AGENT_ID = "movilizer-webservice";
-  public static final String AGENT_VERSION = "12.11.1.2";
+  public static final String AGENT_VERSION = "12.11.1.3";
   public static final String USER_AGENT = USER_AGENT_FORMAT_STRING(AGENT_ID, AGENT_VERSION);
 
   public static String USER_AGENT_FORMAT_STRING(String agentId, String agentVersion) {

@@ -25,3 +25,15 @@ Add features
 
 - Movilizer OnlineSync manages asynchronously
 - Serializable artifacts compiled from the wsdl
+
+## 12.11.1.3 (2015-06-24)
+
+Add features
+
+- Add new API method to marshal any Movilizer element
+- Add new API method to unmarshal any Movilizer element
+- Add new API method to check for errors in a webservice response
+- Add PasswordHashTypes enum to ease participant configuration in webservice calls
+
+Fixes
+- Config bug when creating serializable artifacts compiled from the wsdl
