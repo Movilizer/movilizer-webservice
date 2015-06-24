@@ -14,9 +14,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<bindings xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://java.sun.com/xml/ns/jaxws">
-    <bindings node="wsdl:definitions">
-        <enableAsyncMapping>true</enableAsyncMapping>
-        <enableWrapperStyle>false</enableWrapperStyle>
-    </bindings>
-</bindings>
+<jaxws:bindings xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns="http://java.sun.com/xml/ns/jaxws">
+    <jaxws:bindings node="wsdl:definitions/wsdl:types/xsd:schema[@targetNamespace='http://movilitas.com/movilizer/v12']">
+        <jaxb:globalBindings>
+            <jaxb:serializable uid="1"/>
+            <!--<jxb:javaType name="java.util.Date" xmlType="xs:dateTime"-->
+            <!--parseMethod="org.apache.cxf.tools.common.DataTypeAdapter.parseDateTime"-->
+            <!--printMethod="org.apache.cxf.tools.common.DataTypeAdapter.printDateTime"/>-->
+        </jaxb:globalBindings>
+    </jaxws:bindings>
+    <jaxws:bindings node="wsdl:definitions">
+        <jaxws:enableAsyncMapping>true</jaxws:enableAsyncMapping>
+        <jaxws:enableWrapperStyle>false</jaxws:enableWrapperStyle>
+    </jaxws:bindings>
+</jaxws:bindings>

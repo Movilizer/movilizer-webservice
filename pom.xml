@@ -6,8 +6,8 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>12.11.1.3-SNAPSHOT</version>
-    <!-- Movilizer version v12 WSDL version 11 then internal java version 1.1 -->
+    <version>12.11.1.3</version>
+    <!-- Movilizer version v12 WSDL version 11 then internal java version 1.3 -->
 
     <name>Movilizer Web Service</name>
     <description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
@@ -45,7 +45,7 @@
     </developers>
 
     <properties>
-        <cxf.version>3.0.4</cxf.version>
+        <cxf.version>3.1.1</cxf.version>
         <java.version>1.7</java.version>
         <maven-plugins.version>3.2</maven-plugins.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -113,6 +113,13 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>${cxf.version}</version>
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>org.apache.cxf.xjcplugins</groupId>-->
+                        <!--<artifactId>cxf-xjc-ts</artifactId>-->
+                        <!--<version>${cxf.version}</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
                 <configuration>
                     <fork>once</fork>
                     <defaultOptions>
@@ -125,27 +132,27 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
+                            <encoding>UTF-8</encoding>
                             <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+                            <defaultOptions>
+                                <bindingFiles>
+                                    <bindingFile>src/main/resources/${movilizer.wsdl.binding}</bindingFile>
+                                </bindingFiles>
+                                <extraargs>
+                                    <extraarg>-impl</extraarg>
+                                    <extraarg>-verbose</extraarg>
+                                    <!--<extraarg>-xjc-Xts</extraarg>-->
+                                </extraargs>
+                                <noAddressBinding>true</noAddressBinding>
+                            </defaultOptions>
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/${movilizer.wsdl.file}</wsdl>
                                     <wsdlLocation>classpath:${movilizer.wsdl.file}</wsdlLocation>
-                                    <bindingFiles>
-                                        <bindingFile>src/main/resources/${movilizer.wsdl.binding}</bindingFile>
-                                    </bindingFiles>
-                                    <extraargs>
-                                        <extraarg>-xjc-b,${basedir}/src/main/resources/${movilizer.jaxb.binding}</extraarg>
-                                    </extraargs>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/${movilizer.wsdl.online.file}</wsdl>
                                     <wsdlLocation>classpath:${movilizer.wsdl.online.file}</wsdlLocation>
-                                    <bindingFiles>
-                                        <bindingFile>src/main/resources/${movilizer.wsdl.binding}</bindingFile>
-                                    </bindingFiles>
-                                    <extraargs>
-                                        <extraarg>-xjc-b,${basedir}/src/main/resources/${movilizer.jaxb.binding}</extraarg>
-                                    </extraargs>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
