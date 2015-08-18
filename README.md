@@ -1,7 +1,7 @@
 # Movilizer Webservice
 
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
-at https://devtools.movilizer.com/confluence/display/DOC22/Introduction+to+the+Movilizer+Web+Service
+at https://devtools.movilizer.com/confluence/display/DOC24/Introduction+to+the+Movilizer+Web+Service
 
 [![Circle CI](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master.svg?style=svg)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
 
