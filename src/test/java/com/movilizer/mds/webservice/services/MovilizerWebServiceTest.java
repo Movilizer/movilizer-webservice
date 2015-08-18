@@ -1,9 +1,9 @@
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerRequest;
-import com.movilitas.movilizer.v12.MovilizerResponse;
-import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
-import com.movilitas.movilizer.v12.MovilizerWebServiceV12Service;
+import com.movilitas.movilizer.v14.MovilizerRequest;
+import com.movilitas.movilizer.v14.MovilizerResponse;
+import com.movilitas.movilizer.v14.MovilizerWebServiceV14;
+import com.movilitas.movilizer.v14.MovilizerWebServiceV14Service;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.models.FutureCallback;
 import org.junit.Before;
@@ -25,7 +25,7 @@ public class MovilizerWebServiceTest {
 
   @Before
   public void setUp() throws Exception {
-    MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
+    MovilizerWebServiceV14 movilizerCloud = new MovilizerWebServiceV14Service().getMovilizerWebServiceV14Soap11();
     webService = new MovilizerWebService(movilizerCloud, DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS,
         DefaultValues.RECEIVE_TIMEOUT_IN_MILLIS, DefaultValues.AGENT_ID, DefaultValues.AGENT_VERSION);
     webService.setEndpoint(DefaultValues.MOVILIZER_ENDPOINT.getMdsUrl());

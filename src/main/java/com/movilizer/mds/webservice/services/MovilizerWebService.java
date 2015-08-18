@@ -16,19 +16,21 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerDocumentError;
-import com.movilitas.movilizer.v12.MovilizerMasterdataError;
-import com.movilitas.movilizer.v12.MovilizerMoveletError;
-import com.movilitas.movilizer.v12.MovilizerRequest;
-import com.movilitas.movilizer.v12.MovilizerResponse;
-import com.movilitas.movilizer.v12.MovilizerStatusMessage;
-import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
+import com.movilitas.movilizer.v14.MovilizerDocumentError;
+import com.movilitas.movilizer.v14.MovilizerMasterdataError;
+import com.movilitas.movilizer.v14.MovilizerMoveletError;
+import com.movilitas.movilizer.v14.MovilizerParticipantConfiguration;
+import com.movilitas.movilizer.v14.MovilizerRequest;
+import com.movilitas.movilizer.v14.MovilizerResponse;
+import com.movilitas.movilizer.v14.MovilizerStatusMessage;
+import com.movilitas.movilizer.v14.MovilizerWebServiceV14;
 import com.movilizer.mds.webservice.adapters.AsyncHandlerAdapter;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
 import com.movilizer.mds.webservice.messages.MESSAGES;
 import com.movilizer.mds.webservice.messages.MovilizerCloudMessages;
 import com.movilizer.mds.webservice.models.FutureCallback;
+import com.movilizer.mds.webservice.models.PasswordHashTypes;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.slf4j.Logger;
@@ -48,12 +50,12 @@ class MovilizerWebService {
   private static final String CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout";
   private static final String RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout";
   private static final String THREAD_LOCAL_CONTEXT_KEY = "thread.local.request.context";
-  private MovilizerWebServiceV12 movilizerCloud;
+  private MovilizerWebServiceV14 movilizerCloud;
   private Integer defaultConnectionTimeoutInMillis;
   private Integer defaultReceiveTimeoutInMillis;
   private String userAgent;
 
-  protected MovilizerWebService(MovilizerWebServiceV12 movilizerCloud, Integer defaultConnectionTimeoutInMillis, Integer defaultReceiveTimeoutInMillis, String agentId, String agentVersion) {
+  protected MovilizerWebService(MovilizerWebServiceV14 movilizerCloud, Integer defaultConnectionTimeoutInMillis, Integer defaultReceiveTimeoutInMillis, String agentId, String agentVersion) {
     this.movilizerCloud = movilizerCloud;
     this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
     this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
@@ -264,5 +266,47 @@ class MovilizerWebService {
       }
     }
     return sb.toString();
+  }
+
+  protected void setParticipantPassword(Long systemId, String systemPassword, String deviceAddress, String newPassword, PasswordHashTypes type) {
+    MovilizerResponse response;
+    try {
+      MovilizerParticipantConfiguration config = new MovilizerParticipantConfiguration();
+      config.setDeviceAddress(deviceAddress);
+      config.setPasswordHashType(type.getValue());
+      config.setPasswordHashValue(digestPassword(newPassword, type));
+
+      MovilizerRequest request = prepareUploadRequest(systemId, systemPassword, new MovilizerRequest());
+      request.getParticipantConfiguration().add(config);
+      response = movilizerCloud.movilizer(request);
+    } catch (SOAPFaultException | HTTPException e) {
+      if (logger.isErrorEnabled()) {
+        logger.error(e.getMessage());
+      }
+      throw new MovilizerWebServiceException(e);
+    }
+    if (logger.isInfoEnabled()) {
+      logger.info(String.format(MESSAGES.PASSWORD_SUCCESSFULY_CHANGED, deviceAddress, response.getSystemId()));
+    }
+  }
+
+  private String digestPassword(String password, PasswordHashTypes type) {
+    //see: http://www.jasypt.org/api/jasypt/1.9.2/org/jasypt/digest/StandardStringDigester.html
+    String hashedPassword = "";
+    switch (type) {
+      case PLAIN_TEXT:
+        hashedPassword = password;
+        break;
+      case MD5:
+        hashedPassword = "";
+        break;
+      case SHA_256:
+        hashedPassword = "";
+        break;
+      case SHA_512:
+        hashedPassword = "";
+        break;
+    }
+    return hashedPassword;
   }
 }

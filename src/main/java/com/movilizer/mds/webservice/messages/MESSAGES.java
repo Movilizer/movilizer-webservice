@@ -64,4 +64,5 @@ public class MESSAGES {
   public static final String FOLDERS_CREATED = "Created folders for file: %s";
   public static final String PARSING_XML = "Parsing instance of class %s from XML";
   public static final String PRINTING_XML = "Printing instance of class %s to XML";
+  public static final String PASSWORD_SUCCESSFULY_CHANGED = "Password for participant '%s' successfully changed using system '%s'";
 }

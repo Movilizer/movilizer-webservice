@@ -16,8 +16,8 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerRequest;
-import com.movilitas.movilizer.v12.MovilizerResponse;
+import com.movilitas.movilizer.v14.MovilizerRequest;
+import com.movilitas.movilizer.v14.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
 import com.movilizer.mds.webservice.messages.MESSAGES;
 import org.slf4j.Logger;

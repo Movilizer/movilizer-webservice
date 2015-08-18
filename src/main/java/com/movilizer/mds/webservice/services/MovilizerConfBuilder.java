@@ -16,8 +16,8 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
-import com.movilitas.movilizer.v12.MovilizerWebServiceV12Service;
+import com.movilitas.movilizer.v14.MovilizerWebServiceV14;
+import com.movilitas.movilizer.v14.MovilizerWebServiceV14Service;
 import com.movilizer.mds.webservice.EndPoint;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.messages.MESSAGES;
@@ -75,7 +75,7 @@ public class MovilizerConfBuilder {
     if (logger.isTraceEnabled()) {
       logger.trace(MESSAGES.BUILDING_CONFIG);
     }
-    MovilizerWebServiceV12 movilizerCloud = new MovilizerWebServiceV12Service().getMovilizerWebServiceV12Soap11();
+    MovilizerWebServiceV14 movilizerCloud = new MovilizerWebServiceV14Service().getMovilizerWebServiceV14Soap11();
     MovilizerWebService webService = new MovilizerWebService(movilizerCloud, defaultConnectionTimeoutInMillis, defaultReceiveTimeoutInMillis, agentId, agentVersion);
     webService.setEndpoint(endpoint.getMdsUrl());
     if (logger.isTraceEnabled()) {
