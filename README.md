@@ -1,7 +1,7 @@
 # Movilizer Webservice
 
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
-at https://devtools.movilizer.com/confluence/display/DOC22/Introduction+to+the+Movilizer+Web+Service
+at https://devtools.movilizer.com/confluence/display/DOC21/Introduction+to+the+Movilizer+Web+Service
 
 [![Circle CI](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master.svg?style=svg)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
 
@@ -14,7 +14,7 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>12.11.1.3</version>
+        <version>11.11.1.3</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->

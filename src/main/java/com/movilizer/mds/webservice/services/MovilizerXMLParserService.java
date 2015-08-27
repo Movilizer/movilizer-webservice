@@ -16,8 +16,8 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerRequest;
-import com.movilitas.movilizer.v12.MovilizerResponse;
+import com.movilitas.movilizer.v11.MovilizerRequest;
+import com.movilitas.movilizer.v11.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
 import com.movilizer.mds.webservice.messages.MESSAGES;
 import org.slf4j.Logger;
@@ -95,22 +95,7 @@ class MovilizerXMLParserService {
   }
 
   protected MovilizerRequest getRequestFromString(final String requestString) {
-    if (requestString == null) {
-      if (logger.isErrorEnabled()) {
-        logger.error(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
-      }
-      throw new MovilizerXMLException(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
-    }
-    JAXBElement<MovilizerRequest> root;
-    try {
-      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(requestString))), MovilizerRequest.class);
-      if (logger.isInfoEnabled()) {
-        logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
-      }
-    } catch (JAXBException e) {
-      throw new MovilizerXMLException(e);
-    }
-    return root.getValue();
+    return getMovilizerElementFromString(requestString, MovilizerRequest.class);
   }
 
   protected <T> T getMovilizerElementFromString(final String elementString, final Class<T> movilizerElementClass) {

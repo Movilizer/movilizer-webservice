@@ -1,7 +1,7 @@
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerMovelet;
-import com.movilitas.movilizer.v12.MovilizerRequest;
+import com.movilitas.movilizer.v11.MovilizerMovelet;
+import com.movilitas.movilizer.v11.MovilizerRequest;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,16 +60,15 @@ public class MovilizerXMLParserServiceTest {
     @Test
     public void testLoadMoveletFromString() throws Exception {
         String moveletString = "" +
-            "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
+            "<movelet name=\"Create simple movelet test request\" moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
             "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
-            "    xmlns=\"http://movilitas.com/movilizer/v12\" >\n" +
+            "    xmlns=\"http://movilitas.com/movilizer/v11\" >\n" +
             "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
             "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
             "                    <text>This is a paragraph for the test movelet.</text>\n" +
             "                </answer>\n" +
             "                <text>Hi, this is a test movelet!</text>\n" +
             "            </question>\n" +
-            "            <name>Create simple movelet test request</name>\n" +
             "        </movelet>";
         MovilizerMovelet movelet = xmlParserService.getMovilizerElementFromString(moveletString, MovilizerMovelet.class);
         assertThat(movelet, is(notNullValue()));
@@ -81,18 +80,40 @@ public class MovilizerXMLParserServiceTest {
     }
 
     @Test
+    public void testLoadRequestFromString() throws Exception {
+        String moveletString = "<MovilizerRequest requestTrackingKey=\"\" systemId=\"1\" systemPassword=\"1\" \n" +
+                "  numResponses=\"1000\" synchronousResponse=\"true\" \n" +
+                "  useAutoAcknowledge=\"true\" xmlns=\"http://movilitas.com/movilizer/v11\">\n" +
+                "  <moveletSet>\n" +
+                "    <movelet name=\"Read Masterdata\" moveletKey=\"com.movilizer.copec.poc.readMasterdata\" moveletVersion=\"1\" validTillDate=\"2049-12-31T23:59:00.000Z\" visible=\"false\" moveletType=\"MULTI\" initialQuestionKey=\"EPSILON_SCREEN\">\n" +
+                "   \n" +
+                "      <question type=\"41\" title=\"Epsilon Screen\" key=\"EPSILON_SCREEN\">\n" +
+                "        <answer dummyAnswer=\"false\" nextQuestionKey=\"END\" position=\"1\" key=\"EPSILON_SCREEN_0\">\n" +
+                "          <text>Mandatory Answer</text>\n" +
+                "        </answer>\n" +
+                "        <text/>\n" +
+                "      </question>\n" +
+                "    </movelet>\n" +
+                "  </moveletSet>\n" +
+                "</MovilizerRequest>";
+        MovilizerRequest movelet = xmlParserService.getRequestFromString(moveletString);
+        assertThat(movelet, is(notNullValue()));
+        assertThat(movelet.getMoveletSet().size(), is(1));
+        assertThat(movelet.getMoveletSet().get(0).getMovelet().size(), is(1));
+    }
+
+    @Test
     public void testPrintMoveletToString() throws Exception {
         String moveletString = "" +
-            "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
+            "<movelet name=\"Create simple movelet test request\" moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
             "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
-            "    xmlns=\"http://movilitas.com/movilizer/v12\" >\n" +
+            "    xmlns=\"http://movilitas.com/movilizer/v11\" >\n" +
             "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
             "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
             "                    <text>This is a paragraph for the test movelet.</text>\n" +
             "                </answer>\n" +
             "                <text>Hi, this is a test movelet!</text>\n" +
             "            </question>\n" +
-            "            <name>Create simple movelet test request</name>\n" +
             "        </movelet>";
         MovilizerMovelet movelet = xmlParserService.getMovilizerElementFromString(moveletString, MovilizerMovelet.class);
         String printedMovelet = xmlParserService.printMovilizerElementToString(movelet, MovilizerMovelet.class);

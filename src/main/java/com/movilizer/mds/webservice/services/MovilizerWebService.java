@@ -16,13 +16,13 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v12.MovilizerDocumentError;
-import com.movilitas.movilizer.v12.MovilizerMasterdataError;
-import com.movilitas.movilizer.v12.MovilizerMoveletError;
-import com.movilitas.movilizer.v12.MovilizerRequest;
-import com.movilitas.movilizer.v12.MovilizerResponse;
-import com.movilitas.movilizer.v12.MovilizerStatusMessage;
-import com.movilitas.movilizer.v12.MovilizerWebServiceV12;
+import com.movilitas.movilizer.v11.MovilizerDocumentError;
+import com.movilitas.movilizer.v11.MovilizerMasterdataError;
+import com.movilitas.movilizer.v11.MovilizerMoveletError;
+import com.movilitas.movilizer.v11.MovilizerRequest;
+import com.movilitas.movilizer.v11.MovilizerResponse;
+import com.movilitas.movilizer.v11.MovilizerStatusMessage;
+import com.movilitas.movilizer.v11.MovilizerWebServiceV11;
 import com.movilizer.mds.webservice.adapters.AsyncHandlerAdapter;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
@@ -48,12 +48,12 @@ class MovilizerWebService {
   private static final String CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout";
   private static final String RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout";
   private static final String THREAD_LOCAL_CONTEXT_KEY = "thread.local.request.context";
-  private MovilizerWebServiceV12 movilizerCloud;
+  private MovilizerWebServiceV11 movilizerCloud;
   private Integer defaultConnectionTimeoutInMillis;
   private Integer defaultReceiveTimeoutInMillis;
   private String userAgent;
 
-  protected MovilizerWebService(MovilizerWebServiceV12 movilizerCloud, Integer defaultConnectionTimeoutInMillis, Integer defaultReceiveTimeoutInMillis, String agentId, String agentVersion) {
+  protected MovilizerWebService(MovilizerWebServiceV11 movilizerCloud, Integer defaultConnectionTimeoutInMillis, Integer defaultReceiveTimeoutInMillis, String agentId, String agentVersion) {
     this.movilizerCloud = movilizerCloud;
     this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
     this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
