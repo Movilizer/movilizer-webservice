@@ -16,14 +16,14 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v14.MovilizerDocumentError;
-import com.movilitas.movilizer.v14.MovilizerMasterdataError;
-import com.movilitas.movilizer.v14.MovilizerMoveletError;
-import com.movilitas.movilizer.v14.MovilizerParticipantConfiguration;
-import com.movilitas.movilizer.v14.MovilizerRequest;
-import com.movilitas.movilizer.v14.MovilizerResponse;
-import com.movilitas.movilizer.v14.MovilizerStatusMessage;
-import com.movilitas.movilizer.v14.MovilizerWebServiceV14;
+import com.movilitas.movilizer.v15.MovilizerDocumentError;
+import com.movilitas.movilizer.v15.MovilizerMasterdataError;
+import com.movilitas.movilizer.v15.MovilizerMoveletError;
+import com.movilitas.movilizer.v15.MovilizerParticipantConfiguration;
+import com.movilitas.movilizer.v15.MovilizerRequest;
+import com.movilitas.movilizer.v15.MovilizerResponse;
+import com.movilitas.movilizer.v15.MovilizerStatusMessage;
+import com.movilitas.movilizer.v15.MovilizerWebServiceV15;
 import com.movilizer.mds.webservice.adapters.AsyncHandlerAdapter;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
@@ -50,12 +50,12 @@ class MovilizerWebService {
   private static final String CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout";
   private static final String RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout";
   private static final String THREAD_LOCAL_CONTEXT_KEY = "thread.local.request.context";
-  private MovilizerWebServiceV14 movilizerCloud;
+  private MovilizerWebServiceV15 movilizerCloud;
   private Integer defaultConnectionTimeoutInMillis;
   private Integer defaultReceiveTimeoutInMillis;
   private String userAgent;
 
-  protected MovilizerWebService(MovilizerWebServiceV14 movilizerCloud, Integer defaultConnectionTimeoutInMillis, Integer defaultReceiveTimeoutInMillis, String agentId, String agentVersion) {
+  protected MovilizerWebService(MovilizerWebServiceV15 movilizerCloud, Integer defaultConnectionTimeoutInMillis, Integer defaultReceiveTimeoutInMillis, String agentId, String agentVersion) {
     this.movilizerCloud = movilizerCloud;
     this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
     this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;

@@ -6,7 +6,7 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>14.11.1.3</version>
+    <version>15.11.1.3</version>
     <!-- Movilizer version v14 WSDL version 11 then internal java version 1.3 -->
 
     <name>Movilizer Web Service</name>
@@ -51,9 +51,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
         <movilizer.wsdl.folder>META-INF/movilizer/wsdl/</movilizer.wsdl.folder>
-        <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV14Wsdl11.wsdl</movilizer.wsdl.file>
-        <movilizer.xsd.file>${movilizer.wsdl.folder}MovilizerTypesV14.xsd</movilizer.xsd.file>
-        <movilizer.wsdl.online.file>${movilizer.wsdl.folder}MovilizerOnlineV14Wsdl11.wsdl</movilizer.wsdl.online.file>
+        <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV15Wsdl11.wsdl</movilizer.wsdl.file>
+        <movilizer.xsd.file>${movilizer.wsdl.folder}MovilizerTypesV15.xsd</movilizer.xsd.file>
+        <movilizer.wsdl.online.file>${movilizer.wsdl.folder}MovilizerOnlineV15Wsdl11.wsdl</movilizer.wsdl.online.file>
         <movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding_wsdl.xml</movilizer.wsdl.binding>
         <movilizer.jaxb.binding>${movilizer.wsdl.folder}movilizer_binding_serializable.xml</movilizer.jaxb.binding>
         <!-- Logging -->

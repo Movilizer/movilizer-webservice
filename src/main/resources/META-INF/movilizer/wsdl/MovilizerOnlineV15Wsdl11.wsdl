@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://movilitas.com/movilizer/v15" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://movilitas.com/movilizer/v15" targetNamespace="http://movilitas.com/movilizer/v15">
+  <wsdl:types xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://movilitas.com/movilizer/v15">
+          <xsd:import namespace="http://movilitas.com/movilizer/v15" schemaLocation="MovilizerTypesV15.xsd"/>
+      </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="MovilizerOnlineResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:part element="tns:MovilizerOnlineResponse" name="MovilizerOnlineResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="MovilizerOnlineCallbackRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:part element="tns:MovilizerOnlineCallbackRequest" name="MovilizerOnlineCallbackRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="MovilizerOnlineWebServiceV15" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:operation name="MovilizerOnlineCallback" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <wsdl:input message="tns:MovilizerOnlineCallbackRequest" name="MovilizerOnlineCallbackRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    </wsdl:input>
+        <wsdl:output message="tns:MovilizerOnlineResponse" name="MovilizerOnlineResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+        </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MovilizerOnlineWebServiceV15Soap11" type="tns:MovilizerOnlineWebServiceV15" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    <wsdl:operation name="MovilizerOnlineCallback" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <soap:operation soapAction="" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      <wsdl:input name="MovilizerOnlineCallbackRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+        <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+      </wsdl:input>
+        <wsdl:output name="MovilizerOnlineResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+            <soap:body use="literal" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+        </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MovilizerOnlineWebServiceV15Service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:port binding="tns:MovilizerOnlineWebServiceV15Soap11" name="MovilizerOnlineWebServiceV15Soap11" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+      <soap:address location="https://yoursystem:123/YourSystemAddress/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

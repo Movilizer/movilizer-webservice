@@ -1,7 +1,7 @@
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v14.MovilizerMovelet;
-import com.movilitas.movilizer.v14.MovilizerRequest;
+import com.movilitas.movilizer.v15.MovilizerMovelet;
+import com.movilitas.movilizer.v15.MovilizerRequest;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,7 +62,7 @@ public class MovilizerXMLParserServiceTest {
         String moveletString = "" +
             "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
             "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
-            "    xmlns=\"http://movilitas.com/movilizer/v14\" >\n" +
+            "    xmlns=\"http://movilitas.com/movilizer/v15\" >\n" +
             "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
             "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
             "                    <text>This is a paragraph for the test movelet.</text>\n" +
@@ -84,7 +84,7 @@ public class MovilizerXMLParserServiceTest {
     public void testLoadRequestFromString() throws Exception {
         String moveletString = "<MovilizerRequest requestTrackingKey=\"\" systemId=\"1\" systemPassword=\"1\" \n" +
                 "  numResponses=\"1000\" synchronousResponse=\"true\" \n" +
-                "  useAutoAcknowledge=\"true\" xmlns=\"http://movilitas.com/movilizer/v14\">\n" +
+                "  useAutoAcknowledge=\"true\" xmlns=\"http://movilitas.com/movilizer/v15\">\n" +
                 "  <moveletSet>\n" +
                 "    <movelet moveletKey=\"com.movilizer.copec.poc.readMasterdata\" moveletVersion=\"1\" validTillDate=\"2049-12-31T23:59:00.000Z\" visible=\"false\" moveletType=\"MULTI\" initialQuestionKey=\"EPSILON_SCREEN\">\n" +
                 "   \n" +
@@ -109,7 +109,7 @@ public class MovilizerXMLParserServiceTest {
         String moveletString = "" +
             "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
             "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
-            "    xmlns=\"http://movilitas.com/movilizer/v14\" >\n" +
+            "    xmlns=\"http://movilitas.com/movilizer/v15\" >\n" +
             "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
             "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
             "                    <text>This is a paragraph for the test movelet.</text>\n" +

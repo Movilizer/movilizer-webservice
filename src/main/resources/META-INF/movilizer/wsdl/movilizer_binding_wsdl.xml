@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2015 Movilizer GmbH
+  ~ Copyright 2016 Movilizer GmbH
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 <jaxws:bindings xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns="http://java.sun.com/xml/ns/jaxws">
-    <jaxws:bindings node="wsdl:definitions/wsdl:types/xsd:schema[@targetNamespace='http://movilitas.com/movilizer/v14']">
+    <jaxws:bindings node="wsdl:definitions/wsdl:types/xsd:schema[@targetNamespace='http://movilitas.com/movilizer/v15']">
         <jaxb:globalBindings>
             <jaxb:serializable uid="1"/>
             <!--<jxb:javaType name="java.util.Date" xmlType="xs:dateTime"-->

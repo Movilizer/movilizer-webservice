@@ -45,10 +45,10 @@ import com.movilizer.mds.webservice.services.MovilizerDistributionService;
  * @since 12.11.1.0
  */
 public class Movilizer {
-    public static final String SCHEMA = "META-INF/movilizer/wsdl/MovilizerTypesV14.xsd";
-    public static final String WSDL = "META-INF/movilizer/wsdl/MovilizerV14Wsdl11.wsdl";
-    public static final String ONLINE_WSDL = "META-INF/movilizer/wsdl/MovilizerOnlineV14Wsdl11.wsdl";
-    public static final String ONLINE_INTERFACE = "com.movilitas.movilizer.v14.MovilizerOnlineWebServiceV14";
+    public static final String SCHEMA = "META-INF/movilizer/wsdl/MovilizerTypesV15.xsd";
+    public static final String WSDL = "META-INF/movilizer/wsdl/MovilizerV15Wsdl11.wsdl";
+    public static final String ONLINE_WSDL = "META-INF/movilizer/wsdl/MovilizerOnlineV15Wsdl11.wsdl";
+    public static final String ONLINE_INTERFACE = "com.movilitas.movilizer.v15.MovilizerOnlineWebServiceV15";
     public static final String ONLINE_OPERATION = "MovilizerOnlineCallback";
 
     /**

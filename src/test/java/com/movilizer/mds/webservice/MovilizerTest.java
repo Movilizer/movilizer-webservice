@@ -16,8 +16,8 @@
 
 package com.movilizer.mds.webservice;
 
-import com.movilitas.movilizer.v14.MovilizerRequest;
-import com.movilitas.movilizer.v14.MovilizerResponse;
+import com.movilitas.movilizer.v15.MovilizerRequest;
+import com.movilitas.movilizer.v15.MovilizerResponse;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.models.FutureCallback;
 import com.movilizer.mds.webservice.services.MovilizerDistributionService;
