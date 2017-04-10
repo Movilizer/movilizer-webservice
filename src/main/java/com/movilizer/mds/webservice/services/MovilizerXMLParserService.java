@@ -16,12 +16,14 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v15.MovilizerRequest;
-import com.movilitas.movilizer.v15.MovilizerResponse;
-import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -32,14 +34,14 @@ import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.movilitas.movilizer.v15.MovilizerRequest;
+import com.movilitas.movilizer.v15.MovilizerResponse;
+import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
+import com.movilizer.mds.webservice.messages.MESSAGES;
 
 class MovilizerXMLParserService {
   private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
@@ -108,9 +110,7 @@ class MovilizerXMLParserService {
     JAXBElement<T> root;
     try {
       root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(new BufferedReader(new StringReader(elementString))), movilizerElementClass);
-      if (logger.isInfoEnabled()) {
-        logger.info(MESSAGES.SUCCESSFUL_REQUEST_FROM_STRING);
-      }
+
     } catch (JAXBException e) {
       throw new MovilizerXMLException(e);
     }

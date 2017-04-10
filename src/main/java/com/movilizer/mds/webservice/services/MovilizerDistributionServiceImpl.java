@@ -16,6 +16,12 @@
 
 package com.movilizer.mds.webservice.services;
 
+import java.io.InputStream;
+import java.nio.file.Path;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.movilitas.movilizer.v15.MovilizerRequest;
 import com.movilitas.movilizer.v15.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
@@ -23,11 +29,6 @@ import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
 import com.movilizer.mds.webservice.messages.MESSAGES;
 import com.movilizer.mds.webservice.models.FutureCallback;
 import com.movilizer.mds.webservice.models.UploadResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.InputStream;
-import java.nio.file.Path;
 
 class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   private static final Logger logger = LoggerFactory.getLogger(MovilizerDistributionService.class);
@@ -187,8 +188,8 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
 
   @Override
   public MovilizerRequest getRequestFromString(String requestString) throws MovilizerXMLException {
-    if (logger.isInfoEnabled()) {
-      logger.info(MESSAGES.READING_REQUEST_FROM_STRING);
+    if (logger.isDebugEnabled()) {
+      logger.debug(MESSAGES.READING_REQUEST_FROM_STRING);
     }
     return parserService.getRequestFromString(requestString);
   }
