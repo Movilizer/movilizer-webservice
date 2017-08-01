@@ -29,7 +29,7 @@ public class MovilizerXMLParserServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        xmlParserService = new MovilizerXMLParserService(DefaultValues.OUTPUT_ENCODING);
+        xmlParserService = new MovilizerXMLParserServiceImpl(DefaultValues.OUTPUT_ENCODING);
     }
 
     @Test

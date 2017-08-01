@@ -55,6 +55,7 @@ public class MESSAGES {
   public static final String SET_CONNECTION_TIMEOUT = "Set default connection timeout to '%d'";
   public static final String SET_RECEIVE_TIMEOUT = "Set default receive timeout to '%d'";
   public static final String SET_USER_AGENT = "Set user agent to '%s'";
+  public static final String SET_THREAD_SAFE = "Set thread safety to '%s'";
   public static final String PREPARE_UPLOAD_REQUEST = "Preparing request for upload for system id %d";
   public static final String PREPARE_DOWNLOAD_REQUEST = "Preparing request for download for system id %d with %d responses";
   public static final String REQUEST_STRING_MUST_NOT_BE_NULL = "Request String must not be null";

@@ -57,6 +57,7 @@ public class MovilizerConfBuilder {
   private Integer defaultReceiveTimeoutInMillis = DefaultValues.RECEIVE_TIMEOUT_IN_MILLIS;
   private String agentId = DefaultValues.AGENT_ID;
   private String agentVersion = DefaultValues.AGENT_VERSION;
+  private boolean threadSafe = false;
 
   /**
    * <b>DO NOT USE</b>
@@ -81,7 +82,13 @@ public class MovilizerConfBuilder {
     if (logger.isTraceEnabled()) {
       logger.trace(String.format(MESSAGES.USING_ENCODING, outputEncoding.displayName()));
     }
-    MovilizerXMLParserService parserService = new MovilizerXMLParserService(outputEncoding);
+    MovilizerXMLParserService parserService;
+    if(this.threadSafe) {
+      parserService = new MovilizerXMLThreadSafeParserServiceImpl(outputEncoding);
+    } else {
+      parserService = new MovilizerXMLParserServiceImpl(outputEncoding);
+    }
+
     UploadFileService uploadFileService = new UploadFileService(endpoint.getUploadUrl(), new MovilizerUploadForm(), defaultConnectionTimeoutInMillis);
 
     if (endpointAddress != null && documentUploadAddress != null) {
@@ -211,6 +218,23 @@ public class MovilizerConfBuilder {
       logger.trace(String.format(MESSAGES.SET_ENCODING, outputEncoding.displayName()));
     }
     this.outputEncoding = outputEncoding;
+    return this;
+  }
+
+  /**
+   * Set the XML serialization to be thread-safe.
+   *
+   * @param isThreadSafe boolean to set the thread safety on or off.
+   * @return this to be able to chain calls in a fluid API way.
+   * @see MovilizerXMLParserService
+   * @see MovilizerXMLThreadSafeParserServiceImpl
+   * @since 12.11.1.4
+   */
+  public MovilizerConfBuilder setThreadSafe(boolean isThreadSafe) {
+    this.threadSafe = isThreadSafe;
+    if (logger.isTraceEnabled()) {
+      logger.trace(String.format(MESSAGES.SET_THREAD_SAFE, isThreadSafe));
+    }
     return this;
   }
 }

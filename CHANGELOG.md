@@ -37,3 +37,22 @@ Add features
 
 Fixes
 - Config bug when creating serializable artifacts compiled from the wsdl
+
+## 14.11.1.3 (2017-08-18)
+
+Add features
+
+- Update webservice to the protocol version 14
+
+# 15.11.1.3 (2017-04-10)
+
+Add features
+
+- Update webservice to the protocol version 15
+
+# 15.11.1.4 (2017-08-01)
+
+Add features
+
+- Add thread safe XML conversions
+
