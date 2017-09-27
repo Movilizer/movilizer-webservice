@@ -16,16 +16,18 @@
 
 package com.movilizer.mds.webservice.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.movilizer.mds.webservice.exceptions.MovilizerIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.movilitas.movilizer.v15.MovilizerRequest;
 import com.movilitas.movilizer.v15.MovilizerResponse;
-import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
 import com.movilizer.mds.webservice.messages.MESSAGES;
 import com.movilizer.mds.webservice.models.FutureCallback;
 import com.movilizer.mds.webservice.models.UploadResponse;
@@ -36,11 +38,14 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   private MovilizerWebService webService;
   private MovilizerXMLParserService parserService;
   private UploadFileService uploadFileService;
+  private FolderLoaderService loaderService;
 
-  public MovilizerDistributionServiceImpl(MovilizerWebService webService, MovilizerXMLParserService parserService, UploadFileService uploadFileService) {
+  public MovilizerDistributionServiceImpl(MovilizerWebService webService, MovilizerXMLParserService parserService,
+                                          UploadFileService uploadFileService, FolderLoaderService loaderService) {
     this.webService = webService;
     this.parserService = parserService;
     this.uploadFileService = uploadFileService;
+    this.loaderService = loaderService;
   }
 
   @Override
@@ -57,7 +62,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) throws MovilizerWebServiceException {
+  public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
     }
@@ -65,7 +70,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
+  public void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
     }
@@ -73,7 +78,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis) throws MovilizerWebServiceException {
+  public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
     }
@@ -81,7 +86,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException {
+  public void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis, FutureCallback<MovilizerResponse> asyncHandler) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
     }
@@ -99,7 +104,22 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+  public List<MovilizerResponse> batchUploadFolderSync(Path folder) {
+    try {
+      List<MovilizerRequest> requests = loaderService.loadRequestsFromFolder(folder);
+      List<MovilizerResponse> responses = new ArrayList<>(requests.size());
+      for(MovilizerRequest request: requests) {
+        MovilizerResponse response = getReplyFromCloudSync(request);
+        responses.add(response);
+      }
+      return responses;
+    } catch (IOException e) {
+      throw new MovilizerIOException(e);
+    }
+  }
+
+  @Override
+  public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -107,7 +127,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -115,7 +135,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+  public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -123,7 +143,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -131,7 +151,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) throws MovilizerWebServiceException {
+  public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -139,7 +159,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -147,7 +167,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) throws MovilizerWebServiceException {
+  public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -155,7 +175,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -163,7 +183,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public <T> T getElementFromString(String elementString, Class<T> movilizerElementClass) throws MovilizerXMLException {
+  public <T> T getElementFromString(String elementString, Class<T> movilizerElementClass) {
     if (logger.isDebugEnabled()) {
       logger.debug(String.format(MESSAGES.PARSING_XML, movilizerElementClass.getName()));
     }
@@ -179,7 +199,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public MovilizerRequest getRequestFromFile(Path filePath) throws MovilizerXMLException {
+  public MovilizerRequest getRequestFromFile(Path filePath) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.READING_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
     }
@@ -187,7 +207,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public MovilizerRequest getRequestFromString(String requestString) throws MovilizerXMLException {
+  public MovilizerRequest getRequestFromString(String requestString) {
     if (logger.isDebugEnabled()) {
       logger.debug(MESSAGES.READING_REQUEST_FROM_STRING);
     }
@@ -195,17 +215,17 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
   }
 
   @Override
-  public String requestToString(MovilizerRequest request) throws MovilizerXMLException {
+  public String requestToString(MovilizerRequest request) {
     return parserService.printRequest(request);
   }
 
   @Override
-  public String responseToString(MovilizerResponse response) throws MovilizerXMLException {
+  public String responseToString(MovilizerResponse response) {
     return parserService.printResponse(response);
   }
 
   @Override
-  public void saveRequestToFile(MovilizerRequest request, Path filePath) throws MovilizerXMLException {
+  public void saveRequestToFile(MovilizerRequest request, Path filePath) {
     if (logger.isInfoEnabled()) {
       logger.info(String.format(MESSAGES.SAVING_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
     }

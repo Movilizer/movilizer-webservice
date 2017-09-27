@@ -60,9 +60,11 @@ public class MovilizerConfBuilder {
   private boolean threadSafe = false;
 
   /**
-   * <b>DO NOT USE</b>
+   * <b>DO NOT USE</b>. Use instead Movilizer.buildConf() or Movilizer.getService()
+   * @see com.movilizer.mds.webservice.Movilizer
    */
   public MovilizerConfBuilder() {
+    // All defaults already set in the fields declaration of the class.
   }
 
   /**
@@ -103,10 +105,13 @@ public class MovilizerConfBuilder {
       }
     }
 
+    FolderLoaderService loaderService = new FolderLoaderService(parserService);
+
     return new MovilizerDistributionServiceImpl(
         webService,
         parserService,
-        uploadFileService
+        uploadFileService,
+        loaderService
     );
   }
 

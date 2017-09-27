@@ -56,3 +56,10 @@ Add features
 
 - Add thread safe XML conversions
 
+# 15.11.1.5 (2017-09-27)
+
+Add features
+
+- Add send all requests from a folder
+
+Minor code clean up

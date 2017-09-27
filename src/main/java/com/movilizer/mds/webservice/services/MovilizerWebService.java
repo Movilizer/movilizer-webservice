@@ -292,7 +292,7 @@ class MovilizerWebService {
 
   private String digestPassword(String password, PasswordHashTypes type) {
     //see: http://www.jasypt.org/api/jasypt/1.9.2/org/jasypt/digest/StandardStringDigester.html
-    String hashedPassword = "";
+    String hashedPassword;
     switch (type) {
       case PLAIN_TEXT:
         hashedPassword = password;
@@ -304,6 +304,7 @@ class MovilizerWebService {
         hashedPassword = "";
         break;
       case SHA_512:
+      default:
         hashedPassword = "";
         break;
     }

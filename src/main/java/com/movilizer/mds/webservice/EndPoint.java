@@ -35,7 +35,7 @@ public enum EndPoint {
     private final URL mdsUrl;
     private final URL uploadUrl;
 
-    EndPoint(final String mdsUrl, final String uploadUrl) throws MovilizerWebServiceException {
+    EndPoint(final String mdsUrl, final String uploadUrl) {
         try {
             this.mdsUrl = URI.create(mdsUrl).toURL();
             this.uploadUrl = URI.create(uploadUrl).toURL();

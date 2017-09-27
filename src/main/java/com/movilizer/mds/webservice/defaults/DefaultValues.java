@@ -22,18 +22,14 @@ import java.nio.charset.Charset;
 
 public class DefaultValues {
   public static final EndPoint MOVILIZER_ENDPOINT = EndPoint.DEMO;
-  //    public static final String MOVILIZER_FOLDER = "movilizer/";
-//    public static final String REQUEST_FOLDER = MOVILIZER_FOLDER + "requests/";
-//    public static final String MOVILIZER_XML_EXTENSION = ".mxml";
-//    public static final String REQUEST_FILE_NAME = "default" + MOVILIZER_XML_EXTENSION;
-//    public static final String CUSTOMIZING_FOLDER = MOVILIZER_FOLDER + "customizing/";
-//    public static final String DOCUMENTS_FOLDER = MOVILIZER_FOLDER + "documents/";
   public static final Charset OUTPUT_ENCODING = Charset.forName("UTF-8");
   public static final Integer CONNECTION_TIMEOUT_IN_MILLIS = 30000;
   public static final Integer RECEIVE_TIMEOUT_IN_MILLIS = 60000;
   public static final String AGENT_ID = "movilizer-webservice";
-  public static final String AGENT_VERSION = "14.11.1.3";
+  public static final String AGENT_VERSION = "15.11.1.5";
   public static final String USER_AGENT = USER_AGENT_FORMAT_STRING(AGENT_ID, AGENT_VERSION);
+
+  private DefaultValues() {}
 
   public static String USER_AGENT_FORMAT_STRING(String agentId, String agentVersion) {
     String userAgentString = "";

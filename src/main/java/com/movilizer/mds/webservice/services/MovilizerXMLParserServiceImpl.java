@@ -66,26 +66,27 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
   }
 
   public MovilizerRequest getRequestFromFile(final Path filePath) {
-    if (!Files.exists(filePath)) {
-      if (logger.isErrorEnabled()) {
-        logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
-      }
-      throw new MovilizerXMLException(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
-    }
-    JAXBElement<MovilizerRequest> root;
-    try {
-      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
-      if (logger.isInfoEnabled()) {
-        logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
-      }
-    } catch (JAXBException e) {
-      throw new MovilizerXMLException(e);
-    }
-    return root.getValue();
+    return getMovilizerElementFromPath(filePath, MovilizerRequest.class);
   }
 
   public MovilizerRequest getRequestFromString(final String requestString) {
     return getMovilizerElementFromString(requestString, MovilizerRequest.class);
+  }
+
+  public <T> T getMovilizerElementFromPath(final Path elementPath, final Class<T> movilizerElementClass) {
+    if (!Files.exists(elementPath)) {
+      if (logger.isErrorEnabled()) {
+        logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + elementPath.toAbsolutePath().toString());
+      }
+      throw new MovilizerXMLException(MESSAGES.REQUEST_FILE_NOT_FOUND + elementPath.toAbsolutePath().toString());
+    }
+    JAXBElement<T> root;
+    try {
+      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(elementPath.toFile()), movilizerElementClass);
+    } catch (JAXBException e) {
+      throw new MovilizerXMLException(e);
+    }
+    return root.getValue();
   }
 
   public <T> T getMovilizerElementFromString(final String elementString, final Class<T> movilizerElementClass) {

@@ -65,7 +65,7 @@ public class Movilizer {
      * @since 12.11.1.0
      */
     public static MovilizerDistributionService getService() {
-        return new MovilizerConfBuilder().getService();
+        return (new MovilizerConfBuilder()).getService();
     }
 
     /**

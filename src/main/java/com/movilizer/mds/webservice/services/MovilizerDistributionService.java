@@ -25,6 +25,7 @@ import com.movilizer.mds.webservice.models.UploadResponse;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Public API to access the Movilizer Cloud Services and utils related to it. Features:
@@ -75,7 +76,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerWebServiceException when there's connection problems.
    * @since 12.11.1.0
    */
-  MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) throws MovilizerWebServiceException;
+  MovilizerResponse getReplyFromCloudSync(MovilizerRequest request);
 
   /**
    * Performs an asynchronous request the Movilizer cloud.
@@ -87,7 +88,7 @@ public interface MovilizerDistributionService {
    * @see FutureCallback
    * @since 12.11.1.0
    */
-  void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException;
+  void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler);
 
   /**
    * Performs a synchronous request the Movilizer cloud.
@@ -100,7 +101,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerWebServiceException when there's connection problems.
    * @since 12.11.1.0
    */
-  MovilizerResponse getReplyFromCloudSync(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis) throws MovilizerWebServiceException;
+  MovilizerResponse getReplyFromCloudSync(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis);
 
   /**
    * Performs an asynchronous request the Movilizer cloud.
@@ -114,7 +115,7 @@ public interface MovilizerDistributionService {
    * @see FutureCallback
    * @since 12.11.1.0
    */
-  void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis, FutureCallback<MovilizerResponse> asyncHandler) throws MovilizerWebServiceException;
+  void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis, FutureCallback<MovilizerResponse> asyncHandler);
 
   /**
    * Indicates if the response java instance has errors.
@@ -126,13 +127,22 @@ public interface MovilizerDistributionService {
   Boolean responseHasErrors(MovilizerResponse response);
 
   /**
-   * Generates a string from the response java instance errors.
+   * Generate a string with errors.
    *
-   * @param response the response to be transformed into string.
-   * @return the string representation of the response errors.
-   * @since 12.11.1.0
+   * @param response the response that contains the errors.
+   * @return string represantion of the errors to use in messages.
+   * @since 12.11.1.3
    */
   String responseErrorsToString(MovilizerResponse response);
+
+  /**
+   * Send all files that has .mxml extension in a folder and subfolders collecting all cloud responses.
+   *
+   * @param folder to walk for the request files.
+   * @return a list with all the cloud responses.
+   * @since 15.11.1.5
+   */
+  List<MovilizerResponse> batchUploadFolderSync(Path folder);
 
   // ------------------------------------------------------------------------------------------------- Document upload
 
@@ -152,7 +162,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.0
    */
-  UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException;
+  UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey);
 
   /**
    * Performs an asynchronous blob upload to the Movilizer Cloud given the input stream.
@@ -172,7 +182,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.0
    */
-  void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException;
+  void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler);
 
   /**
    * Performs a synchronous blob upload to the Movilizer Cloud given the path to a file.
@@ -189,7 +199,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.0
    */
-  UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException;
+  UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey);
 
   /**
    * Performs an asynchronous blob upload to the Movilizer Cloud given the path to a file.
@@ -208,7 +218,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.0
    */
-  void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException;
+  void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler);
 
   /**
    * Performs a synchronous blob upload to the Movilizer Cloud given the input stream.
@@ -227,7 +237,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.2
    */
-  UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) throws MovilizerWebServiceException;
+  UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis);
 
   /**
    * Performs an asynchronous blob upload to the Movilizer Cloud given the input stream.
@@ -248,7 +258,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.2
    */
-  void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException;
+  void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler);
 
   /**
    * Performs a synchronous blob upload to the Movilizer Cloud given the path to a file.
@@ -266,7 +276,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.2
    */
-  UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) throws MovilizerWebServiceException;
+  UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis);
 
   /**
    * Performs an asynchronous blob upload to the Movilizer Cloud given the path to a file.
@@ -286,7 +296,7 @@ public interface MovilizerDistributionService {
    * @see UploadResponse
    * @since 12.11.1.2
    */
-  void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException;
+  void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler);
 
   // -------------------------------------------------------------------------------------------------- File XML utils
 
@@ -300,7 +310,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerXMLException when there are parsing problems.
    * @since 12.11.1.3
    */
-  <T> T getElementFromString(final String elementString, final Class<T> movilizerElementClass) throws MovilizerXMLException;
+  <T> T getElementFromString(final String elementString, final Class<T> movilizerElementClass);
 
   /**
    * Prints a Movilizer element from the webservice name space (MovilizerMovelet, MovilizerReply, etc...) to string.
@@ -323,7 +333,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerXMLException when there's parsing or file access problems.
    * @since 12.11.1.0
    */
-  MovilizerRequest getRequestFromFile(Path filePath) throws MovilizerXMLException;
+  MovilizerRequest getRequestFromFile(Path filePath);
 
   /**
    * Reads and parses a Movilizer Request from the given String.
@@ -333,7 +343,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerXMLException when there's parsing or string problems.
    * @since 12.11.1.1
    */
-  MovilizerRequest getRequestFromString(String requestString) throws MovilizerXMLException;
+  MovilizerRequest getRequestFromString(String requestString);
 
   /**
    * Persists a request java instance to a file.
@@ -343,7 +353,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerXMLException when there's parsing or file access problems.
    * @since 12.11.1.0
    */
-  void saveRequestToFile(MovilizerRequest request, Path filePath) throws MovilizerXMLException;
+  void saveRequestToFile(MovilizerRequest request, Path filePath);
 
   /**
    * Generates a string from a request java instance.
@@ -353,7 +363,7 @@ public interface MovilizerDistributionService {
    * @throws MovilizerXMLException if there's parsing problems.
    * @since 12.11.1.0
    */
-  String requestToString(MovilizerRequest request) throws MovilizerXMLException;
+  String requestToString(MovilizerRequest request);
 
   /**
    * Generates a string from a response java instance.
@@ -363,5 +373,5 @@ public interface MovilizerDistributionService {
    * @throws MovilizerXMLException if there's parsing problems.
    * @since 12.11.1.0
    */
-  String responseToString(MovilizerResponse response) throws MovilizerXMLException;
+  String responseToString(MovilizerResponse response);
 }

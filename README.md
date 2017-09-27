@@ -1,7 +1,7 @@
 # Movilizer Webservice
 
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
-at https://devtools.movilizer.com/confluence/display/DOC24/Introduction+to+the+Movilizer+Web+Service
+at https://devtools.movilizer.com/confluence/display/DOC25/Introduction+to+the+Movilizer+Web+Service
 
 [![Circle CI](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master.svg?style=svg)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
 
@@ -14,7 +14,7 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>14.11.1.3</version>
+        <version>15.11.1.5</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -49,6 +49,55 @@ maven install in the root of the cloned repository.
 git clone https://github.com/Movilizer/movilizer-webservice.git
 cd movilizer-webservice
 mvn install
+```
+
+You can also fetch this from the Movilizer internal Maven repository if you have access to it.
+
+```xml
+<repositories>
+    <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>lighthouse</id>
+        <name>lighthouse</name>
+        <url>https://source.movilizer.com/artifactory/lighthouse/</url>
+    </repository>
+</repositories>
+```
+
+Using Gradle you can use it with the following `build.gradle`.
+
+```groovy
+repositories {
+	jcenter()
+	mavenLocal()
+    maven {
+        credentials {
+            username movilizerRepoUsername
+            password movilizerRepoPassword
+        }
+        url 'https://source.movilizer.com/artifactory/lighthouse/'
+    }
+}
+
+ext {
+    movilizerWebserviceVersion = '15.11.1.5'
+    apacheHttpcomponentsVersion = '4.4'
+    apacheCxfVersion = '3.1.1'
+}
+
+dependencies {
+    compile group: 'com.movilizer.mds', name: 'movilizer-webservice', version: "$movilizerWebserviceVersion"
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: "$apacheHttpcomponentsVersion"
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: "$apacheHttpcomponentsVersion"
+    compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: "$apacheHttpcomponentsVersion"
+    compile(group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxws', version: "$apacheCxfVersion") {
+        exclude group: 'com.sun.xml.bind', module: "jaxb-impl"
+    }
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: "$apacheCxfVersion"
+}
+
 ```
 
 ## Using the web service
@@ -86,6 +135,15 @@ MovilizerDistributionService mds = Movilizer.buildConf()
                                             .setEndpoint("https://movilizer.mycloud.com/WebService/",
                                                         "https://movilizer.mycloud.com/mds/document")
                                             .setOutputEncoding(Charset.defaultCharset())
+                                            .getService();
+```
+
+In case you're using a multi-threading environment and you're not using a Movilzer service instance per thread,
+you can set the safe multi-threading on to avoid possible serialization issues.
+
+```java
+MovilizerDistributionService mds = Movilizer.buildConf()
+                                            .setThreadSafe(true)
                                             .getService();
 ```
 

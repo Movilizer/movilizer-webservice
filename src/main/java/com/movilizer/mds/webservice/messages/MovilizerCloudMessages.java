@@ -128,15 +128,22 @@ public enum  MovilizerCloudMessages {
     }
 
     public static boolean isError(short messageType) {
-        if (1000 < messageType && messageType < 2000) { // MovilizerMoveletError
-            return true;
-        } else if (2000 < messageType && messageType < 3000) { // MovilizerParticipantError
-            return true;
-        } else if (3000 < messageType && messageType < 4000) { // MovilizerMasterdataError
-            return true;
-        }
-        //Check individual errors
-        return fromType(messageType).isError();
+        return isMovilizerMoveletError(messageType) ||
+                isMovilizerParticipantError(messageType) ||
+                isMovilizerMasterdataError(messageType) ||
+                fromType(messageType).isError();
+    }
+
+    public static boolean isMovilizerMoveletError(short messageType) {
+        return 1000 < messageType && messageType < 2000;
+    }
+
+    public static boolean isMovilizerParticipantError(short messageType) {
+        return 2000 < messageType && messageType < 3000;
+    }
+
+    public static boolean isMovilizerMasterdataError(short messageType) {
+        return 3000 < messageType && messageType < 4000;
     }
 
     @Override

@@ -27,6 +27,8 @@ interface MovilizerXMLParserService {
 
   MovilizerRequest getRequestFromString(final String requestString);
 
+  <T> T getMovilizerElementFromPath(final Path elementPath, final Class<T> movilizerElementClass);
+
   <T> T getMovilizerElementFromString(final String elementString, final Class<T> movilizerElementClass);
 
   String printRequest(final MovilizerRequest request);

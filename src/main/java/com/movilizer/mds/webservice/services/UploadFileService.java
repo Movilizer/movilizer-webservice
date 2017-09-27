@@ -56,11 +56,11 @@ class UploadFileService {
     this.documentUploadAddress = documentUploadAddress;
   }
 
-  protected UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+  protected UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
     return uploadDocumentSync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, defaultConnectionTimeoutInMillis);
   }
 
-  protected UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) throws MovilizerWebServiceException {
+  protected UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
     if (logger.isDebugEnabled()) {
       logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -71,22 +71,22 @@ class UploadFileService {
     return result;
   }
 
-  protected void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  protected void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) {
     uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, defaultConnectionTimeoutInMillis, asyncHandler);
   }
 
-  protected void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  protected void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) {
     if (logger.isDebugEnabled()) {
       logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
     upload(movilizerUpload.getForm(documentInputStream, filename, systemId, password, documentPool, documentKey, language, getSuffixFromFilename(filename), ackKey), connectionTimeoutInMillis, asyncHandler);
   }
 
-  protected UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) throws MovilizerWebServiceException {
+  protected UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
     return uploadDocumentSync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, defaultConnectionTimeoutInMillis);
   }
 
-  protected UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) throws MovilizerWebServiceException {
+  protected UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
     if (logger.isDebugEnabled()) {
       logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
     }
@@ -97,11 +97,11 @@ class UploadFileService {
     return result;
   }
 
-  protected void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  protected void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) {
     uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, defaultConnectionTimeoutInMillis, asyncHandler);
   }
 
-  protected void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) throws MovilizerWebServiceException {
+  protected void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) {
     String suffix = getSuffixFromFilename(documentFilePath.getFileName());
     if (logger.isDebugEnabled()) {
       logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));

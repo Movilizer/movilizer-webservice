@@ -43,27 +43,28 @@ class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserServi
   }
 
   public MovilizerRequest getRequestFromFile(final Path filePath) {
+    return getMovilizerElementFromPath(filePath, MovilizerRequest.class);
+  }
+
+  public MovilizerRequest getRequestFromString(final String requestString) {
+    return getMovilizerElementFromString(requestString, MovilizerRequest.class);
+  }
+
+  public <T> T getMovilizerElementFromPath(final Path filePath, final Class<T> movilizerElementClass) {
     if (!Files.exists(filePath)) {
       if (logger.isErrorEnabled()) {
         logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
       }
       throw new MovilizerXMLException(MESSAGES.REQUEST_FILE_NOT_FOUND + filePath.toAbsolutePath().toString());
     }
-    JAXBElement<MovilizerRequest> root;
+    JAXBElement<T> root;
     final Unmarshaller movilizerXMLUnmarshaller = getUnmarshaller();
     try {
-      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), MovilizerRequest.class);
-      if (logger.isInfoEnabled()) {
-        logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
-      }
+      root = movilizerXMLUnmarshaller.unmarshal(new StreamSource(filePath.toFile()), movilizerElementClass);
     } catch (JAXBException e) {
       throw new MovilizerXMLException(e);
     }
     return root.getValue();
-  }
-
-  public MovilizerRequest getRequestFromString(final String requestString) {
-    return getMovilizerElementFromString(requestString, MovilizerRequest.class);
   }
 
   public <T> T getMovilizerElementFromString(final String elementString, final Class<T> movilizerElementClass) {
@@ -169,7 +170,7 @@ class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserServi
     }
   }
 
-  private Marshaller getMarshaller() throws MovilizerXMLException {
+  private Marshaller getMarshaller() {
     // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version-of-jaxb-for-jax-ws-in-java-1-6
     System.setProperty("javax.xml.bind.JAXBContext",
         "com.sun.xml.internal.bind.v2.ContextFactory");
