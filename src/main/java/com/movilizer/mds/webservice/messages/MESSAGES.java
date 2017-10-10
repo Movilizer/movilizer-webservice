@@ -39,6 +39,7 @@ public class MESSAGES {
   public static final String CANNOT_CLOSE_FILE = "Cannot close file writer for file: ";
   public static final String MISSING_FILE_EXTENSION = "Invalid filename '%s'. Missing file extension";
   public static final String FAILED_FILE_UPLOAD = "Failed upload request with status '%d' with reason '%s'";
+  public static final String FAILED_FILE_UPLOAD_CREDENTIALS = ". This bad request can also be due to using wrong credentials, please verify";
   public static final String HANDLING_HTTP_RESPONSE = "Handling response from the document upload service";
   public static final String SUCCESSFUL_HTTP_RESPONSE = "Successfully handled response with status code %d";
   public static final String SUCCESSFUL_WEB_RESPONSE = "Successfully handled response for class %s";

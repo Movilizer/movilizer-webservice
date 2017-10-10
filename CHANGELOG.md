@@ -63,3 +63,19 @@ Add features
 - Add send all requests from a folder
 
 Minor code clean up
+
+# 15.11.2.0 (2017-10-09)
+
+Breaking changes
+
+- Minimum Java updated to 1.8
+- CXF updated to 3.2.0
+- Apache httpclient updated to 4.5.3
+- Logback updated to 1.2.3
+
+Fixes
+
+- Upload documents give a confusing "Bad Request" message when credentials are incorrect.
+- Ignored tests have been "un-ignored"
+- Updated libraries
+- initial setup for CI/CD 

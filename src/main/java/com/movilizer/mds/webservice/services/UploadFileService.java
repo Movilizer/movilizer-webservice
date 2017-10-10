@@ -41,6 +41,7 @@ import java.nio.file.Path;
 class UploadFileService {
   private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
   private static final String USER_AGENT_HEADER_KEY = "User-Agent";
+  private static final int POSSIBLE_BAD_CREDENTIALS = 400;
 
   private URL documentUploadAddress;
   private MovilizerUploadForm movilizerUpload;
@@ -131,10 +132,11 @@ class UploadFileService {
           .execute().returnResponse();
       int statusCode = response.getStatusLine().getStatusCode();
       if (!(HttpStatus.SC_OK <= statusCode && statusCode < HttpStatus.SC_MULTIPLE_CHOICES)) {
-        throw new MovilizerWebServiceException(
-            String.format(MESSAGES.FAILED_FILE_UPLOAD,
-                statusCode,
-                response.getStatusLine().getReasonPhrase()));
+        String errorMessage = response.getStatusLine().getReasonPhrase();
+        if (statusCode == POSSIBLE_BAD_CREDENTIALS) {
+          errorMessage = errorMessage + MESSAGES.FAILED_FILE_UPLOAD_CREDENTIALS;
+        }
+        throw new MovilizerWebServiceException(String.format(MESSAGES.FAILED_FILE_UPLOAD, statusCode, errorMessage));
       }
       return new UploadResponse(
           response.getStatusLine().getStatusCode(),
@@ -156,9 +158,12 @@ class UploadFileService {
         @Override
         public UploadResponse convertHttpResponse(HttpResponse httpResponse) {
           logger.info(MESSAGES.UPLOAD_COMPLETE);
-          return new UploadResponse(
-              httpResponse.getStatusLine().getStatusCode(),
-              httpResponse.getStatusLine().getReasonPhrase());
+          int statusCode = httpResponse.getStatusLine().getStatusCode();
+          String errorMessage = httpResponse.getStatusLine().getReasonPhrase();
+          if (statusCode == POSSIBLE_BAD_CREDENTIALS) {
+            errorMessage = errorMessage + MESSAGES.FAILED_FILE_UPLOAD_CREDENTIALS;
+          }
+          return new UploadResponse(statusCode, errorMessage);
         }
       });
     } catch (URISyntaxException e) {

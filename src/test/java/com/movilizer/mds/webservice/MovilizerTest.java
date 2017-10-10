@@ -38,8 +38,8 @@ import static org.hamcrest.Matchers.nullValue;
 
 @RunWith(JUnit4.class)
 public class MovilizerTest {
-  private static long SYSTEM_ID = 1L; //Put your own here
-  private static String PASSWORD = "pass"; //Put your own here
+  private static long SYSTEM_ID = 0L; //Put your own here
+  private static String PASSWORD = ""; //Put your own here
 
   private MovilizerDistributionService mds;
 
@@ -53,7 +53,6 @@ public class MovilizerTest {
         .getService();
   }
 
-  @Ignore
   @Test
   public void testPerformEmptyRequest() throws Exception {
     URL requestFileResource = this.getClass().getResource("/requests/ping-request.mxml");
@@ -65,7 +64,6 @@ public class MovilizerTest {
     assertThat(mds.responseHasErrors(response), is(false));
   }
 
-  @Ignore
   @Test
   public void testPerformEmptyRequestAsync() throws Exception {
     MovilizerRequest request = new MovilizerRequest();

@@ -21,8 +21,8 @@ import static org.hamcrest.Matchers.notNullValue;
 public class UploadServiceTest {
   private static final String documentsDir = "/documents";
   private static final String pdfFilename = "movilizer_days.pdf";
-  private static long SYSTEM_ID = 1L; //Put your own here
-  private static String PASSWORD = "pass"; //Put your own here
+  private static long SYSTEM_ID = Long.parseLong(System.getenv("MOV_SYSTEM_ID")); //Put your own here
+  private static String PASSWORD = System.getenv("MOV_PASSWORD"); //Put your own here
   private static String DOCUMENT_POOL = "testMovilizerWebservicePdfPool";
   private static String DOCUMENT_KEY = "testMovilizerWebservicePdfKey";
   private static String LANG = "";
@@ -36,7 +36,6 @@ public class UploadServiceTest {
         DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS);
   }
 
-  @Ignore
   @Test
   public void testSavePdf() throws Exception {
     Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
@@ -44,7 +43,6 @@ public class UploadServiceTest {
     uploadService.uploadDocumentSync(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
   }
 
-  @Ignore
   @Test
   public void testSavePdfAsync() throws Exception {
     Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());

@@ -18,8 +18,8 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(JUnit4.class)
 public class MovilizerWebServiceTest {
-  private static long SYSTEM_ID = 1L; //Put your own here
-  private static String PASSWORD = "pass"; //Put your own here
+  private static long SYSTEM_ID = 0L; //Put your own here
+  private static String PASSWORD = ""; //Put your own here
 
   private MovilizerWebService webService;
 
@@ -31,7 +31,6 @@ public class MovilizerWebServiceTest {
     webService.setEndpoint(DefaultValues.MOVILIZER_ENDPOINT.getMdsUrl());
   }
 
-  @Ignore
   @Test
   public void testPerformEmptyRequest() throws Exception {
     MovilizerRequest request = new MovilizerRequest();
@@ -41,7 +40,6 @@ public class MovilizerWebServiceTest {
     assertThat(webService.responseHasErrors(response), is(false));
   }
 
-  @Ignore
   @Test
   public void testPerformEmptyRequestAsync() throws Exception {
     MovilizerRequest request = new MovilizerRequest();

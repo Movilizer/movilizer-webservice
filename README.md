@@ -14,30 +14,30 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>15.11.1.5</version>
+        <version>15.11.1.6</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
-        <version>4.4</version>
+        <version>4.5.3</version>
     </dependency>
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpmime</artifactId>
-        <version>4.4</version>
+        <version>4.5.3</version>
     </dependency>
     <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>fluent-hc</artifactId>
-        <version>4.4</version>
+        <version>4.5.3</version>
     </dependency>
     <!-- Online sync -->
     <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-frontend-jaxws</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.0</version>
     </dependency>
 </dependencies>
 ```
@@ -82,9 +82,9 @@ repositories {
 }
 
 ext {
-    movilizerWebserviceVersion = '15.11.1.5'
-    apacheHttpcomponentsVersion = '4.4'
-    apacheCxfVersion = '3.1.1'
+    movilizerWebserviceVersion = '15.11.2.0'
+    apacheHttpcomponentsVersion = '4.5.3'
+    apacheCxfVersion = '3.2.0'
 }
 
 dependencies {
@@ -109,6 +109,9 @@ Once the dependencies are in place the Movilizer web service can be called the f
 MovilizerDistributionService mds = Movilizer.getService();
 
 // Loading a .mxml request file from the filesystem
+MovilizerRequest request = mds.getRequestFromFile(Paths.get("requests", "loginMovelet.mxml"));
+
+// Loading a .mxml request files from a folder
 MovilizerRequest request = mds.getRequestFromFile(Paths.get("requests", "loginMovelet.mxml"));
 
 // Loading a request from string (hook for Velocity templates and the like)
