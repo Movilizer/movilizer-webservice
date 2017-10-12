@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-
     working_directory: ~/circleci-movilizer-webservice
 
     docker:
@@ -21,6 +20,9 @@ jobs:
             - ~/.m2
           key: circleci-movilizer-webservice-{{ checksum "pom.xml" }}
 
+      - run: mvn test
+
+  package:
       - run: mvn package
 
       - store_test_results:
@@ -28,3 +30,27 @@ jobs:
 
       - store_artifacts:
           path: target/movilizer-webservice-15.11.2.0.jar
+
+  deploy:
+      - run: mvn -s settings.xml deploy
+
+notify:
+  webhooks:
+    - url: https://outlook.office.com/webhook/461ab315-3631-4075-b2b5-37146a0a4f01@96ece526-9c7d-48b0-8daf-8b93c90a5d18/CircleCI/bc3f3e1927744544b720483219d07eae/d1cadcd8-7e4e-4429-91a2-bd7ecb0f0b2a
+
+workflows:
+  version: 2
+  build-n-deploy:
+    jobs:
+      - package:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - package
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/

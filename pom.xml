@@ -46,16 +46,16 @@
 
     <distributionManagement>
         <repository>
-            <id>lighthouse-upload</id>
-            <name>Movilizer Lighthouse Repository</name>
-            <url>https://source.movilizer.com/artifactory/lighthouse</url>
+            <id>bintray-movilizer-maven</id>
+            <name>movilizer-maven</name>
+            <url>https://api.bintray.com/maven/movilizer/maven/movilizer-webservice/;publish=1</url>
         </repository>
     </distributionManagement>
 
     <properties>
         <cxf.version>3.2.0</cxf.version>
         <java.version>1.8</java.version>
-        <maven-plugins.version>3.2</maven-plugins.version>
+        <maven-plugins.version>3.7.0</maven-plugins.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
         <movilizer.wsdl.folder>META-INF/movilizer/wsdl/</movilizer.wsdl.folder>
@@ -221,31 +221,11 @@
                                         <limit implementation="org.jacoco.report.check.Limit">
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.60</minimum>
+                                            <minimum>0.20</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
                             </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jfrog.buildinfo</groupId>
-                <artifactId>artifactory-maven-plugin</artifactId>
-                <version>2.6.1</version>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>build-info</id>
-                        <goals>
-                            <goal>publish</goal>
-                        </goals>
-                        <configuration>
-                            <publisher>
-                                <contextUrl>https://source.movilizer.com/artifactory</contextUrl>
-                                <repoKey>lighthouse</repoKey>
-                            </publisher>
                         </configuration>
                     </execution>
                 </executions>

@@ -3,7 +3,10 @@
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
 at https://devtools.movilizer.com/confluence/display/DOC25/Introduction+to+the+Movilizer+Web+Service
 
-[![Circle CI](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master.svg?style=svg)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
+[![Circle CI](https://img.shields.io/circleci/project/github/Movilizer/movilizer-webservice/master.svg?style=flat-square)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
+[![Dependency Status](https://www.versioneye.com/user/projects/59db355c2de28c21ceb95f13/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59db355c2de28c21ceb95f13)
+[![Codacy Badge](https://img.shields.io/codacy/grade/f7c2d7254e4d4b0cb102247d6a1f51f8.svg?style=flat-square)](https://www.codacy.com/app/demula/movilizer-webservice?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Movilizer/movilizer-webservice&amp;utm_campaign=Badge_Grade)
+[![Download](https://api.bintray.com/packages/movilizer/maven/movilizer-webservice/images/download.svg?style=flat-square) ](https://bintray.com/movilizer/maven/movilizer-webservice/_latestVersion)
 
 ## Adding it into your project
 
@@ -14,7 +17,7 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>15.11.1.6</version>
+        <version>15.11.2.0</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -175,4 +178,13 @@ UploadResponse uploadResponse = mds.uploadDocument(Paths.get("myCatalogue1.pdf")
         logger.error("Something went terribly wrong.");
     }
 });
+```
+
+## Contributing
+
+Some of the tests will require your Movilizer system id and password. Please add the following environment variables:
+
+```bash
+export MOV_SYSTEM_ID=1234
+export MOV_PASSWORD=secret
 ```
