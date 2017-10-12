@@ -2,36 +2,35 @@ version: 2
 jobs:
   build:
     working_directory: ~/circleci-movilizer-webservice
-
     docker:
       - image: circleci/openjdk:8-jdk-browsers
-
     steps:
-
       - checkout
-
       - restore_cache:
           key: circleci-movilizer-webservice-{{ checksum "pom.xml" }}
-
       - run: mvn dependency:go-offline
-
       - save_cache:
           paths:
             - ~/.m2
           key: circleci-movilizer-webservice-{{ checksum "pom.xml" }}
-
       - run: mvn test
 
   package:
+    working_directory: ~/circleci-movilizer-webservice
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
       - run: mvn package
-
       - store_test_results:
           path: target/surefire-reports
-
       - store_artifacts:
           path: target/movilizer-webservice-15.11.2.0.jar
 
   deploy:
+    working_directory: ~/circleci-movilizer-webservice
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
       - run: mvn -s settings.xml deploy
 
 notify:
