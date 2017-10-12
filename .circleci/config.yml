@@ -15,22 +15,17 @@ jobs:
           key: circleci-movilizer-webservice-{{ checksum "pom.xml" }}
       - run: mvn test
 
-  package:
-    working_directory: ~/circleci-movilizer-webservice
-    docker:
-      - image: circleci/openjdk:8-jdk-browsers
-    steps:
-      - run: mvn package
-      - store_test_results:
-          path: target/surefire-reports
-      - store_artifacts:
-          path: target/movilizer-webservice-15.11.2.0.jar
-
   deploy:
     working_directory: ~/circleci-movilizer-webservice
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     steps:
+      - checkout
+      - restore_cache:
+          key: circleci-movilizer-webservice-{{ checksum "pom.xml" }}
+      - run: mvn package
+      - store_test_results:
+          path: target/surefire-reports
       - run: mvn -s settings.xml deploy
 
 notify:
@@ -42,9 +37,6 @@ workflows:
   test:
       jobs:
         - build
-        - package:
-            requires:
-              - build
 
   build-n-deploy:
     jobs:
@@ -52,15 +44,11 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - package:
-          requires:
-            - build
-          filters:
-            tags:
-              only: /.*/
+            branches:
+              ignore: /.*/
       - deploy:
           requires:
-            - package
+            - build
           filters:
             tags:
               only: /.*/
