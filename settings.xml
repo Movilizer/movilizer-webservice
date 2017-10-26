@@ -2,6 +2,19 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <profiles>
+        <profile>
+            <id>codacy-cobertura-reporter</id>
+            <properties>
+                <coverageReportFile>target/site/jacoco/jacoco.xml</coverageReportFile>
+                <projectToken>${env.CODACY_PROJECT_TOKEN}</projectToken>
+                <apiToken>${env.CODADY_API_TOKEN}</apiToken>
+            </properties>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>codacy-cobertura-reporter</activeProfile>
+    </activeProfiles>
     <servers>
         <server>
             <id>bintray-movilizer-maven</id>

@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class MovilizerXMLParserServiceTest extends MovilizerXMLParserServiceTestFixture {
+public class MovilizerXMLThreadSafeParserServiceTest extends MovilizerXMLParserServiceTestFixture {
 
     @Before
     public void setUp() throws Exception {
-        xmlParserService = new MovilizerXMLParserServiceImpl(DefaultValues.OUTPUT_ENCODING);
+        xmlParserService = new MovilizerXMLThreadSafeParserServiceImpl(DefaultValues.OUTPUT_ENCODING);
     }
 }

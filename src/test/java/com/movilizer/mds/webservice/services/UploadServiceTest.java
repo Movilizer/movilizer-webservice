@@ -40,7 +40,11 @@ public class UploadServiceTest {
   public void testSavePdf() throws Exception {
     Path folderPath = Paths.get(getClass().getResource(documentsDir).toURI());
     Path filePath = folderPath.resolve(pdfFilename);
-    uploadService.uploadDocumentSync(filePath, SYSTEM_ID, PASSWORD, DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
+    UploadResponse response = uploadService.uploadDocumentSync(filePath, SYSTEM_ID, PASSWORD,
+              DOCUMENT_POOL, DOCUMENT_KEY, LANG, ACK);
+
+    assertThat(response.wasSuccessful(), is(true));
+    assertThat(response.getStatusCode(), is(200));
   }
 
   @Test

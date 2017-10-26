@@ -1,0 +1,12 @@
+{
+  "event": {
+    "scriptSystemId": 0,
+    "scriptKey": "",
+    "appSpace": "",
+    "description": "Test script for PS",
+    "deviceAddress": "",
+    "moveletKey": "com.movilizer.ps.test",
+    "moveletKeyExt": "",
+    "scriptTriggers": "ONLINECONTAINER_RECEIVED"
+  }
+}

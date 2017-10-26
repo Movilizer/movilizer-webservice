@@ -1,0 +1,1 @@
+context.getNotificationManager().writeDebug("test", null)

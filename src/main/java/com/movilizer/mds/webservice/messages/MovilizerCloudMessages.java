@@ -19,7 +19,7 @@ package com.movilizer.mds.webservice.messages;
 /*
  @see: https://devtools.movilizer.com/confluence/display/DOC21/Common+Errors+Messages
  */
-public enum  MovilizerCloudMessages {
+public enum MovilizerCloudMessages {
     MOVELET_PORTAL_CREATED(100, "MOVELET_PORTAL_CREATED", false),
     MOVELET_PORTAL_SENT(101, "MOVELET_PORTAL_SENT", false),
     MOVELET_PORTAL_STOPPED(107, "MOVELET_PORTAL_STOPPED", false),

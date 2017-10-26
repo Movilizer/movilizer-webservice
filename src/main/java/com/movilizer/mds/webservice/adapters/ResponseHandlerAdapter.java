@@ -49,16 +49,17 @@ public abstract class ResponseHandlerAdapter<T> implements ResponseHandler<T> {
                         httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().getReasonPhrase()));
             }
-            Exception e = new MovilizerWebServiceException(
+            Exception exception = new MovilizerWebServiceException(
                     String.format(MESSAGES.FAILED_REQUEST_ERROR,
                             httpResponse.getStatusLine().getStatusCode(),
                             httpResponse.getStatusLine().getReasonPhrase()));
-            futureCallback.onFailure(e);
-            futureCallback.onComplete(null, e);
+            futureCallback.onFailure(exception);
+            futureCallback.onComplete(null, exception);
             return null;
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(MESSAGES.SUCCESSFUL_HTTP_RESPONSE, httpResponse.getStatusLine().getStatusCode()));
+                logger.debug(String.format(MESSAGES.SUCCESSFUL_HTTP_RESPONSE,
+                        httpResponse.getStatusLine().getStatusCode()));
             }
         }
         return convertHttpResponse(httpResponse);

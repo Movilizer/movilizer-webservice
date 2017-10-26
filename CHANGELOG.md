@@ -44,19 +44,19 @@ Add features
 
 - Update webservice to the protocol version 14
 
-# 15.11.1.3 (2017-04-10)
+## 15.11.1.3 (2017-04-10)
 
 Add features
 
 - Update webservice to the protocol version 15
 
-# 15.11.1.4 (2017-08-01)
+## 15.11.1.4 (2017-08-01)
 
 Add features
 
 - Add thread safe XML conversions
 
-# 15.11.1.5 (2017-09-27)
+## 15.11.1.5 (2017-09-27)
 
 Add features
 
@@ -64,7 +64,7 @@ Add features
 
 Minor code clean up
 
-# 15.11.2.0 (2017-10-09)
+## 15.11.2.0 (2017-10-09)
 
 Breaking changes
 
@@ -79,3 +79,18 @@ Fixes
 - Ignored tests have been "un-ignored"
 - Updated libraries
 - initial setup for CI/CD 
+
+## 15.11.2.1 (2017-10-26)
+
+Breaking changes
+
+- Now configuration only takes the base url of the cloud and infer the specific endpoints (as they already are standard)
+- Logging level lowered to debug to all messages
+
+Features
+
+- MAF capabilities
+
+Configuration changes
+
+- PMD and checkstyle are now specified for static quality analysis

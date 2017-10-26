@@ -41,9 +41,10 @@ public class AsyncHandlerAdapter<T> implements AsyncHandler<T> {
             if (logger.isErrorEnabled()) {
                 logger.error(MESSAGES.WEB_RESPONSE_CANCELED);
             }
-            Exception e = new MovilizerWebServiceException(MESSAGES.REQUEST_CANCELLED_ERROR);
-            futureCallback.onFailure(e);
-            futureCallback.onComplete(null, e);
+            Exception exception = new MovilizerWebServiceException(
+                    MESSAGES.REQUEST_CANCELLED_ERROR);
+            futureCallback.onFailure(exception);
+            futureCallback.onComplete(null, exception);
             return;
         }
         if (response.isDone()) {
@@ -53,7 +54,8 @@ public class AsyncHandlerAdapter<T> implements AsyncHandler<T> {
                 }
                 T resInstance = response.get();
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(MESSAGES.SUCCESSFUL_WEB_RESPONSE, resInstance.getClass().toString()));
+                    logger.debug(String.format(MESSAGES.SUCCESSFUL_WEB_RESPONSE,
+                            resInstance.getClass().toString()));
                 }
                 futureCallback.onSuccess(resInstance);
                 futureCallback.onComplete(resInstance, null);

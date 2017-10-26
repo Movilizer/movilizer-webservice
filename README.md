@@ -3,10 +3,11 @@
 This is a non-official non supported compilation of the Movilizer WSDL. More info about Movilizer and their webservice
 at https://devtools.movilizer.com/confluence/display/DOC25/Introduction+to+the+Movilizer+Web+Service
 
-[![Circle CI](https://img.shields.io/circleci/project/github/Movilizer/movilizer-webservice/master.svg?style=flat-square)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
-[![Dependency Status](https://www.versioneye.com/user/projects/59db355c2de28c21ceb95f13/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/59db355c2de28c21ceb95f13)
-[![Codacy Badge](https://img.shields.io/codacy/grade/f7c2d7254e4d4b0cb102247d6a1f51f8.svg?style=flat-square)](https://www.codacy.com/app/demula/movilizer-webservice?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Movilizer/movilizer-webservice&amp;utm_campaign=Badge_Grade)
-[![Download](https://api.bintray.com/packages/movilizer/maven/movilizer-webservice/images/download.svg?style=flat-square) ](https://bintray.com/movilizer/maven/movilizer-webservice/_latestVersion)
+[![Circle CI](https://img.shields.io/circleci/project/github/Movilizer/movilizer-webservice/master.svg)](https://circleci.com/gh/Movilizer/movilizer-webservice/tree/master)
+[![Dependency Status](https://www.versioneye.com/user/projects/59db355c2de28c21ceb95f13/badge.svg?style=flat)](https://www.versioneye.com/user/projects/59db355c2de28c21ceb95f13)
+[![Codacy Badge](https://img.shields.io/codacy/grade/f7c2d7254e4d4b0cb102247d6a1f51f8.svg)](https://www.codacy.com/app/demula/movilizer-webservice?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Movilizer/movilizer-webservice&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://img.shields.io/codacy/coverage/f7c2d7254e4d4b0cb102247d6a1f51f8.svg)](https://www.codacy.com/app/demula/movilizer-webservice?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Movilizer/movilizer-webservice&amp;utm_campaign=Badge_Grade)
+[![Download](https://api.bintray.com/packages/movilizer/maven/movilizer-webservice/images/download.svg) ](https://bintray.com/movilizer/maven/movilizer-webservice/_latestVersion)
 
 ## Adding it into your project
 
@@ -17,7 +18,7 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>15.11.2.0</version>
+        <version>15.11.2.1</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -42,6 +43,12 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
         <artifactId>cxf-rt-frontend-jaxws</artifactId>
         <version>3.2.0</version>
     </dependency>
+    <!-- MAF management -->
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.8.2</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -54,38 +61,15 @@ cd movilizer-webservice
 mvn install
 ```
 
-You can also fetch this from the Movilizer internal Maven repository if you have access to it.
-
-```xml
-<repositories>
-    <repository>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-        <id>lighthouse</id>
-        <name>lighthouse</name>
-        <url>https://source.movilizer.com/artifactory/lighthouse/</url>
-    </repository>
-</repositories>
-```
-
 Using Gradle you can use it with the following `build.gradle`.
 
 ```groovy
 repositories {
 	jcenter()
-	mavenLocal()
-    maven {
-        credentials {
-            username movilizerRepoUsername
-            password movilizerRepoPassword
-        }
-        url 'https://source.movilizer.com/artifactory/lighthouse/'
-    }
 }
 
 ext {
-    movilizerWebserviceVersion = '15.11.2.0'
+    movilizerWebserviceVersion = '15.11.2.1'
     apacheHttpcomponentsVersion = '4.5.3'
     apacheCxfVersion = '3.2.0'
 }
@@ -187,4 +171,5 @@ Some of the tests will require your Movilizer system id and password. Please add
 ```bash
 export MOV_SYSTEM_ID=1234
 export MOV_PASSWORD=secret
+export MOV_TOKEN=secret-token
 ```

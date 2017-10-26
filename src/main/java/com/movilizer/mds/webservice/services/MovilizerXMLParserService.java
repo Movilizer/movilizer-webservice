@@ -23,19 +23,21 @@ import java.nio.file.Path;
 
 interface MovilizerXMLParserService {
 
-  MovilizerRequest getRequestFromFile(final Path filePath);
+    MovilizerRequest getRequestFromFile(final Path filePath);
 
-  MovilizerRequest getRequestFromString(final String requestString);
+    MovilizerRequest getRequestFromString(final String requestString);
 
-  <T> T getMovilizerElementFromPath(final Path elementPath, final Class<T> movilizerElementClass);
+    <T> T getMovilizerElementFromPath(final Path elementPath, final Class<T> movilizerElementClass);
 
-  <T> T getMovilizerElementFromString(final String elementString, final Class<T> movilizerElementClass);
+    <T> T getMovilizerElementFromString(final String elementString,
+                                        final Class<T> movilizerElementClass);
 
-  String printRequest(final MovilizerRequest request);
+    String printRequest(final MovilizerRequest request);
 
-  String printResponse(final MovilizerResponse response);
+    String printResponse(final MovilizerResponse response);
 
-  <T> String printMovilizerElementToString(final T movilizerElement, final Class<T> movilizerElementClass);
+    <T> String printMovilizerElementToString(final T movilizerElement,
+                                             final Class<T> movilizerElementClass);
 
-  void saveRequestToFile(final MovilizerRequest request, final Path filePath);
+    void saveRequestToFile(final MovilizerRequest request, final Path filePath);
 }

@@ -26,25 +26,26 @@ package com.movilizer.mds.webservice.models;
  * @since 12.11.1.3
  */
 public enum PasswordHashTypes {
-  DONT_CHANGE_PASSWORD(-1),
-  DISABLE_PASSWORD(0),
-  PLAIN_TEXT(1),
-  MD5(2),
-  SHA_256(3),
-  SHA_512(4);
+    DONT_CHANGE_PASSWORD(-1),
+    DISABLE_PASSWORD(0),
+    PLAIN_TEXT(1),
+    MD5(2),
+    SHA_256(3),
+    SHA_512(4);
 
-  private final Integer passwordType;
+    private final Integer passwordType;
 
-  PasswordHashTypes(Integer passwordType) {
-    this.passwordType = passwordType;
-  }
+    PasswordHashTypes(Integer passwordType) {
+        this.passwordType = passwordType;
+    }
 
-  /**
-   * Hash type identifier for the webservice.
-   * @return Integer for the given hash type identifier
-   */
-  public Integer getValue() {
-    return passwordType;
-  }
+    /**
+     * Hash type identifier for the webservice.
+     *
+     * @return Integer for the given hash type identifier
+     */
+    public Integer getValue() {
+        return passwordType;
+    }
 }
 

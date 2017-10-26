@@ -20,6 +20,7 @@ import com.movilitas.movilizer.v15.MovilizerWebServiceV15;
 import com.movilitas.movilizer.v15.MovilizerWebServiceV15Service;
 import com.movilizer.mds.webservice.EndPoint;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
+import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
 import com.movilizer.mds.webservice.messages.MESSAGES;
 import com.movilizer.mds.webservice.models.MovilizerUploadForm;
 import org.slf4j.Logger;
@@ -27,13 +28,15 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
- * This class is used to set the configuration of interest for the Movilizer webservice and then return an instance
- * configured. Do not instance it by yourself, use the {@code Movilizer.buildConf()} static factory method.
- * <p/>
+ * This class is used to set the configuration of interest for the Movilizer webservice and then
+ * return an instance configured. Do not instance it by yourself, use the
+ * {@code Movilizer.buildConf()} static factory method.
+ * <p>
  * Intended use would be as the following:
  * <pre>
  * {@code
@@ -41,6 +44,7 @@ import java.nio.charset.Charset;
  *                                          .setEndpoint(EndPoint.PROD)
  *                                          .setOutputEncoding(Charset.defaultCharset())
  *                                          .getService();
+ * }
  * </pre>
  *
  * @author Jesús de Mula Cano
@@ -48,198 +52,217 @@ import java.nio.charset.Charset;
  * @since 12.11.1.0
  */
 public class MovilizerConfBuilder {
-  private static final Logger logger = LoggerFactory.getLogger(MovilizerConfBuilder.class);
-  private Charset outputEncoding = DefaultValues.OUTPUT_ENCODING;
-  private EndPoint endpoint = DefaultValues.MOVILIZER_ENDPOINT;
-  private URL endpointAddress;
-  private URL documentUploadAddress;
-  private Integer defaultConnectionTimeoutInMillis = DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS;
-  private Integer defaultReceiveTimeoutInMillis = DefaultValues.RECEIVE_TIMEOUT_IN_MILLIS;
-  private String agentId = DefaultValues.AGENT_ID;
-  private String agentVersion = DefaultValues.AGENT_VERSION;
-  private boolean threadSafe = false;
+    private static final Logger logger = LoggerFactory.getLogger(MovilizerConfBuilder.class);
+    private Charset outputEncoding = DefaultValues.OUTPUT_ENCODING;
+    private EndPoint endpoint = DefaultValues.MOVILIZER_ENDPOINT;
+    private URI cloudBaseAddress;
+    private Integer defaultConnectionTimeoutInMillis = DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS;
+    private Integer defaultReceiveTimeoutInMillis = DefaultValues.RECEIVE_TIMEOUT_IN_MILLIS;
+    private String agentId = DefaultValues.AGENT_ID;
+    private String agentVersion = DefaultValues.AGENT_VERSION;
+    private boolean threadSafe = false;
 
-  /**
-   * <b>DO NOT USE</b>. Use instead Movilizer.buildConf() or Movilizer.getService()
-   * @see com.movilizer.mds.webservice.Movilizer
-   */
-  public MovilizerConfBuilder() {
-    // All defaults already set in the fields declaration of the class.
-  }
-
-  /**
-   * Get a <tt>MovilizerDistributionService</tt> instance with the configuration of the builder.
-   *
-   * @return the <tt>MovilizerDistributionService</tt> instance configured.
-   * @see MovilizerDistributionService
-   * @since 12.11.1.0
-   */
-  public MovilizerDistributionService getService() {
-    if (logger.isTraceEnabled()) {
-      logger.trace(MESSAGES.BUILDING_CONFIG);
-    }
-    MovilizerWebServiceV15 movilizerCloud = new MovilizerWebServiceV15Service().getMovilizerWebServiceV15Soap11();
-    MovilizerWebService webService = new MovilizerWebService(movilizerCloud, defaultConnectionTimeoutInMillis, defaultReceiveTimeoutInMillis, agentId, agentVersion);
-    webService.setEndpoint(endpoint.getMdsUrl());
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.USING_ENCODING, outputEncoding.displayName()));
-    }
-    MovilizerXMLParserService parserService;
-    if(this.threadSafe) {
-      parserService = new MovilizerXMLThreadSafeParserServiceImpl(outputEncoding);
-    } else {
-      parserService = new MovilizerXMLParserServiceImpl(outputEncoding);
+    /**
+     * <b>DO NOT USE</b>. Use instead Movilizer.buildConf() or Movilizer.getService()
+     *
+     * @see com.movilizer.mds.webservice.Movilizer
+     */
+    public MovilizerConfBuilder() {
+        // All defaults already set in the fields declaration of the class.
     }
 
-    UploadFileService uploadFileService = new UploadFileService(endpoint.getUploadUrl(), new MovilizerUploadForm(), defaultConnectionTimeoutInMillis);
+    /**
+     * Get a <tt>MovilizerDistributionService</tt> instance with the configuration of the builder.
+     *
+     * @return the <tt>MovilizerDistributionService</tt> instance configured.
+     * @see MovilizerDistributionService
+     * @since 12.11.1.0
+     */
+    public MovilizerDistributionService getService() {
+        if (logger.isTraceEnabled()) {
+            logger.trace(MESSAGES.BUILDING_CONFIG);
+        }
+        MovilizerWebServiceV15 movilizerCloud = new MovilizerWebServiceV15Service()
+                .getMovilizerWebServiceV15Soap11();
+        MovilizerWebService webService = new MovilizerWebService(movilizerCloud,
+                defaultConnectionTimeoutInMillis, defaultReceiveTimeoutInMillis, agentId,
+                agentVersion);
+        webService.setEndpoint(endpoint.getMdsUrl());
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.USING_ENCODING, outputEncoding.displayName()));
+        }
+        MovilizerXMLParserService parserService;
+        if (this.threadSafe) {
+            parserService = new MovilizerXMLThreadSafeParserServiceImpl(outputEncoding);
+        } else {
+            parserService = new MovilizerXMLParserServiceImpl(outputEncoding);
+        }
 
-    if (endpointAddress != null && documentUploadAddress != null) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(String.format(MESSAGES.USING_PRIVATE_CONFIG, endpointAddress.toString(), documentUploadAddress.toString()));
-      }
-      webService.setEndpoint(endpointAddress);
-      uploadFileService.setDocumentUploadAddress(documentUploadAddress);
-    } else {
-      if (logger.isTraceEnabled()) {
-        logger.trace(String.format(MESSAGES.USING_PUBLIC_CONFIG, endpoint.name()));
-      }
+        UploadFileService uploadFileService = new UploadFileService(endpoint.getUploadUrl(),
+                new MovilizerUploadForm(), defaultConnectionTimeoutInMillis);
+
+        MafManagementService mafService = new MafManagementService(endpoint.getMafUrl(),
+                defaultConnectionTimeoutInMillis);
+
+        if (cloudBaseAddress != null) {
+            if (logger.isTraceEnabled()) {
+                logger.trace(String.format(MESSAGES.USING_PRIVATE_CONFIG,
+                        cloudBaseAddress.toString()));
+            }
+            try {
+                webService.setEndpoint(cloudBaseAddress.resolve(
+                        EndPoint.WEBSERVICE_RELATIVE_PATH).toURL());
+                uploadFileService.setDocumentUploadAddress(cloudBaseAddress.resolve(
+                        EndPoint.DOCUMENT_RELATIVE_PATH).toURL());
+                mafService.setMafBaseAddress(cloudBaseAddress.resolve(
+                        EndPoint.MAF_RELATIVE_PATH).toURL());
+            } catch (MalformedURLException e) {
+                throw new MovilizerWebServiceException(e);
+            }
+        } else {
+            if (logger.isTraceEnabled()) {
+                logger.trace(String.format(MESSAGES.USING_PUBLIC_CONFIG, endpoint.name()));
+            }
+        }
+
+        FolderLoaderService loaderService = new FolderLoaderService(parserService);
+
+        return new MovilizerDistributionServiceImpl(
+                webService,
+                parserService,
+                uploadFileService,
+                loaderService,
+                mafService
+        );
     }
 
-    FolderLoaderService loaderService = new FolderLoaderService(parserService);
-
-    return new MovilizerDistributionServiceImpl(
-        webService,
-        parserService,
-        uploadFileService,
-        loaderService
-    );
-  }
-
-  /**
-   * Endpoint to be used in the <tt>MovilizerDistributionService</tt> instance.
-   *
-   * @param endpoint Endpoint to be used in the <tt>MovilizerDistributionService</tt> instance.
-   * @return this to be able to chain calls in a fluid API way.
-   * @see EndPoint
-   * @since 12.11.1.0
-   */
-  public MovilizerConfBuilder setEndpoint(EndPoint endpoint) {
-    this.endpoint = endpoint;
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_ENDPOINT, endpoint.name()));
+    /**
+     * Endpoint to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param endpoint Endpoint to be used in the <tt>MovilizerDistributionService</tt> instance.
+     * @return this to be able to chain calls in a fluid API way.
+     * @see EndPoint
+     * @since 12.11.1.0
+     */
+    public MovilizerConfBuilder setEndpoint(EndPoint endpoint) {
+        this.endpoint = endpoint;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_ENDPOINT, endpoint.name()));
+        }
+        return this;
     }
-    return this;
-  }
 
-  /**
-   * URLs to be used in the <tt>MovilizerDistributionService</tt> instance.
-   *
-   * @param endpointAddress       the URL of the web service endpoint.
-   * @param documentUploadAddress the URL of to upload documents to the cloud.
-   * @return this to be able to chain calls in a fluid API way.
-   * @see EndPoint
-   * @since 12.11.1.0
-   */
-  public MovilizerConfBuilder setEndpoint(URL endpointAddress, URL documentUploadAddress) {
-    this.endpointAddress = endpointAddress;
-    this.documentUploadAddress = documentUploadAddress;
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_PRIVATE_ENDPOINT, endpointAddress.toString(), documentUploadAddress.toString()));
+    /**
+     * URLs to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param cloudBaseAddress the URI of the Movilizer cloud. I.e.: https//demo.movilizer.com
+     * @return this to be able to chain calls in a fluid API way.
+     * @see EndPoint
+     * @since 12.11.1.0
+     */
+    public MovilizerConfBuilder setEndpoint(URI cloudBaseAddress) {
+        this.cloudBaseAddress = cloudBaseAddress;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_PRIVATE_ENDPOINT, cloudBaseAddress.toString()));
+        }
+        return this;
     }
-    return this;
-  }
 
-  /**
-   * Connection timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
-   *
-   * @param defaultConnectionTimeoutInMillis timeout to be used by default.
-   * @return this to be able to chain calls in a fluid API way.
-   * @since 12.11.1.2
-   */
-  public MovilizerConfBuilder setDefaultConnectionTimeout(Integer defaultConnectionTimeoutInMillis) {
-    this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_CONNECTION_TIMEOUT, defaultConnectionTimeoutInMillis));
+    /**
+     * Connection timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param defaultConnectionTimeoutInMillis timeout to be used by default.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.2
+     */
+    public MovilizerConfBuilder setDefaultConnectionTimeout(
+            Integer defaultConnectionTimeoutInMillis) {
+        this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_CONNECTION_TIMEOUT,
+                    defaultConnectionTimeoutInMillis));
+        }
+        return this;
     }
-    return this;
-  }
 
-  /**
-   * Receive timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
-   *
-   * @param defaultReceiveTimeoutInMillis timeout to be used by default.
-   * @return this to be able to chain calls in a fluid API way.
-   * @since 12.11.1.2
-   */
-  public MovilizerConfBuilder setDefaultReceiveTimeout(Integer defaultReceiveTimeoutInMillis) {
-    this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_RECEIVE_TIMEOUT, defaultReceiveTimeoutInMillis));
+    /**
+     * Receive timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param defaultReceiveTimeoutInMillis timeout to be used by default.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.2
+     */
+    public MovilizerConfBuilder setDefaultReceiveTimeout(Integer defaultReceiveTimeoutInMillis) {
+        this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_RECEIVE_TIMEOUT,
+                    defaultReceiveTimeoutInMillis));
+        }
+        return this;
     }
-    return this;
-  }
 
-  /**
-   * User agent string to be used in the <tt>MovilizerDistributionService</tt> calls.
-   *
-   * @param agentId      id to show as user agent.
-   * @param agentVersion version of the user agent.
-   * @return this to be able to chain calls in a fluid API way.
-   * @since 12.11.1.2
-   */
-  public MovilizerConfBuilder setUserAgent(String agentId, String agentVersion) {
-    this.agentId = agentId;
-    this.agentVersion = agentVersion;
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_USER_AGENT, DefaultValues.USER_AGENT_FORMAT_STRING(agentId, agentVersion)));
+    /**
+     * User agent string to be used in the <tt>MovilizerDistributionService</tt> calls.
+     *
+     * @param agentId      id to show as user agent.
+     * @param agentVersion version of the user agent.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.2
+     */
+    public MovilizerConfBuilder setUserAgent(String agentId, String agentVersion) {
+        this.agentId = agentId;
+        this.agentVersion = agentVersion;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_USER_AGENT,
+                    DefaultValues.USER_AGENT_FORMAT_STRING(agentId, agentVersion)));
+        }
+        return this;
     }
-    return this;
-  }
 
-  /**
-   * URLs to be used in the <tt>MovilizerDistributionService</tt> instance.
-   *
-   * @param endpointAddress       the URL of the web service endpoint.
-   * @param documentUploadAddress the URL of to upload documents to the cloud.
-   * @return this to be able to chain calls in a fluid API way.
-   * @throws MalformedURLException
-   * @see EndPoint
-   * @since 12.11.1.0
-   */
-  public MovilizerConfBuilder setEndpoint(String endpointAddress, String documentUploadAddress) throws MalformedURLException {
-    setEndpoint(URI.create(endpointAddress).toURL(), URI.create(documentUploadAddress).toURL());
-    return this;
-  }
-
-  /**
-   * The charset encoding to be used in the files that contains the requests.
-   *
-   * @param outputEncoding the charset to be used.
-   * @return this to be able to chain calls in a fluid API way.
-   * @since 12.11.1.0
-   */
-  public MovilizerConfBuilder setOutputEncoding(Charset outputEncoding) {
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_ENCODING, outputEncoding.displayName()));
+    /**
+     * URLs to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param cloudBaseAddress the URL of the Movilizer cloud. I.e.: https//demo.movilizer.com
+     * @return this to be able to chain calls in a fluid API way.
+     * @throws MalformedURLException when any url given is not valid
+     * @see EndPoint
+     * @since 12.11.1.0
+     */
+    public MovilizerConfBuilder setEndpoint(String cloudBaseAddress)
+            throws MalformedURLException {
+        setEndpoint(URI.create(cloudBaseAddress));
+        return this;
     }
-    this.outputEncoding = outputEncoding;
-    return this;
-  }
 
-  /**
-   * Set the XML serialization to be thread-safe.
-   *
-   * @param isThreadSafe boolean to set the thread safety on or off.
-   * @return this to be able to chain calls in a fluid API way.
-   * @see MovilizerXMLParserService
-   * @see MovilizerXMLThreadSafeParserServiceImpl
-   * @since 12.11.1.4
-   */
-  public MovilizerConfBuilder setThreadSafe(boolean isThreadSafe) {
-    this.threadSafe = isThreadSafe;
-    if (logger.isTraceEnabled()) {
-      logger.trace(String.format(MESSAGES.SET_THREAD_SAFE, isThreadSafe));
+    /**
+     * The charset encoding to be used in the files that contains the requests.
+     *
+     * @param outputEncoding the charset to be used.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.0
+     */
+    public MovilizerConfBuilder setOutputEncoding(Charset outputEncoding) {
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_ENCODING, outputEncoding.displayName()));
+        }
+        this.outputEncoding = outputEncoding;
+        return this;
     }
-    return this;
-  }
+
+    /**
+     * Set the XML serialization to be thread-safe.
+     *
+     * @param isThreadSafe boolean to set the thread safety on or off.
+     * @return this to be able to chain calls in a fluid API way.
+     * @see MovilizerXMLParserService
+     * @see MovilizerXMLThreadSafeParserServiceImpl
+     * @since 12.11.1.4
+     */
+    public MovilizerConfBuilder setThreadSafe(boolean isThreadSafe) {
+        this.threadSafe = isThreadSafe;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(MESSAGES.SET_THREAD_SAFE, isThreadSafe));
+        }
+        return this;
+    }
 }

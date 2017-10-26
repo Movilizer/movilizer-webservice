@@ -1,0 +1,8 @@
+{
+  "generic": {
+    "scriptSystemId": 0,
+    "scriptKey": "",
+    "description": "Test generic script for PS",
+    "name": "com.movilizer.ps.test.ValidGenericScript"
+  }
+}

@@ -31,30 +31,32 @@ import java.util.List;
 
 
 class FolderLoaderService {
-  private static final Logger logger = LoggerFactory.getLogger(FolderLoaderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FolderLoaderService.class);
 
-  private MovilizerXMLParserService parserService;
+    private final MovilizerXMLParserService parserService;
 
-  public FolderLoaderService(MovilizerXMLParserService parserService) {
-    this.parserService = parserService;
-  }
+    public FolderLoaderService(final MovilizerXMLParserService parserService) {
+        this.parserService = parserService;
+    }
 
-  List<MovilizerRequest> loadRequestsFromFolder(Path folder) throws IOException {
-    final List<MovilizerRequest> out = new ArrayList<>();
+    List<MovilizerRequest> loadRequestsFromFolder(Path folder) throws IOException {
+        final List<MovilizerRequest> out = new ArrayList<>();
 
-    Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
-      @Override
-      public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
-        if (filePath.toString().endsWith(".mxml")) {
-          MovilizerRequest request = parserService.getRequestFromFile(filePath);
-          out.add(request);
-          logger.debug("Loaded file: " + filePath.getFileName());
-        }
-        return FileVisitResult.CONTINUE;
-      }
-    });
+        Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+                if (filePath.toString().endsWith(".mxml")) {
+                    MovilizerRequest request = parserService.getRequestFromFile(filePath);
+                    out.add(request);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Loaded file: " + filePath.getFileName());
+                    }
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
 
-    return out;
-  }
+        return out;
+    }
 
 }

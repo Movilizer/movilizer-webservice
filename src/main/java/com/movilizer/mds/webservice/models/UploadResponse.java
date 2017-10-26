@@ -17,7 +17,8 @@
 package com.movilizer.mds.webservice.models;
 
 /**
- * This class encapsulates the results of the HTTP POST done to the Movilizer upload document service.
+ * This class encapsulates the results of the HTTP POST done to the Movilizer upload document
+ * service.
  *
  * @author Jesús de Mula Cano
  * @since 12.11.1.0
@@ -35,7 +36,8 @@ public class UploadResponse {
     }
 
     /**
-     * If the status code indicates a successful request then returns true, anything else returns false.
+     * If the status code indicates a successful request then returns true, anything else returns
+     * false.
      *
      * @return true if the request was successful.
      */

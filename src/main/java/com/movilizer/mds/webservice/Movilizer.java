@@ -20,23 +20,25 @@ import com.movilizer.mds.webservice.services.MovilizerConfBuilder;
 import com.movilizer.mds.webservice.services.MovilizerDistributionService;
 
 /**
- * Main class for the Movilizer webservice usage. It provides access to configuration builder for the webservice and a
- * shortcut for the webservice with default values.
- * <p/>
+ * Main class for the Movilizer webservice usage. It provides access to configuration builder for
+ * the webservice and a shortcut for the webservice with default values.
+ *
  * Usage with defaults DEMO cloud values and UTF-8 for requests files:
+ *
  * <pre>
  * {@code
  * MovilizerDistributionService mds = Movilizer.getService();
+ * }
  * </pre>
- * <p/>
+ *
  * Usage giving your own values for private clouds:
  * <pre>
  * {@code
  * MovilizerDistributionService mds = Movilizer.buildConf()
- *                                          .setEndpoint("https://movilizer.mycloud.com/WebService/",
- *                                                       "https://movilizer.mycloud.com/mds/document")
- *                                          .setOutputEncoding(Charset.defaultCharset())
- *                                          .getService();
+ *                                        .setEndpoint("https://movilizer.mycloud.com/WebService/",
+ *                                                     "https://movilizer.mycloud.com/mds/document")
+ *                                        .setOutputEncoding(Charset.defaultCharset())
+ * }                                      .getService();
  * </pre>
  *
  * @author Jesús de Mula Cano
@@ -44,11 +46,13 @@ import com.movilizer.mds.webservice.services.MovilizerDistributionService;
  * @see MovilizerConfBuilder
  * @since 12.11.1.0
  */
-public class Movilizer {
+public final class Movilizer {
     public static final String SCHEMA = "META-INF/movilizer/wsdl/MovilizerTypesV15.xsd";
     public static final String WSDL = "META-INF/movilizer/wsdl/MovilizerV15Wsdl11.wsdl";
-    public static final String ONLINE_WSDL = "META-INF/movilizer/wsdl/MovilizerOnlineV15Wsdl11.wsdl";
-    public static final String ONLINE_INTERFACE = "com.movilitas.movilizer.v15.MovilizerOnlineWebServiceV15";
+    public static final String ONLINE_WSDL =
+            "META-INF/movilizer/wsdl/MovilizerOnlineV15Wsdl11.wsdl";
+    public static final String ONLINE_INTERFACE =
+            "com.movilitas.movilizer.v15.MovilizerOnlineWebServiceV15";
     public static final String ONLINE_OPERATION = "MovilizerOnlineCallback";
 
     /**
@@ -69,7 +73,8 @@ public class Movilizer {
     }
 
     /**
-     * Provides a configuration builder to specify which parameters are to be modified from the defaults.
+     * Provides a configuration builder to specify which parameters are to be modified from the
+     * defaults.
      *
      * @return the builder that can be used to get the webservice instance.
      * @see MovilizerConfBuilder

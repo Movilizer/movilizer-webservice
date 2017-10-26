@@ -29,16 +29,28 @@ import java.net.URL;
  * @since 12.11.1.0
  */
 public enum EndPoint {
-    DEMO("https://demo.movilizer.com/MovilizerDistributionService/WebService/", "https://demo.movilizer.com/mds/document"),
-    PROD("https://movilizer.com/MovilizerDistributionService/WebService/", "https://movilizer.com/mds/document");
+    DEMO("https://demo.movilizer.com"),
+    PROD("https://movilizer.com");
+
+    public static final String WEBSERVICE_RELATIVE_PATH = "/MovilizerDistributionService/WebService";
+    public static final String DOCUMENT_RELATIVE_PATH = "/MovilizerDistributionService/document";
+    public static final String MAF_RELATIVE_PATH = "/MovilizerDistributionService/maf";
 
     private final URL mdsUrl;
     private final URL uploadUrl;
+    private final URL mafUrl;
 
-    EndPoint(final String mdsUrl, final String uploadUrl) {
+    EndPoint(final String cloudBaseUrl) {
         try {
-            this.mdsUrl = URI.create(mdsUrl).toURL();
-            this.uploadUrl = URI.create(uploadUrl).toURL();
+            final String mdsBase;
+            if (cloudBaseUrl.endsWith("/")) {
+                mdsBase = cloudBaseUrl.substring(0, cloudBaseUrl.length() - 1);
+            } else {
+                mdsBase = cloudBaseUrl;
+            }
+            mdsUrl = URI.create(mdsBase + WEBSERVICE_RELATIVE_PATH).toURL();
+            uploadUrl = URI.create(mdsBase + DOCUMENT_RELATIVE_PATH).toURL();
+            mafUrl = URI.create(mdsBase + MAF_RELATIVE_PATH).toURL();
         } catch (MalformedURLException e) {
             throw new MovilizerWebServiceException(e);
         }
@@ -47,10 +59,11 @@ public enum EndPoint {
 
     @Override
     public String toString() {
-        return "EndPoint{" +
-                "mdsUrl='" + mdsUrl + '\'' +
-                ", uploadUrl='" + uploadUrl + '\'' +
-                '}';
+        return "EndPoint{"
+                + "mdsUrl='" + mdsUrl + '\''
+                + ", uploadUrl='" + uploadUrl + '\''
+                + ", mafUrl='" + mafUrl + '\''
+                + '}';
     }
 
     /**
@@ -71,5 +84,15 @@ public enum EndPoint {
      */
     public URL getUploadUrl() {
         return uploadUrl;
+    }
+
+    /**
+     * The Movilizer URL to MAF api.
+     *
+     * @return the URL of to the MAF api.
+     * @since 15.11.2.1
+     */
+    public URL getMafUrl() {
+        return mafUrl;
     }
 }

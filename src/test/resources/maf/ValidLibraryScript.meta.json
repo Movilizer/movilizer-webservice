@@ -1,0 +1,8 @@
+{
+  "library": {
+    "scriptSystemId": 0,
+    "description": "Test library with valid syntax",
+    "name": "com.movilizer.ps.test.ValidLibraryScript",
+    "public": false
+  }
+}

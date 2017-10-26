@@ -6,8 +6,8 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>15.11.2.0</version>
-    <!-- Movilizer version v15 WSDL version 11 then internal java version 2.0 -->
+    <version>15.11.2.1</version>
+    <!-- Movilizer version v15 WSDL version 11 then internal java version 2.1 -->
 
     <name>Movilizer Web Service</name>
     <description>Compiled WSDL and utilities to interact with the Movilizer Cloud</description>
@@ -57,6 +57,8 @@
         <cxf.version>3.2.0</cxf.version>
         <java.version>1.8</java.version>
         <maven-plugins.version>3.7.0</maven-plugins.version>
+        <checkstyle.version>8.3</checkstyle.version>
+        <pmd.version>3.8</pmd.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
         <movilizer.wsdl.folder>META-INF/movilizer/wsdl/</movilizer.wsdl.folder>
@@ -70,6 +72,8 @@
         <logback.version>1.2.3</logback.version>
         <!-- Upload documents -->
         <httpclient.version>4.5.3</httpclient.version>
+        <!-- MAF manager -->
+        <gson.version>2.8.2</gson.version>
         <!-- Test -->
         <junit.version>4.12</junit.version>
         <mockito.version>2.10.0</mockito.version>
@@ -86,6 +90,29 @@
                         <reports>
                             <!-- select non-aggregate reports -->
                             <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.version}</version>
+                <configuration>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources/cxf</excludeRoot>
+                    </excludeRoots>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>checkstyle</report>
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -185,6 +212,35 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludePackageNames>com.movilitas.*</excludePackageNames>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
@@ -214,12 +270,10 @@
                         </goals>
                         <configuration>
                             <rules>
-                                <!--  implementation is needed only for Maven 2  -->
-                                <rule implementation="org.jacoco.maven.RuleConfiguration">
+                                <rule>
                                     <element>BUNDLE</element>
                                     <limits>
-                                        <!--  implementation is needed only for Maven 2  -->
-                                        <limit implementation="org.jacoco.report.check.Limit">
+                                        <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>0.20</minimum>
@@ -230,6 +284,67 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>false</failsOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <failsOnError>true</failsOnError>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.version}</version>
+                <configuration>
+                    <linkXRef>false</linkXRef>
+                    <failOnViolation>false</failOnViolation>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources/cxf</excludeRoot>
+                    </excludeRoots>
+                    <printFailingErrors>true</printFailingErrors>
+                    <rulesets>
+                        <ruleset>ruleset.xml</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>cpd-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.gavinmogan</groupId>
+                <artifactId>codacy-maven-plugin</artifactId>
+                <version>1.0.3</version>
             </plugin>
         </plugins>
     </build>
@@ -284,6 +399,13 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
             <version>${httpclient.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- MAF management -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Test -->

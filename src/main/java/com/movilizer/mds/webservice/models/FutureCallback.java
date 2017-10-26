@@ -20,8 +20,9 @@ package com.movilizer.mds.webservice.models;
  * This is <tt>Future</tt> mimics the behavior and API of Scala Futures for easier integration Scala since Java Futures
  * are blocking... This interface is intended to be use to create anonymous classes when async methods are to be used.
  * See the following example:
- * <p/>
+ *
  * Async method call:
+ *
  * <pre>
  * {@code
  * final Persistence service = new Persistence();
@@ -32,8 +33,9 @@ package com.movilizer.mds.webservice.models;
  *     void onComplete(Integer myExternalNumber, Exception futureException) {}
  *     void onFailure(Exception futureException) {}
  * });
+ * }
  * </pre>
- * <p/>
+ *
  * Async method implementation:
  * <pre>
  * {@code
@@ -48,12 +50,13 @@ package com.movilizer.mds.webservice.models;
  *          myFuture.onComplete(null, e);  //onComplete IS CALLED LAST
  *      }
  * }
+ * }
  * </pre>
- * <p/>
+ *
  * <b>IMPORTANT:</b> Notice the following behaviour. On future completion, either <tt>onSuccess</tt> or
  * <tt>onFailure</tt> will be called once and then, independently of the result of the future, the onComplete will be
  * called. <b>THIS BEHAVIOUR MUST BE FOLLOWED WHEN IMPLEMENTING FUNCTIONS THAT RESOLVE THE GIVEN FUTURES</b>.
- * <p/>
+ *
  * For extra information on Futures and Scala Futures see:
  * <a href="http://docs.scala-lang.org/overviews/core/futures.html">Futures and Promises</a>
  *
