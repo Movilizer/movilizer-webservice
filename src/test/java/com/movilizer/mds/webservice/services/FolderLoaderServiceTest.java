@@ -1,6 +1,6 @@
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v15.MovilizerRequest;
+import com.movilitas.movilizer.v16.MovilizerRequest;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import org.junit.Before;
 import org.junit.Test;

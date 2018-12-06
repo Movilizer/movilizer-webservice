@@ -25,6 +25,20 @@ import java.io.InputStream;
 
 public class MovilizerUploadForm {
 
+    /**
+     * Create an HTTP multipart form to perform a request.
+     *
+     * @param file with the document to be uploaded.
+     * @param filename of the document.
+     * @param systemId of Movilizer Cloud.
+     * @param password for the system id.
+     * @param pool to store the document at.
+     * @param key to find the document in the pool.
+     * @param lang of the document.
+     * @param suffix ending of the document (".zip" for HTML5 apps).
+     * @param ack value that the cloud will return to you when the document is uploaded.
+     * @return HttpEntity to be used in the request.
+     */
     public HttpEntity getForm(InputStream file, String filename, long systemId, String password,
                               String pool, String key, String lang, String suffix, String ack) {
         MultipartEntityBuilder form = getForm(systemId, password, pool, key, lang, suffix, ack);
@@ -32,6 +46,19 @@ public class MovilizerUploadForm {
         return form.build();
     }
 
+    /**
+     * Create an HTTP multipart form to perform a request.
+     *
+     * @param file with the document to be uploaded.
+     * @param systemId of Movilizer Cloud.
+     * @param password for the system id.
+     * @param pool to store the document at.
+     * @param key to find the document in the pool.
+     * @param lang of the document.
+     * @param suffix ending of the document (".zip" for HTML5 apps).
+     * @param ack value that the cloud will return to you when the document is uploaded.
+     * @return HttpEntity to be used in the request.
+     */
     public HttpEntity getForm(File file, long systemId, String password, String pool, String key,
                               String lang, String suffix, String ack) {
         MultipartEntityBuilder form = getForm(systemId, password, pool, key, lang, suffix, ack);
@@ -47,8 +74,12 @@ public class MovilizerUploadForm {
                 .addTextBody("pool", pool, ContentType.TEXT_PLAIN)
                 .addTextBody("key", key, ContentType.TEXT_PLAIN)
                 .addTextBody("suffix", suffix, ContentType.TEXT_PLAIN);
-        if (lang != null) form.addTextBody("lang", lang, ContentType.TEXT_PLAIN);
-        if (ack != null) form.addTextBody("ack", suffix, ContentType.TEXT_PLAIN);
+        if (lang != null) {
+            form.addTextBody("lang", lang, ContentType.TEXT_PLAIN);
+        }
+        if (ack != null) {
+            form.addTextBody("ack", suffix, ContentType.TEXT_PLAIN);
+        }
         return form;
     }
 }

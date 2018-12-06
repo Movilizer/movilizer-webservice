@@ -16,56 +16,44 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v15.MovilizerDocumentError;
-import com.movilitas.movilizer.v15.MovilizerMasterdataError;
-import com.movilitas.movilizer.v15.MovilizerMoveletError;
-import com.movilitas.movilizer.v15.MovilizerParticipantConfiguration;
-import com.movilitas.movilizer.v15.MovilizerRequest;
-import com.movilitas.movilizer.v15.MovilizerResponse;
-import com.movilitas.movilizer.v15.MovilizerStatusMessage;
-import com.movilitas.movilizer.v15.MovilizerWebServiceV15;
+import com.movilitas.movilizer.v16.*;
 import com.movilizer.mds.webservice.adapters.AsyncHandlerAdapter;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
+import com.movilizer.mds.webservice.messages.Messages;
 import com.movilizer.mds.webservice.messages.MovilizerCloudMessages;
-import com.movilizer.mds.webservice.models.FutureCallback;
 import com.movilizer.mds.webservice.models.PasswordHashTypes;
-import org.apache.cxf.headers.Header;
-import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.http.HTTPException;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 
 class MovilizerWebService {
     private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
     private static final String CONNECTION_TIMEOUT_KEY = "javax.xml.ws.client.connectionTimeout";
     private static final String RECEIVE_TIMEOUT_KEY = "javax.xml.ws.client.receiveTimeout";
     private static final String THREAD_LOCAL_CONTEXT_KEY = "thread.local.request.context";
-    private MovilizerWebServiceV15 movilizerCloud;
+    private MovilizerWebServiceV16 movilizerCloud;
     private Integer defaultConnectionTimeoutInMillis;
     private Integer defaultReceiveTimeoutInMillis;
     private String userAgent;
 
-    protected MovilizerWebService(MovilizerWebServiceV15 movilizerCloud,
+    protected MovilizerWebService(MovilizerWebServiceV16 movilizerCloud,
                                   Integer defaultConnectionTimeoutInMillis,
                                   Integer defaultReceiveTimeoutInMillis, String agentId,
                                   String agentVersion) {
         this.movilizerCloud = movilizerCloud;
         this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
         this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
-        this.userAgent = DefaultValues.USER_AGENT_FORMAT_STRING(agentId, agentVersion);
+        this.userAgent = DefaultValues.userAgentFormatString(agentId, agentVersion);
         setUserAgentPropietaryApacheCXF();
         setTimeout(defaultConnectionTimeoutInMillis, defaultReceiveTimeoutInMillis);
-        setWSClientToKeepSepareContextPerThread();
+        setWSClientToKeepSeparateContextPerThread();
     }
 
     /**
@@ -73,37 +61,45 @@ class MovilizerWebService {
      * http://cxf.apache.org/faq.html#FAQ-HowcanIaddsoapheaderstotherequest/response?
      */
     protected void setUserAgentPropietaryApacheCXF() {
-        try {
-            List<Header> headers = new ArrayList<>();
-            Header userAgentHeader = new Header(new QName("uri:com.movilizer.mds.webservice",
-                    "user-agent"), userAgent, new JAXBDataBinding(String.class));
-            headers.add(userAgentHeader);
-            ((BindingProvider) movilizerCloud).getRequestContext().put(Header.HEADER_LIST, headers);
-        } catch (JAXBException e) {
-            if (logger.isErrorEnabled()) {
-                logger.error(String.format(MESSAGES.MARSHALLING_ERROR, userAgent), e);
-            }
-        }
+//        try {
+//            List<Header> headers = new ArrayList<>();
+//            Header userAgentHeader = new Header(new QName("uri:com.movilizer.mds.webservice",
+//                    "user-agent"), userAgent, new JAXBDataBinding(String.class));
+//            headers.add(userAgentHeader);
+//            ((BindingProvider) movilizerCloud).getRequestContext().put(Header.HEADER_LIST, headers);
+//        } catch (JAXBException e) {
+//            if (logger.isErrorEnabled()) {
+//                logger.error(String.format(Messages.MARSHALLING_ERROR, userAgent), e);
+//            }
+//        }
     }
 
     protected void setTimeout(Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis) {
-        if (connectionTimeoutInMillis >= 0) {
-            //Set timeout until a connection is established
-            ((BindingProvider) movilizerCloud).getRequestContext().put(CONNECTION_TIMEOUT_KEY,
-                    String.valueOf(connectionTimeoutInMillis));
-        }
-        if (receiveTimeoutInMillis >= 0) {
-            //Set timeout until the response is received
-            ((BindingProvider) movilizerCloud).getRequestContext().put(RECEIVE_TIMEOUT_KEY,
-                    String.valueOf(receiveTimeoutInMillis));
-        }
+//        Client client = ClientProxy.getClient(movilizerCloud);
+//        HTTPConduit http = (HTTPConduit) client.getConduit();
+//
+//        HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+//        httpClientPolicy.setAllowChunking(false);
+//        httpClientPolicy.setConnectionTimeout(connectionTimeoutInMillis);
+//        httpClientPolicy.setReceiveTimeout(receiveTimeoutInMillis);
+//
+//        http.setClient(httpClientPolicy);
+
+        //Set timeout until a connection is established
+        ((BindingProvider) movilizerCloud).getRequestContext().put(CONNECTION_TIMEOUT_KEY,
+                String.valueOf(connectionTimeoutInMillis));
+
+        //Set timeout until the response is received
+        ((BindingProvider) movilizerCloud).getRequestContext().put(RECEIVE_TIMEOUT_KEY,
+                String.valueOf(receiveTimeoutInMillis));
+
     }
 
     /**
      * See Apache CXF explanation of thread safety:
      * http://cxf.apache.org/faq.html#FAQ-AreJAX-WSclientproxiesthreadsafe?
      */
-    private void setWSClientToKeepSepareContextPerThread() {
+    private void setWSClientToKeepSeparateContextPerThread() {
         ((BindingProvider) movilizerCloud).getRequestContext()
                 .put(THREAD_LOCAL_CONTEXT_KEY, "true");
     }
@@ -116,7 +112,7 @@ class MovilizerWebService {
     protected MovilizerRequest prepareUploadRequest(Long systemId, String password,
                                                     MovilizerRequest request) {
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.PREPARE_UPLOAD_REQUEST, systemId));
+            logger.trace(String.format(Messages.PREPARE_UPLOAD_REQUEST, systemId));
         }
         // Load system credentials
         request.setSystemId(systemId);
@@ -132,7 +128,7 @@ class MovilizerWebService {
                                                       Integer numResponses,
                                                       MovilizerRequest request) {
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.PREPARE_DOWNLOAD_REQUEST, systemId, numResponses));
+            logger.trace(String.format(Messages.PREPARE_DOWNLOAD_REQUEST, systemId, numResponses));
         }
         // Load system credentials
         request.setSystemId(systemId);
@@ -153,7 +149,7 @@ class MovilizerWebService {
             throw new MovilizerWebServiceException(e);
         }
         if (logger.isInfoEnabled()) {
-            logger.info(String.format(MESSAGES.RESPONSE_RECEIVED, response.getSystemId()));
+            logger.info(String.format(Messages.RESPONSE_RECEIVED, response.getSystemId()));
         }
         return response;
     }
@@ -174,18 +170,19 @@ class MovilizerWebService {
             setTimeout(defaultConnectionTimeoutInMillis, defaultReceiveTimeoutInMillis);
         }
         if (logger.isInfoEnabled()) {
-            logger.info(String.format(MESSAGES.RESPONSE_RECEIVED, response.getSystemId()));
+            logger.info(String.format(Messages.RESPONSE_RECEIVED, response.getSystemId()));
         }
         return response;
     }
 
-    protected void getReplyFromCloud(MovilizerRequest request,
-                                     FutureCallback<MovilizerResponse> asyncHandler) {
+    protected CompletableFuture<MovilizerResponse> getReplyFromCloud(MovilizerRequest request) {
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+                logger.debug(String.format(Messages.PERFORMING_REQUEST, request.getSystemId()));
             }
-            movilizerCloud.movilizerAsync(request, new AsyncHandlerAdapter<>(asyncHandler));
+            CompletableFuture<MovilizerResponse> response = new CompletableFuture<>();
+            movilizerCloud.movilizerAsync(request, new AsyncHandlerAdapter<>(response));
+            return response;
         } catch (SOAPFaultException | HTTPException e) {
             if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage());
@@ -194,15 +191,17 @@ class MovilizerWebService {
         }
     }
 
-    protected void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis,
-                                     Integer receiveTimeoutInMillis,
-                                     FutureCallback<MovilizerResponse> asyncHandler) {
+    protected CompletableFuture<MovilizerResponse> getReplyFromCloud(
+            MovilizerRequest request, Integer connectionTimeoutInMillis,
+            Integer receiveTimeoutInMillis) {
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+                logger.debug(String.format(Messages.PERFORMING_REQUEST, request.getSystemId()));
             }
+            CompletableFuture<MovilizerResponse> response = new CompletableFuture<>();
             setTimeout(connectionTimeoutInMillis, receiveTimeoutInMillis);
-            movilizerCloud.movilizerAsync(request, new AsyncHandlerAdapter<>(asyncHandler));
+            movilizerCloud.movilizerAsync(request, new AsyncHandlerAdapter<>(response));
+            return response;
         } catch (SOAPFaultException | HTTPException e) {
             if (logger.isErrorEnabled()) {
                 logger.error(e.getMessage());
@@ -214,9 +213,15 @@ class MovilizerWebService {
     }
 
     protected boolean responseHasErrors(MovilizerResponse response) {
-        if (!response.getDocumentError().isEmpty()) return true;
-        if (!response.getMasterdataError().isEmpty()) return true;
-        if (!response.getMoveletError().isEmpty()) return true;
+        if (!response.getDocumentError().isEmpty()) {
+            return true;
+        }
+        if (!response.getMasterdataError().isEmpty()) {
+            return true;
+        }
+        if (!response.getMoveletError().isEmpty()) {
+            return true;
+        }
         if (!response.getStatusMessage().isEmpty()) {
             for (MovilizerStatusMessage message : response.getStatusMessage()) {
                 if (MovilizerCloudMessages.fromType(message.getType()).isError()) {
@@ -229,9 +234,9 @@ class MovilizerWebService {
 
     protected String prettyPrintErrors(MovilizerResponse response) {
         StringBuilder sb = new StringBuilder();
-        sb.append(MESSAGES.RESPONSE_HAS_ERRORS).append("\n");
+        sb.append(Messages.RESPONSE_HAS_ERRORS).append("\n");
         if (!response.getDocumentError().isEmpty()) {
-            sb.append(MESSAGES.DOCUMENT_ERRORS)
+            sb.append(Messages.DOCUMENT_ERRORS)
                     .append(" (")
                     .append(String.valueOf(response.getDocumentError().size()))
                     .append(")\n");
@@ -244,7 +249,7 @@ class MovilizerWebService {
             }
         }
         if (!response.getMasterdataError().isEmpty()) {
-            sb.append(MESSAGES.MASTERDATA_ERRORS)
+            sb.append(Messages.MASTERDATA_ERRORS)
                     .append(" (")
                     .append(String.valueOf(response.getMasterdataError().size()))
                     .append(")\n");
@@ -257,7 +262,7 @@ class MovilizerWebService {
             }
         }
         if (!response.getMoveletError().isEmpty()) {
-            sb.append(MESSAGES.MOVELET_ERRORS)
+            sb.append(Messages.MOVELET_ERRORS)
                     .append(" (")
                     .append(String.valueOf(response.getMoveletError().size()))
                     .append(")\n");
@@ -272,11 +277,11 @@ class MovilizerWebService {
         if (!response.getStatusMessage().isEmpty()) {
             for (MovilizerStatusMessage cloudMessage : response.getStatusMessage()) {
                 if (MovilizerCloudMessages.isError(cloudMessage.getType())) {
-                    sb.append(MESSAGES.MESSAGES_ERROR)
+                    sb.append(Messages.MESSAGES_ERROR)
                             .append("\n")
                             .append("  - ")
                             .append(cloudMessage.getMessage())
-                            .append(MESSAGES.SYSTEM_ID_IN_MESSAGE)
+                            .append(Messages.SYSTEM_ID_IN_MESSAGE)
                             .append("'")
                             .append(response.getSystemId())
                             .append("'");
@@ -307,7 +312,7 @@ class MovilizerWebService {
             throw new MovilizerWebServiceException(e);
         }
         if (logger.isInfoEnabled()) {
-            logger.info(String.format(MESSAGES.PASSWORD_SUCCESSFULY_CHANGED, deviceAddress,
+            logger.info(String.format(Messages.PASSWORD_SUCCESSFULY_CHANGED, deviceAddress,
                     response.getSystemId()));
         }
     }

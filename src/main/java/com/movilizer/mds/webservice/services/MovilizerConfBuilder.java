@@ -16,20 +16,18 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v15.MovilizerWebServiceV15;
-import com.movilitas.movilizer.v15.MovilizerWebServiceV15Service;
+import com.movilitas.movilizer.v16.MovilizerWebServiceV16;
+import com.movilitas.movilizer.v16.MovilizerWebServiceV16Service;
 import com.movilizer.mds.webservice.EndPoint;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
+import com.movilizer.mds.webservice.messages.Messages;
 import com.movilizer.mds.webservice.models.MovilizerUploadForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
@@ -80,16 +78,16 @@ public class MovilizerConfBuilder {
      */
     public MovilizerDistributionService getService() {
         if (logger.isTraceEnabled()) {
-            logger.trace(MESSAGES.BUILDING_CONFIG);
+            logger.trace(Messages.BUILDING_CONFIG);
         }
-        MovilizerWebServiceV15 movilizerCloud = new MovilizerWebServiceV15Service()
-                .getMovilizerWebServiceV15Soap11();
+        MovilizerWebServiceV16 movilizerCloud = new MovilizerWebServiceV16Service()
+                .getMovilizerWebServiceV16Soap11();
         MovilizerWebService webService = new MovilizerWebService(movilizerCloud,
                 defaultConnectionTimeoutInMillis, defaultReceiveTimeoutInMillis, agentId,
                 agentVersion);
         webService.setEndpoint(endpoint.getMdsUrl());
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.USING_ENCODING, outputEncoding.displayName()));
+            logger.trace(String.format(Messages.USING_ENCODING, outputEncoding.displayName()));
         }
         MovilizerXMLParserService parserService;
         if (this.threadSafe) {
@@ -106,7 +104,7 @@ public class MovilizerConfBuilder {
 
         if (cloudBaseAddress != null) {
             if (logger.isTraceEnabled()) {
-                logger.trace(String.format(MESSAGES.USING_PRIVATE_CONFIG,
+                logger.trace(String.format(Messages.USING_PRIVATE_CONFIG,
                         cloudBaseAddress.toString()));
             }
             try {
@@ -121,7 +119,7 @@ public class MovilizerConfBuilder {
             }
         } else {
             if (logger.isTraceEnabled()) {
-                logger.trace(String.format(MESSAGES.USING_PUBLIC_CONFIG, endpoint.name()));
+                logger.trace(String.format(Messages.USING_PUBLIC_CONFIG, endpoint.name()));
             }
         }
 
@@ -136,6 +134,14 @@ public class MovilizerConfBuilder {
         );
     }
 
+    protected URI getCloudBaseAddress() {
+        return cloudBaseAddress;
+    }
+
+    protected EndPoint getEndpoint() {
+        return endpoint;
+    }
+
     /**
      * Endpoint to be used in the <tt>MovilizerDistributionService</tt> instance.
      *
@@ -147,7 +153,7 @@ public class MovilizerConfBuilder {
     public MovilizerConfBuilder setEndpoint(EndPoint endpoint) {
         this.endpoint = endpoint;
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_ENDPOINT, endpoint.name()));
+            logger.trace(String.format(Messages.SET_ENDPOINT, endpoint.name()));
         }
         return this;
     }
@@ -163,58 +169,7 @@ public class MovilizerConfBuilder {
     public MovilizerConfBuilder setEndpoint(URI cloudBaseAddress) {
         this.cloudBaseAddress = cloudBaseAddress;
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_PRIVATE_ENDPOINT, cloudBaseAddress.toString()));
-        }
-        return this;
-    }
-
-    /**
-     * Connection timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
-     *
-     * @param defaultConnectionTimeoutInMillis timeout to be used by default.
-     * @return this to be able to chain calls in a fluid API way.
-     * @since 12.11.1.2
-     */
-    public MovilizerConfBuilder setDefaultConnectionTimeout(
-            Integer defaultConnectionTimeoutInMillis) {
-        this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
-        if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_CONNECTION_TIMEOUT,
-                    defaultConnectionTimeoutInMillis));
-        }
-        return this;
-    }
-
-    /**
-     * Receive timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
-     *
-     * @param defaultReceiveTimeoutInMillis timeout to be used by default.
-     * @return this to be able to chain calls in a fluid API way.
-     * @since 12.11.1.2
-     */
-    public MovilizerConfBuilder setDefaultReceiveTimeout(Integer defaultReceiveTimeoutInMillis) {
-        this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
-        if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_RECEIVE_TIMEOUT,
-                    defaultReceiveTimeoutInMillis));
-        }
-        return this;
-    }
-
-    /**
-     * User agent string to be used in the <tt>MovilizerDistributionService</tt> calls.
-     *
-     * @param agentId      id to show as user agent.
-     * @param agentVersion version of the user agent.
-     * @return this to be able to chain calls in a fluid API way.
-     * @since 12.11.1.2
-     */
-    public MovilizerConfBuilder setUserAgent(String agentId, String agentVersion) {
-        this.agentId = agentId;
-        this.agentVersion = agentVersion;
-        if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_USER_AGENT,
-                    DefaultValues.USER_AGENT_FORMAT_STRING(agentId, agentVersion)));
+            logger.trace(String.format(Messages.SET_PRIVATE_ENDPOINT, cloudBaseAddress.toString()));
         }
         return this;
     }
@@ -234,6 +189,77 @@ public class MovilizerConfBuilder {
         return this;
     }
 
+    protected Integer getDefaultConnectionTimeoutInMillis() {
+        return defaultConnectionTimeoutInMillis;
+    }
+
+    /**
+     * Connection timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param defaultConnectionTimeoutInMillis timeout to be used by default.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.2
+     */
+    public MovilizerConfBuilder setDefaultConnectionTimeout(
+            Integer defaultConnectionTimeoutInMillis) {
+        this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(Messages.SET_CONNECTION_TIMEOUT,
+                    defaultConnectionTimeoutInMillis));
+        }
+        return this;
+    }
+
+    protected Integer getDefaultReceiveTimeoutInMillis() {
+        return defaultReceiveTimeoutInMillis;
+    }
+
+    /**
+     * Receive timeout to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param defaultReceiveTimeoutInMillis timeout to be used by default.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.2
+     */
+    public MovilizerConfBuilder setDefaultReceiveTimeout(Integer defaultReceiveTimeoutInMillis) {
+        this.defaultReceiveTimeoutInMillis = defaultReceiveTimeoutInMillis;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(Messages.SET_RECEIVE_TIMEOUT,
+                    defaultReceiveTimeoutInMillis));
+        }
+        return this;
+    }
+
+    protected String getAgentId() {
+        return agentId;
+    }
+
+    protected String getAgentVersion() {
+        return agentVersion;
+    }
+
+    /**
+     * User agent string to be used in the <tt>MovilizerDistributionService</tt> calls.
+     *
+     * @param agentId      id to show as user agent.
+     * @param agentVersion version of the user agent.
+     * @return this to be able to chain calls in a fluid API way.
+     * @since 12.11.1.2
+     */
+    public MovilizerConfBuilder setUserAgent(String agentId, String agentVersion) {
+        this.agentId = agentId;
+        this.agentVersion = agentVersion;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(Messages.SET_USER_AGENT,
+                    DefaultValues.userAgentFormatString(agentId, agentVersion)));
+        }
+        return this;
+    }
+
+    protected Charset getOutputEncoding() {
+        return outputEncoding;
+    }
+
     /**
      * The charset encoding to be used in the files that contains the requests.
      *
@@ -243,10 +269,14 @@ public class MovilizerConfBuilder {
      */
     public MovilizerConfBuilder setOutputEncoding(Charset outputEncoding) {
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_ENCODING, outputEncoding.displayName()));
+            logger.trace(String.format(Messages.SET_ENCODING, outputEncoding.displayName()));
         }
         this.outputEncoding = outputEncoding;
         return this;
+    }
+
+    protected boolean isThreadSafe() {
+        return threadSafe;
     }
 
     /**
@@ -261,7 +291,7 @@ public class MovilizerConfBuilder {
     public MovilizerConfBuilder setThreadSafe(boolean isThreadSafe) {
         this.threadSafe = isThreadSafe;
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.SET_THREAD_SAFE, isThreadSafe));
+            logger.trace(String.format(Messages.SET_THREAD_SAFE, isThreadSafe));
         }
         return this;
     }

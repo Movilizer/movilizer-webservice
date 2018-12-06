@@ -23,16 +23,23 @@ import java.nio.charset.Charset;
 public class DefaultValues {
     public static final EndPoint MOVILIZER_ENDPOINT = EndPoint.DEMO;
     public static final Charset OUTPUT_ENCODING = Charset.forName("UTF-8");
-    public static final Integer CONNECTION_TIMEOUT_IN_MILLIS = 30000;
-    public static final Integer RECEIVE_TIMEOUT_IN_MILLIS = 60000;
+    public static final Integer CONNECTION_TIMEOUT_IN_MILLIS = 45000;
+    public static final Integer RECEIVE_TIMEOUT_IN_MILLIS = 90000;
     public static final String AGENT_ID = "movilizer-webservice";
-    public static final String AGENT_VERSION = "15.11.1.5";
-    public static final String USER_AGENT = USER_AGENT_FORMAT_STRING(AGENT_ID, AGENT_VERSION);
+    public static final String AGENT_VERSION = "15.11.2.2";
+    public static final String USER_AGENT = userAgentFormatString(AGENT_ID, AGENT_VERSION);
 
     private DefaultValues() {
     }
 
-    public static String USER_AGENT_FORMAT_STRING(String agentId, String agentVersion) {
+    /**
+     * Create a string to be used as user agent when performing requests.
+     *
+     * @param agentId to be used.
+     * @param agentVersion version of the agent.
+     * @return formatted string
+     */
+    public static String userAgentFormatString(String agentId, String agentVersion) {
         String userAgentString = "";
         if (agentId != null) {
             userAgentString = userAgentString + agentId;

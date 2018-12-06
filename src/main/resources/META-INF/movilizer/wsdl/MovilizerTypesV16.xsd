@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2015 Movilizer GmbH
+  ~ Copyright 2018 Movilizer GmbH
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,8 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:movilizer="http://movilitas.com/movilizer/v15" elementFormDefault="qualified" jaxb:version="2.0" targetNamespace="http://movilitas.com/movilizer/v15">
-
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:movilizer="http://movilitas.com/movilizer/v16" elementFormDefault="qualified" jaxb:version="2.0" targetNamespace="http://movilitas.com/movilizer/v16">
 
 	<!-- Datatype definitions -->
 
@@ -191,6 +190,17 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
+	<xsd:simpleType name="trend" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:enumeration value="NONE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="UP" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="HALF_UP" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="DOWN" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="HALF_DOWN" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="EQUAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:simpleType name="string1" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 			<xsd:minLength value="0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -218,6 +228,14 @@
 			<xsd:maxLength value="31" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:restriction>
 	</xsd:simpleType>
+
+	<xsd:simpleType name="string63" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:minLength value="0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:maxLength value="63" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 
 	<xsd:simpleType name="string255" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -259,6 +277,9 @@
 			<xsd:enumeration value="NORMAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="LARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="VERYLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="XLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="XXLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="XXXLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -301,6 +322,7 @@
 			<xsd:enumeration value="NONE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="SYNCHRONOUS" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="ASYNCHRONOUS" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="ASYNCHRONOUS_SILENT" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -321,12 +343,39 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
-	<xsd:simpleType name="margin" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:simpleType name="thickness" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 			<xsd:enumeration value="NONE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="SMALL" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="MEDIUM" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="LARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="XLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="XXLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="XXXLARGE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="itemAction" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:enumeration value="NONE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="SCAN_1D" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="SCAN_2D_DM" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="SCAN_2D_QR" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="SCAN_ANY" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="GOTO" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="SHARE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="CLEAR" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="relativeSize" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:enumeration value="QUARTER" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="ONE_THIRD" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="HALF" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="TWO_THIRDS" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="THREE_QUARTERS" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="FULL" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -371,6 +420,15 @@
 			<xsd:enumeration value="NONE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="FILL" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:enumeration value="STRETCHITEM" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="axisDataType" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:restriction base="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:enumeration value="DECIMAL" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="TIME" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="BYTE" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:enumeration value="TEXT" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -491,7 +549,7 @@
 		<xsd:attribute name="requestAcknowledgeKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 			<xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema"><xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">This field is used by the backend to acknowledge the last request: This field must be filled with the key of the last request.</xsd:documentation></xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute default="1000" name="numResponses" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute default="0" name="numResponses" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 			<xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema"><xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">if set to a positive number, Responses are being sent to this request. If set to zero, only the request is processed.</xsd:documentation></xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute default="5242880" name="responseSize" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -559,6 +617,8 @@
 	<xsd:complexType name="MovilizerDocumentDelete" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:attribute name="key" type="movilizer:documentKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="documentAckKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="allowPoolDelete" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="language" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 	<xsd:element name="MovilizerDocumentUpdate" type="movilizer:MovilizerDocumentUpdate" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -585,6 +645,7 @@
 			<xsd:element maxOccurs="unbounded" minOccurs="0" name="update" type="movilizer:MovilizerMasterdataUpdate" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="0" name="reference" type="movilizer:MovilizerMasterdataReference" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:sequence>
+		<xsd:attribute default="-1" name="mafBucket" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="pool" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
@@ -613,6 +674,8 @@
 		<xsd:attribute name="key" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="group" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="masterdataAckKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="allowPoolDelete" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="language" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 	<xsd:element name="MovilizerMasterdataUpdate" type="movilizer:MovilizerMasterdataUpdate" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -648,6 +711,7 @@
 		<xsd:attribute name="validTillDate" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="encryptionAlgorithm" type="movilizer:string15" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="mafAppSpace" type="movilizer:string31" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="responseQueue" type="movilizer:string7" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 	<xsd:element name="MovilizerMasterdataUpdateLanguage" type="movilizer:MovilizerMasterdataUpdateLanguage" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -689,8 +753,8 @@
 	<xsd:complexType name="MovilizerAttributeEntry" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 			<xsd:choice xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-				<xsd:element maxOccurs="1" minOccurs="1" name="entry" type="movilizer:MovilizerGenericDataContainer" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-				<xsd:element maxOccurs="1" minOccurs="1" name="value" type="movilizer:string1023" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+				<xsd:element maxOccurs="1" minOccurs="1" name="data" type="movilizer:MovilizerGenericDataContainer" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+				<xsd:element maxOccurs="1" minOccurs="1" name="valstr" type="movilizer:string1023" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			</xsd:choice>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="movilizer:string1023" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -774,6 +838,11 @@
 					<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows a dynamic representation of the Movelet name in the list of Movelets on the client.</xsd:documentation>
 				</xsd:annotation>
 			</xsd:element>
+			<xsd:element maxOccurs="1" minOccurs="0" name="voiceCommandExpression" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+					<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">A dynamic MEL expression that allows a dynamic assignment of a voice command for a Movelet</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
 			<xsd:element maxOccurs="1" minOccurs="0" name="subText" type="movilizer:string255" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 				<xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 					<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Movelet sub text</xsd:documentation>
@@ -816,12 +885,14 @@
 			<xsd:element maxOccurs="1" minOccurs="0" name="onDocumentChange" type="movilizer:MovilizerMoveletDocumentChange" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="encryptionIV" type="movilizer:nativeKey" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="encryptionHMAC" type="movilizer:nativeKey" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="mafUploadBucket" type="movilizer:uploadBucketRange" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:sequence>
 		<xsd:attribute name="moveletKey" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="moveletKeyExtension" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="responseQueue" type="movilizer:string7" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="namespace" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="mafAppSpace" type="movilizer:string31" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="-1" name="mafDownloadBucket" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute default="true" name="privateNamespace" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 			<xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 				<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">If set to true, the namespace will only be available within the same system.</xsd:documentation>
@@ -836,6 +907,7 @@
 		<xsd:attribute name="validFromDate" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="validTillDate" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute default="0" name="additionalTTL" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="0" name="orphanTTL" type="xsd:int" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="encryptionAlgorithm" type="movilizer:string15" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="priority" type="xsd:long" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute default="0" name="moveletDownloadPriority" type="xsd:short" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -880,6 +952,16 @@
 				<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Defines the label of the quickLaunch menu which is displayed on top of the quickLaunch popup menu in case it is displayed.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
+
+		<xsd:attribute name="voiceCommand" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="useNameAsVoiceCommand" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+	</xsd:complexType>
+
+	<xsd:element name="uploadBucketRange" type="movilizer:uploadBucketRange" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="uploadBucketRange" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="fromBucketRange" type="xsd:int" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="tillBucketRange" type="xsd:int" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 	<xsd:element name="MovilizerMoveletMasterdata" type="movilizer:MovilizerMoveletMasterdata" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -995,6 +1077,10 @@
 				<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Defines the label of the quickLaunch menu which is displayed on top of the quickLaunch popup menu in case it is displayed.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
+
+		<xsd:attribute name="voiceCommand" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="useNameAsVoiceCommand" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
 	</xsd:complexType>
 
 	<xsd:element name="MovilizerMetaMovelet" type="movilizer:MovilizerMetaMovelet" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1231,6 +1317,13 @@
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:element>
+			<xsd:element maxOccurs="1" minOccurs="0" name="onDialogEvent" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<xsd:annotation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+					<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+						MEL function that is called when a MEL triggered dialog is closed by the user. Function signature must be: function(dialogId, isDeclined, data)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
 			<xsd:element maxOccurs="1" minOccurs="0" name="encryptionIV" type="movilizer:nativeKey" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="search" type="movilizer:MovilizerQuestionSearch" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="complex" type="movilizer:MovilizerQuestionComplexDescriptor" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1269,41 +1362,100 @@
 
 		<xsd:attribute name="icon" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<!-- Formatting attributes that if not specified on answer level - will be set with questions -->
-		<xsd:attribute default="LEFT" name="labelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="LEFT" name="subLabelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="LEFT" name="valueAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="LEFT" name="valueInfoAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="NORMAL" name="labelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="SMALL" name="subLabelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="NORMAL" name="valueFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="SMALL" name="valueInfoFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="NORMAL" name="labelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="NORMAL" name="subLabelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="NORMAL" name="valueFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="NORMAL" name="valueInfoFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="bgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="SOLID" name="bgStyle" type="movilizer:bgStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="margin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="padding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 		<xsd:attribute name="titleAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="titleFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="titleFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="questionTextAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="questionTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="questionTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="backTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="backTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="okTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="okTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="titleFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<xsd:attribute name="questionTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="questionTextBgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPadding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<!-- Formatting attributes that if not specified on answer level - will be set with questions -->
+		<xsd:attribute name="answerMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="answerPadding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="labelVerticalAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="labelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="labelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="labelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="labelFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="subLabelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="subLabelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="subLabelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="subLabelFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueVerticalAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="valueFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueHintTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueHintTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueInfoAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueInfoFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueInfoFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="valueInfoFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="backText" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="backTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="backTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="backTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="okText" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="okTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="okTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="okTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<xsd:attribute default="SHORT" name="dateFormat" type="movilizer:dateFormatStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="dateFormat" type="movilizer:dateFormatStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="spacerStyle" type="movilizer:spacerStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="buttonStyle" type="movilizer:buttonStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="iconButtonStyle" type="movilizer:iconButtonStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1312,9 +1464,7 @@
 		<xsd:attribute name="buttonPressedColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="buttonFocusedColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<xsd:attribute name="bgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="SOLID" name="bgStyle" type="movilizer:bgStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="margin" type="movilizer:margin" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="tileAlignmentVertical" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 	</xsd:complexType>
 
@@ -1331,6 +1481,8 @@
 		<xsd:attribute name="destMoveletKey" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="destMoveletKeyExtension" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="destMoveletVersion" type="xsd:long" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="namespace" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="mafAppSpace" type="movilizer:string31" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 	</xsd:complexType>
 
@@ -1361,6 +1513,7 @@
 			<xsd:element maxOccurs="1" minOccurs="0" name="clientStartAssignment" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="name" type="movilizer:string255" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="nameExpression" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="voiceCommandExpression" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="subText" type="movilizer:string255" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="subTextExpression" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="iconExpression" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1382,6 +1535,10 @@
 		<xsd:attribute name="quickLaunchPosition" type="movilizer:quickLaunchPositionType" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="quickLaunchIcon" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="quickLaunchLabel" type="movilizer:string255" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="validFromDate" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="validTillDate" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="voiceCommand" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="useNameAsVoiceCommand" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="MovilizerQuestionSearch" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -1408,6 +1565,7 @@
 			<xsd:element maxOccurs="1" minOccurs="0" name="onLeaveBackAssignment" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="onScreenValueChangeEvent" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="onExternalEvent" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="onDialogEvent" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="encryptionIV" type="movilizer:nativeKey" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="search" type="movilizer:MovilizerQuestionSearch" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="complex" type="movilizer:MovilizerQuestionComplexDescriptor" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1430,38 +1588,97 @@
 
 		<xsd:attribute name="icon" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<!-- Formatting attributes that if not specified on answer level - will be set with questions -->
-		<xsd:attribute name="labelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="subLabelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueInfoAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="labelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="subLabelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueInfoFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="labelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="subLabelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueInfoFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="bgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="SOLID" name="bgStyle" type="movilizer:bgStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="margin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexLinearMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="complexGridMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="padding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 		<xsd:attribute name="titleAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="titleFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="titleFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="questionTextAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="questionTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="questionTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="backTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="backTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="okTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="okTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="titleFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<xsd:attribute name="questionTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="questionTextBgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPadding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextPaddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/><xsd:attribute name="questionTextAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="questionTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<!-- Formatting attributes that if not specified on answer level - will be set with questions -->
+		<xsd:attribute name="answerMargin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerMarginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="answerPadding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="answerPaddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="labelVerticalAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="labelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="labelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="labelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="labelFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="subLabelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="subLabelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="subLabelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="subLabelFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueVerticalAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="valueFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueHintTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueHintTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueInfoAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueInfoFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueInfoFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="valueInfoFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="backText" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="backTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="backTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="backTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="okText" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="okTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="okTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="okTextFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 		<xsd:attribute name="dateFormat" type="movilizer:dateFormatStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1473,9 +1690,7 @@
 		<xsd:attribute name="buttonPressedColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="buttonFocusedColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<xsd:attribute name="bgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="SOLID" name="bgStyle" type="movilizer:bgStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="margin" type="movilizer:margin" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="tileAlignmentVertical" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 	</xsd:complexType>
 
@@ -1641,7 +1856,7 @@
 			<xsd:element maxOccurs="1" minOccurs="0" name="data" type="movilizer:binary" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		</xsd:sequence>
 		<xsd:attribute name="attributeType" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="EQUAL" name="columnSizeType" type="movilizer:answerColumnSizeType" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="columnSizeType" type="movilizer:answerColumnSizeType" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="hotkey" type="movilizer:string15" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 		<xsd:attribute name="key" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1756,24 +1971,45 @@
 
 		<xsd:attribute name="cellAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
+		<xsd:attribute name="bgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="SOLID" name="bgStyle" type="movilizer:bgStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="margin" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="marginBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="padding" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingLeft" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingTop" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingRight" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="paddingBottom" type="movilizer:thickness" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="labelVerticalAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueVerticalAlignment" type="movilizer:verticalAlignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
 		<xsd:attribute name="labelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="subLabelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueInfoAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-
 		<xsd:attribute name="labelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="subLabelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueInfoFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-
 		<xsd:attribute name="labelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="subLabelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="valueInfoFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-
 		<xsd:attribute name="labelFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="subLabelAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="subLabelFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="subLabelFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="subLabelFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="valueFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueHintTextFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueHintTextFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="valueInfoAlignment" type="movilizer:alignment" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueInfoFontStyle" type="movilizer:fontStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="valueInfoFontSize" type="movilizer:fontSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="valueInfoFontColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 		<xsd:attribute default="-1" name="horGroupId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -1788,13 +2024,43 @@
 
 		<xsd:attribute name="dateFormat" type="movilizer:dateFormatStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="spacerStyle" type="movilizer:spacerStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="buttonStyle" type="movilizer:buttonStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
-		<xsd:attribute name="bgColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="SOLID" name="bgStyle" type="movilizer:bgStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="buttonStyle" type="movilizer:buttonStyle" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="buttonColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="buttonFocusedColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="buttonPressedColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="radioButtonGroupId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="dialogId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="minimum" type="xsd:float" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="maximum" type="xsd:float" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="unit" type="movilizer:string31" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="unitBeforeValue" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="stepSize" type="xsd:float" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="inputFieldAction" type="movilizer:itemAction" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="relativeWidth" type="movilizer:relativeSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="relativeHeight" type="movilizer:relativeSize" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute default="false" name="newTileRow" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="newTileColumn" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute default="false" name="required" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="NONE" name="trend" type="movilizer:trend" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="trendArrowColor" type="movilizer:hexColor" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="chartId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="dataColumnId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="axisId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="xAxisId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="yAxisId" type="xsd:byte" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="DECIMAL" name="axisDataType" type="movilizer:axisDataType" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="-1" name="axisTickCount" type="xsd:float" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+		<xsd:attribute name="voiceCommand" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="useAnswerTextAsVoiceCommand" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
 
 	</xsd:complexType>
 
@@ -1809,6 +2075,8 @@
 				<xsd:documentation xmlns:xsd="http://www.w3.org/2001/XMLSchema">Required for 1.8 clients and earlier. Obsolete when using 1.9+ clients.</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
+		<xsd:attribute name="voiceCommand" type="movilizer:string63" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="useValueAsVoiceCommand" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 
@@ -1965,14 +2233,14 @@
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:attribute name="contactName" type="movilizer:string255" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="required" name="email" type="movilizer:string255" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute default="required" name="phone" type="movilizer:string255" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="email" type="movilizer:string255" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="phone" type="movilizer:string255" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="contactRole" type="movilizer:configContactRole" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="street" type="movilizer:string255" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="postalcode" type="movilizer:string255" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="city" type="movilizer:string255" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="province" type="movilizer:string255" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		<xsd:attribute name="country" type="movilizer:string255" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="country" type="movilizer:string255" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 
@@ -2122,13 +2390,24 @@
 				<xsd:element maxOccurs="unbounded" minOccurs="0" name="moveletAssignmentDeleteError" type="movilizer:MovilizerMoveletAssignmentDeleteError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
 
-				<xsd:element maxOccurs="unbounded" minOccurs="0" name="participantDeploymentSmsSent" type="movilizer:MovilizerParticipantDeploymentSmsSent" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="participantDeploymentNotificationSent" type="movilizer:MovilizerParticipantDeploymentSmsSent" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 				<xsd:element maxOccurs="unbounded" minOccurs="0" name="participantInstall" type="movilizer:MovilizerParticipantInstall" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 				<xsd:element maxOccurs="unbounded" minOccurs="0" name="participantInstallAck" type="movilizer:MovilizerParticipantInstallAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 				<xsd:element maxOccurs="unbounded" minOccurs="0" name="participantInstallError" type="movilizer:MovilizerParticipantInstallError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 				<xsd:element maxOccurs="unbounded" minOccurs="0" name="participantDeleted" type="movilizer:MovilizerParticipantDeleted" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="systemConfigurationAck" type="movilizer:MovilizerSystemConfigurationAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="systemConfigurationError" type="movilizer:MovilizerSystemConfigurationError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="masterdataAttributeUpdateAck" type="movilizer:MovilizerMasterdataAttributeUpdateAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="moveletResetAck" type="movilizer:MovilizerMoveletResetAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="moveletResetError" type="movilizer:MovilizerMoveletResetError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
 				<xsd:element maxOccurs="unbounded" minOccurs="0" name="statusMessage" type="movilizer:MovilizerStatusMessage" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="scriptingError" type="movilizer:MovilizerScriptingError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="attributeError" type="movilizer:MovilizerAttributeError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			</xsd:sequence>
 			<xsd:attribute name="systemId" type="xsd:long" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 			<xsd:attribute name="responseQueue" type="movilizer:string7" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -2208,8 +2487,33 @@
 		<xsd:attribute name="pool" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="key" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="group" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="language" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="masterdataAckKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Response: Scripting Error -->
+	<xsd:element name="MovilizerScriptingError" type="movilizer:MovilizerScriptingError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerScriptingError" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="message" type="xsd:string" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="errorCode" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="masterdataPool" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="moveletKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="movilizerKeyExtension" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="appSpace" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="scriptTrigger" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Response: Attribute Error -->
+	<xsd:element name="MovilizerAttributeError" type="movilizer:MovilizerAttributeError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerAttributeError" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="message" type="xsd:string" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="errorCode" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="masterdataPool" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="masterdataKey" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="moveletKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="movilizerKeyExtension" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="deviceAddress" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 	</xsd:complexType>
 
 	<!-- Response: Masterdata Deleted -->
@@ -2218,6 +2522,7 @@
 		<xsd:attribute name="pool" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="key" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="group" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="language" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="timestampMasterdata" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="masterdataAckKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -2249,6 +2554,7 @@
 	<xsd:complexType name="MovilizerDocumentDeleted" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:attribute name="pool" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="key" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="language" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="timestampDocument" type="xsd:dateTime" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
 		<xsd:attribute name="documentAckKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
@@ -2635,6 +2941,57 @@
 		</xsd:attribute>
 	</xsd:complexType>
 
+	<!-- Response: System Configuration Ack -->
+	<xsd:element name="MovilizerSystemConfigurationAck" type="movilizer:MovilizerSystemConfigurationAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerSystemConfigurationAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Response: System Configuration Error -->
+	<xsd:element name="MovilizerSystemConfigurationError" type="movilizer:MovilizerSystemConfigurationError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerSystemConfigurationError" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="message" type="xsd:string" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="validationErrorCode" type="xsd:string" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Response: Masterdata Attribute Update Ack -->
+	<xsd:element name="MovilizerMasterdataAttributeUpdateAck" type="movilizer:MovilizerMasterdataAttributeUpdateAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerMasterdataAttributeUpdateAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="pool" type="movilizer:nativeKey" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="key" type="movilizer:clientKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="friendlySystem" type="xsd:long" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Response: Movelet Reset Ack -->
+	<xsd:element name="MovilizerMoveletResetAck" type="movilizer:MovilizerMoveletResetAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerMoveletResetAck" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="deviceAddress" type="movilizer:deviceAddress" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="moveletKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="moveletKeyExtension" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="ignoreExtensionKey" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Response: Movelet Reset Error -->
+	<xsd:element name="MovilizerMoveletResetError" type="movilizer:MovilizerMoveletResetError" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerMoveletResetError" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:attribute name="deviceAddress" type="movilizer:deviceAddress" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="moveletKey" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="moveletKeyExtension" type="movilizer:nativeKey" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute default="false" name="ignoreExtensionKey" type="xsd:boolean" use="optional" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="timestamp" type="xsd:dateTime" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		<xsd:attribute name="message" type="xsd:string" use="required" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	</xsd:complexType>
+
+	<!-- Movilizer Online-Container structure to exchange data outside the Movelet / Response cycle -->
+	<xsd:element name="MovilizerOnlineDataContainer" type="movilizer:MovilizerOnlineDataContainer" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+	<xsd:complexType name="MovilizerOnlineDataContainer" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:element maxOccurs="1" minOccurs="1" name="container" type="movilizer:MovilizerGenericUploadDataContainer" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+		</xsd:sequence>
+	</xsd:complexType>
 
 	<xsd:element name="MovilizerRequest" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -2654,17 +3011,6 @@
 			</xsd:complexContent>
 		</xsd:complexType>
 	</xsd:element>
-
-	<!-- Movilizer Online-Container structure to exchange data outside the Movelet / Response cycle -->
-	<xsd:element name="MovilizerOnlineDataContainer" type="movilizer:MovilizerOnlineDataContainer"
-				 xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-	<xsd:complexType name="MovilizerOnlineDataContainer" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-		<xsd:sequence xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-			<xsd:element maxOccurs="1" minOccurs="1" name="container"
-						 type="movilizer:MovilizerGenericUploadDataContainer"
-						 xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-		</xsd:sequence>
-	</xsd:complexType>
 
 	<xsd:element name="MovilizerOnlineCallbackRequest" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		<xsd:complexType xmlns:xsd="http://www.w3.org/2001/XMLSchema">

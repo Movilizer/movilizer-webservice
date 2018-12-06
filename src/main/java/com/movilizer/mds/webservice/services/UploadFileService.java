@@ -19,8 +19,7 @@ package com.movilizer.mds.webservice.services;
 import com.movilizer.mds.webservice.adapters.ResponseHandlerAdapter;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
-import com.movilizer.mds.webservice.models.FutureCallback;
+import com.movilizer.mds.webservice.messages.Messages;
 import com.movilizer.mds.webservice.models.MovilizerUploadForm;
 import com.movilizer.mds.webservice.models.UploadResponse;
 import org.apache.http.HttpEntity;
@@ -36,6 +35,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 
 
 class UploadFileService {
@@ -71,13 +71,13 @@ class UploadFileService {
                                                 String documentKey, String language, String ackKey,
                                                 Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
         UploadResponse result = uploadSync(movilizerUpload.getForm(documentInputStream, filename,
                 systemId, password, documentPool, documentKey, language,
                 getSuffixFromFilename(filename), ackKey), connectionTimeoutInMillis);
         if (logger.isInfoEnabled()) {
-            logger.info(MESSAGES.UPLOAD_COMPLETE);
+            logger.info(Messages.UPLOAD_COMPLETE);
         }
         return result;
     }
@@ -95,60 +95,67 @@ class UploadFileService {
                                                 String documentKey, String language, String ackKey,
                                                 Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
         UploadResponse result = uploadSync(movilizerUpload.getForm(documentFilePath.toFile(),
                 systemId, password, documentPool, documentKey, language,
                 getSuffixFromFilename(documentFilePath.getFileName()), ackKey),
                 connectionTimeoutInMillis);
         if (logger.isInfoEnabled()) {
-            logger.info(MESSAGES.UPLOAD_COMPLETE);
+            logger.info(Messages.UPLOAD_COMPLETE);
         }
         return result;
     }
 
-    protected void uploadDocument(InputStream documentInputStream, String filename, long systemId,
-                                  String password, String documentPool, String documentKey,
-                                  String language, String ackKey,
-                                  FutureCallback<UploadResponse> asyncHandler) {
-        uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey,
-                language, ackKey, defaultConnectionTimeoutInMillis, asyncHandler);
+    protected CompletableFuture<UploadResponse> uploadDocument(InputStream documentInputStream,
+                                                               String filename, long systemId,
+                                                               String password, String documentPool,
+                                                               String documentKey, String language,
+                                                               String ackKey) {
+        return uploadDocument(documentInputStream, filename, systemId, password, documentPool,
+                documentKey, language, ackKey, defaultConnectionTimeoutInMillis);
     }
 
-    protected void uploadDocument(InputStream documentInputStream, String filename, long systemId,
-                                  String password, String documentPool, String documentKey,
-                                  String language, String ackKey, Integer connectionTimeoutInMillis,
-                                  FutureCallback<UploadResponse> asyncHandler) {
+    protected CompletableFuture<UploadResponse> uploadDocument(InputStream documentInputStream,
+                                                               String filename, long systemId,
+                                                               String password, String documentPool,
+                                                               String documentKey, String language,
+                                                               String ackKey,
+                                                               Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
-        upload(movilizerUpload.getForm(documentInputStream, filename, systemId, password,
+        return upload(movilizerUpload.getForm(documentInputStream, filename, systemId, password,
                 documentPool, documentKey, language, getSuffixFromFilename(filename), ackKey),
-                connectionTimeoutInMillis, asyncHandler);
+                connectionTimeoutInMillis);
     }
 
-    protected void uploadDocument(Path documentFilePath, long systemId, String password,
-                                  String documentPool, String documentKey, String language,
-                                  String ackKey, FutureCallback<UploadResponse> asyncHandler) {
-        uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language,
-                ackKey, defaultConnectionTimeoutInMillis, asyncHandler);
+    protected CompletableFuture<UploadResponse> uploadDocument(Path documentFilePath,
+                                                               long systemId, String password,
+                                                               String documentPool,
+                                                               String documentKey,
+                                                               String language, String ackKey) {
+        return uploadDocument(documentFilePath, systemId, password, documentPool, documentKey,
+                language, ackKey, defaultConnectionTimeoutInMillis);
     }
 
-    protected void uploadDocument(Path documentFilePath, long systemId, String password,
-                                  String documentPool, String documentKey, String language,
-                                  String ackKey, Integer connectionTimeoutInMillis,
-                                  FutureCallback<UploadResponse> asyncHandler) {
+    protected CompletableFuture<UploadResponse> uploadDocument(Path documentFilePath,
+                                                               long systemId, String password,
+                                                               String documentPool,
+                                                               String documentKey, String language,
+                                                               String ackKey,
+                                                               Integer connectionTimeoutInMillis) {
         String suffix = getSuffixFromFilename(documentFilePath.getFileName());
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
-        upload(movilizerUpload.getForm(documentFilePath.toFile(), systemId, password, documentPool,
-                documentKey, language, suffix, ackKey), connectionTimeoutInMillis, asyncHandler);
+        return upload(movilizerUpload.getForm(documentFilePath.toFile(), systemId, password,
+                documentPool, documentKey, language, suffix, ackKey), connectionTimeoutInMillis);
     }
 
     private String getSuffixFromFilename(Path filename) {
         if (filename == null) {
-            throw new MovilizerWebServiceException(String.format(MESSAGES.MISSING_FILE_EXTENSION,
+            throw new MovilizerWebServiceException(String.format(Messages.MISSING_FILE_EXTENSION,
                     "null filename"));
         }
         return getSuffixFromFilename(filename.toString());
@@ -156,7 +163,7 @@ class UploadFileService {
 
     private String getSuffixFromFilename(String filename) {
         if (!filename.contains(".")) {
-            throw new MovilizerWebServiceException(String.format(MESSAGES.MISSING_FILE_EXTENSION,
+            throw new MovilizerWebServiceException(String.format(Messages.MISSING_FILE_EXTENSION,
                     filename));
         }
         String[] filenameSplit = filename.split("\\.");
@@ -174,9 +181,9 @@ class UploadFileService {
             if (!(HttpStatus.SC_OK <= statusCode && statusCode < HttpStatus.SC_MULTIPLE_CHOICES)) {
                 String errorMessage = response.getStatusLine().getReasonPhrase();
                 if (statusCode == POSSIBLE_BAD_CREDENTIALS) {
-                    errorMessage = errorMessage + MESSAGES.FAILED_FILE_UPLOAD_CREDENTIALS;
+                    errorMessage = errorMessage + Messages.FAILED_FILE_UPLOAD_CREDENTIALS;
                 }
-                throw new MovilizerWebServiceException(String.format(MESSAGES.FAILED_FILE_UPLOAD,
+                throw new MovilizerWebServiceException(String.format(Messages.FAILED_FILE_UPLOAD,
                         statusCode, errorMessage));
             }
             return new UploadResponse(
@@ -184,36 +191,39 @@ class UploadFileService {
                     response.getStatusLine().getReasonPhrase());
         } catch (IOException | URISyntaxException e) {
             if (logger.isErrorEnabled()) {
-                logger.error(String.format(MESSAGES.UPLOAD_ERROR, e.getMessage()));
+                logger.error(String.format(Messages.UPLOAD_ERROR, e.getMessage()));
             }
             throw new MovilizerWebServiceException(e);
         }
     }
 
-    private void upload(HttpEntity entity, Integer connectionTimeoutInMillis,
-                        FutureCallback<UploadResponse> asyncHandler) {
+    private CompletableFuture<UploadResponse> upload(HttpEntity entity,
+                                                     Integer connectionTimeoutInMillis) {
+        CompletableFuture<UploadResponse> future = new CompletableFuture<>();
         try {
+
             Async.newInstance().execute(Request.Post(documentUploadAddress.toURI())
                     .addHeader(USER_AGENT_HEADER_KEY, DefaultValues.USER_AGENT)
                     .connectTimeout(connectionTimeoutInMillis)
-                    .body(entity), new ResponseHandlerAdapter<UploadResponse>(asyncHandler) {
-                @Override
-                public UploadResponse convertHttpResponse(HttpResponse httpResponse) {
-                    logger.info(MESSAGES.UPLOAD_COMPLETE);
-                    int statusCode = httpResponse.getStatusLine().getStatusCode();
-                    String errorMessage = httpResponse.getStatusLine().getReasonPhrase();
-                    if (statusCode == POSSIBLE_BAD_CREDENTIALS) {
-                        errorMessage = errorMessage
-                                + MESSAGES.FAILED_FILE_UPLOAD_CREDENTIALS;
-                    }
-                    return new UploadResponse(statusCode, errorMessage);
-                }
-            });
+                    .body(entity), new ResponseHandlerAdapter<UploadResponse>(future) {
+                        @Override
+                        public UploadResponse convertHttpResponse(HttpResponse httpResponse) {
+                            logger.info(Messages.UPLOAD_COMPLETE);
+                            int statusCode = httpResponse.getStatusLine().getStatusCode();
+                            String errorMessage = httpResponse.getStatusLine().getReasonPhrase();
+                            if (statusCode == POSSIBLE_BAD_CREDENTIALS) {
+                                errorMessage = errorMessage +
+                                        Messages.FAILED_FILE_UPLOAD_CREDENTIALS;
+                            }
+                            return new UploadResponse(statusCode, errorMessage);
+                        }
+                    });
         } catch (URISyntaxException e) {
             if (logger.isErrorEnabled()) {
-                logger.error(String.format(MESSAGES.UPLOAD_ERROR, e.getMessage()));
+                logger.error(String.format(Messages.UPLOAD_ERROR, e.getMessage()));
             }
-            asyncHandler.onFailure(new MovilizerWebServiceException(e));
+            future.completeExceptionally(new MovilizerWebServiceException(e));
         }
+        return future;
     }
 }

@@ -16,7 +16,7 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v15.MovilizerRequest;
+import com.movilitas.movilizer.v16.MovilizerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,8 @@ class FolderLoaderService {
 
         Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
             @Override
-            public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs)
+                    throws IOException {
                 if (filePath.toString().endsWith(".mxml")) {
                     MovilizerRequest request = parserService.getRequestFromFile(filePath);
                     out.add(request);

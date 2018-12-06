@@ -16,8 +16,8 @@
 
 package com.movilizer.mds.webservice.services;
 
-import com.movilitas.movilizer.v15.MovilizerRequest;
-import com.movilitas.movilizer.v15.MovilizerResponse;
+import com.movilitas.movilizer.v16.MovilizerRequest;
+import com.movilitas.movilizer.v16.MovilizerResponse;
 
 import java.nio.file.Path;
 

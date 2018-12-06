@@ -32,7 +32,8 @@ public enum EndPoint {
     DEMO("https://demo.movilizer.com"),
     PROD("https://movilizer.com");
 
-    public static final String WEBSERVICE_RELATIVE_PATH = "/MovilizerDistributionService/WebService";
+    public static final String WEBSERVICE_RELATIVE_PATH =
+            "/MovilizerDistributionService/WebService";
     public static final String DOCUMENT_RELATIVE_PATH = "/MovilizerDistributionService/document";
     public static final String MAF_RELATIVE_PATH = "/MovilizerDistributionService/maf";
 
@@ -42,7 +43,7 @@ public enum EndPoint {
 
     EndPoint(final String cloudBaseUrl) {
         try {
-            final String mdsBase;
+            String mdsBase;
             if (cloudBaseUrl.endsWith("/")) {
                 mdsBase = cloudBaseUrl.substring(0, cloudBaseUrl.length() - 1);
             } else {
@@ -59,11 +60,11 @@ public enum EndPoint {
 
     @Override
     public String toString() {
-        return "EndPoint{"
-                + "mdsUrl='" + mdsUrl + '\''
-                + ", uploadUrl='" + uploadUrl + '\''
-                + ", mafUrl='" + mafUrl + '\''
-                + '}';
+        return "EndPoint{" +
+                "mdsUrl='" + mdsUrl + '\'' +
+                ", uploadUrl='" + uploadUrl + '\'' +
+                ", mafUrl='" + mafUrl + '\'' +
+                '}';
     }
 
     /**

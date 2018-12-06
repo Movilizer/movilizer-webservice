@@ -17,55 +17,53 @@
 package com.movilizer.mds.webservice.adapters;
 
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
-import com.movilizer.mds.webservice.models.FutureCallback;
+import com.movilizer.mds.webservice.messages.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.Response;
-import java.util.concurrent.ExecutionException;
+
 
 public class AsyncHandlerAdapter<T> implements AsyncHandler<T> {
     private static final Logger logger = LoggerFactory.getLogger(AsyncHandlerAdapter.class);
 
-    private FutureCallback<T> futureCallback;
+    private CompletableFuture<T> future;
 
-    public AsyncHandlerAdapter(FutureCallback<T> futureCallback) {
-        this.futureCallback = futureCallback;
+    public AsyncHandlerAdapter(CompletableFuture<T> future) {
+        this.future = future;
     }
 
     @Override
     public void handleResponse(Response<T> response) {
         if (response.isCancelled()) {
             if (logger.isErrorEnabled()) {
-                logger.error(MESSAGES.WEB_RESPONSE_CANCELED);
+                logger.error(Messages.WEB_RESPONSE_CANCELED);
             }
             Exception exception = new MovilizerWebServiceException(
-                    MESSAGES.REQUEST_CANCELLED_ERROR);
-            futureCallback.onFailure(exception);
-            futureCallback.onComplete(null, exception);
+                    Messages.REQUEST_CANCELLED_ERROR);
+            future.completeExceptionally(exception);
             return;
         }
         if (response.isDone()) {
             try {
                 if (logger.isTraceEnabled()) {
-                    logger.trace(MESSAGES.HANDLING_WEB_RESPONSE);
+                    logger.trace(Messages.HANDLING_WEB_RESPONSE);
                 }
                 T resInstance = response.get();
                 if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(MESSAGES.SUCCESSFUL_WEB_RESPONSE,
+                    logger.debug(String.format(Messages.SUCCESSFUL_WEB_RESPONSE,
                             resInstance.getClass().toString()));
                 }
-                futureCallback.onSuccess(resInstance);
-                futureCallback.onComplete(resInstance, null);
+                future.complete(resInstance);
             } catch (ExecutionException | InterruptedException e) {
-                futureCallback.onFailure(e);
-                futureCallback.onComplete(null, e);
+                future.completeExceptionally(e);
             }
         } else {
             if (logger.isErrorEnabled()) {
-                logger.error(MESSAGES.WEB_RESPONSE_NOT_DONE);
+                logger.error(Messages.WEB_RESPONSE_NOT_DONE);
             }
         }
     }

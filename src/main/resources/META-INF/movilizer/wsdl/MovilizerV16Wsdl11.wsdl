@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://movilitas.com/movilizer/v15" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://movilitas.com/movilizer/v15" targetNamespace="http://movilitas.com/movilizer/v15">
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://movilitas.com/movilizer/v16" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://movilitas.com/movilizer/v16" targetNamespace="http://movilitas.com/movilizer/v16">
   <wsdl:types xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-	  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://movilitas.com/movilizer/v15">
-		  <xsd:import namespace="http://movilitas.com/movilizer/v15" schemaLocation="MovilizerTypesV15.xsd"/>
+	  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://movilitas.com/movilizer/v16">
+		  <xsd:import namespace="http://movilitas.com/movilizer/v16" schemaLocation="MovilizerTypesV16.xsd"/>
 	  </xsd:schema>
   </wsdl:types>
   <wsdl:message name="MovilizerRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
@@ -12,15 +12,15 @@
     <wsdl:part element="tns:MovilizerResponse" name="MovilizerResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:portType name="MovilizerWebServiceV15" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:portType name="MovilizerWebServiceV16" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <wsdl:operation name="Movilizer" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
       <wsdl:input message="tns:MovilizerRequest" name="MovilizerRequest" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-    </wsdl:input>
+      </wsdl:input>
       <wsdl:output message="tns:MovilizerResponse" name="MovilizerResponse" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-    </wsdl:output>
+      </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="MovilizerWebServiceV15Soap11" type="tns:MovilizerWebServiceV15" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:binding name="MovilizerWebServiceV16Soap11" type="tns:MovilizerWebServiceV16" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     <wsdl:operation name="Movilizer" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
       <soap:operation soapAction="" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
@@ -32,8 +32,8 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="MovilizerWebServiceV15Service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-    <wsdl:port binding="tns:MovilizerWebServiceV15Soap11" name="MovilizerWebServiceV15Soap11" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:service name="MovilizerWebServiceV16Service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:port binding="tns:MovilizerWebServiceV16Soap11" name="MovilizerWebServiceV16Soap11" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
       <soap:address location="https://demo.movilizer.com/MovilizerDistributionService/WebService/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"/>
     </wsdl:port>
   </wsdl:service>

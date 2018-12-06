@@ -21,8 +21,8 @@ package com.movilizer.mds.webservice.models;
  * (com.movilitas.movilizer.v12.MovilizerParticipantConfiguration#passwordHashValue)
  *
  * @author Jesús de Mula Cano
- * @see com.movilitas.movilizer.v15.MovilizerParticipantConfiguration#passwordHashType
- * @see com.movilitas.movilizer.v15.MovilizerParticipantConfiguration#passwordHashValue
+ * @see com.movilitas.movilizer.v16.MovilizerParticipantConfiguration#passwordHashType
+ * @see com.movilitas.movilizer.v16.MovilizerParticipantConfiguration#passwordHashValue
  * @since 12.11.1.3
  */
 public enum PasswordHashTypes {
