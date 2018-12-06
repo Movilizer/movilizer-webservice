@@ -18,7 +18,7 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>15.11.2.1</version>
+        <version>16.11.2.2</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -37,10 +37,15 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
         <artifactId>fluent-hc</artifactId>
         <version>4.5.3</version>
     </dependency>
-    <!-- Online sync -->
+    <!-- Web service -->
     <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        <version>3.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-transports-http-hc</artifactId>
         <version>3.2.0</version>
     </dependency>
     <!-- MAF management -->
@@ -69,9 +74,10 @@ repositories {
 }
 
 ext {
-    movilizerWebserviceVersion = '15.11.2.1'
+    movilizerWebserviceVersion = '16.11.2.2'
     apacheHttpcomponentsVersion = '4.5.3'
     apacheCxfVersion = '3.2.0'
+    gsonVersion = '2.8.2'
 }
 
 dependencies {
@@ -82,7 +88,8 @@ dependencies {
     compile(group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxws', version: "$apacheCxfVersion") {
         exclude group: 'com.sun.xml.bind', module: "jaxb-impl"
     }
-    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: "$apacheCxfVersion"
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http-hc', version: "$apacheCxfVersion"
+    compile group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
 }
 
 ```

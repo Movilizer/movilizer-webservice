@@ -6,7 +6,7 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>15.11.2.1</version>
+    <version>16.11.2.2</version>
     <!-- Movilizer version v15 WSDL version 11 then internal java version 2.1 -->
 
     <name>Movilizer Web Service</name>
@@ -46,6 +46,11 @@
     </developers>
 
     <distributionManagement>
+        <snapshotRepository>
+            <id>movilizer-nexus</id>
+            <name>movilizer-nexus</name>
+            <url>https://nexus.tools.movilizer.cloud/repository/maven-snapshots/</url>
+        </snapshotRepository>
         <repository>
             <id>bintray-movilizer-maven</id>
             <name>movilizer-maven</name>
@@ -62,9 +67,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <config.location>com/movilizer/mds/webservice/plugin.properties</config.location>
         <movilizer.wsdl.folder>META-INF/movilizer/wsdl/</movilizer.wsdl.folder>
-        <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV15Wsdl11.wsdl</movilizer.wsdl.file>
-        <movilizer.xsd.file>${movilizer.wsdl.folder}MovilizerTypesV15.xsd</movilizer.xsd.file>
-        <movilizer.wsdl.online.file>${movilizer.wsdl.folder}MovilizerOnlineV15Wsdl11.wsdl</movilizer.wsdl.online.file>
+        <movilizer.wsdl.file>${movilizer.wsdl.folder}MovilizerV16Wsdl11.wsdl</movilizer.wsdl.file>
+        <movilizer.xsd.file>${movilizer.wsdl.folder}MovilizerTypesV16.xsd</movilizer.xsd.file>
+        <movilizer.wsdl.online.file>${movilizer.wsdl.folder}MovilizerOnlineV16Wsdl11.wsdl</movilizer.wsdl.online.file>
         <movilizer.wsdl.binding>${movilizer.wsdl.folder}movilizer_binding_wsdl.xml</movilizer.wsdl.binding>
         <movilizer.jaxb.binding>${movilizer.wsdl.folder}movilizer_binding_serializable.xml</movilizer.jaxb.binding>
         <!-- Logging -->
@@ -246,7 +251,7 @@
                 <version>0.7.9</version>
                 <configuration>
                     <excludes>
-                        <exclude>com/movilitas/movilizer/v15/**/*</exclude>
+                        <exclude>com.movilitas.movilizer.v16.**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -276,7 +281,7 @@
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.20</minimum>
+                                            <minimum>0.05</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -369,19 +374,6 @@
             <version>${logback.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Web Service Access -->
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-core</artifactId>
-            <version>${cxf.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-databinding-jaxb</artifactId>
-            <version>${cxf.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Upload documents -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -432,21 +424,21 @@
     <repositories>
         <repository>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
+            <id>movilizer-nexus</id>
+            <name>movilizer-nexus</name>
+            <url>https://nexus.tools.movilizer.cloud/</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
-            <id>central</id>
-            <name>bintray-plugins</name>
-            <url>http://jcenter.bintray.com</url>
+            <id>movilizer-nexus</id>
+            <name>movilizer-nexus</name>
+            <url>https://nexus.tools.movilizer.cloud/</url>
         </pluginRepository>
     </pluginRepositories>
 </project>

@@ -94,3 +94,25 @@ Features
 Configuration changes
 
 - PMD and checkstyle are now specified for static quality analysis
+
+## 15.11.2.2 (2017-11-xx)
+
+Breaking changes
+
+- Change async operations to use Java 8 CompletableFuture
+
+Minor fixes
+
+- Clean up code to comply with checkstyle and PMD
+
+## 16.11.2.2 (2018-12-xx)
+
+Features
+
+- Movilizer protocol version updated to v16
+
+Minor fixes
+
+- Add Jacoco
+- MAF tests
+- Use context inCircle CI for handling secrets needed during tests

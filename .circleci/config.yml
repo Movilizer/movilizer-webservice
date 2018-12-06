@@ -37,17 +37,20 @@ workflows:
   version: 2
   test:
       jobs:
-        - build
+        - build:
+            context: movilizer-webservice
 
   build-n-deploy:
     jobs:
       - build:
+          context: movilizer-webservice
           filters:
             tags:
               only: /.*/
             branches:
               ignore: /.*/
       - deploy:
+          context: movilizer-webservice
           requires:
             - build
           filters:
