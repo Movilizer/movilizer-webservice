@@ -120,13 +120,26 @@ public enum MovilizerCloudMessages {
         this.isError = isError;
     }
 
+    /**
+     * Generates an message object given the code of it.
+     *
+     * @param messageType code of the message.
+     * @return a message.
+     */
     public static MovilizerCloudMessages fromType(short messageType) {
         for (MovilizerCloudMessages message : MovilizerCloudMessages.values()) {
-            if ((short) message.getMessageType() == messageType) return message;
+            if ((short) message.getMessageType() == messageType) {
+                return message;
+            }
         }
         return UNKNOWN_EVENT_TYPE;
     }
 
+    /**
+     * Checks if the message code is an error.
+     *
+     * @param messageType code
+     */
     public static boolean isError(short messageType) {
         return isMovilizerMoveletError(messageType) ||
                 isMovilizerParticipantError(messageType) ||
@@ -134,16 +147,20 @@ public enum MovilizerCloudMessages {
                 fromType(messageType).isError();
     }
 
+    public boolean isError() {
+        return isError;
+    }
+
     public static boolean isMovilizerMoveletError(short messageType) {
-        return 1000 < messageType && messageType < 2000;
+        return 100 < messageType && messageType < 200;
     }
 
     public static boolean isMovilizerParticipantError(short messageType) {
-        return 2000 < messageType && messageType < 3000;
+        return 200 < messageType && messageType < 300;
     }
 
     public static boolean isMovilizerMasterdataError(short messageType) {
-        return 3000 < messageType && messageType < 4000;
+        return 300 < messageType && messageType < 400;
     }
 
     @Override
@@ -161,9 +178,5 @@ public enum MovilizerCloudMessages {
 
     public String getDescription() {
         return description;
-    }
-
-    public boolean isError() {
-        return isError;
     }
 }

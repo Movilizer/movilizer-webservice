@@ -5,18 +5,15 @@ import com.movilitas.movilizer.v15.MovilizerRequest;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
-public class MovilizerXMLParserServiceTestFixture {
+public abstract class MovilizerXMLParserServiceTestFixture {
 
     private static final String testRequestDir = "/requests";
     private static final String testEmptyRequestFilename = "ping-request.mxml";
@@ -24,7 +21,7 @@ public class MovilizerXMLParserServiceTestFixture {
     private static final String testMoveletKey = "com.movilizer.mds.webservice.createMoveletTest";
     private static final String testMoveletQuestionTitle = "Create simple movelet test request";
 
-    protected MovilizerXMLParserService xmlParserService;
+    public MovilizerXMLParserService xmlParserService;
 
     @Test
     public void testLoadEmptyRequest() throws Exception {
@@ -48,23 +45,23 @@ public class MovilizerXMLParserServiceTestFixture {
         assertThat(request.getMoveletSet().get(0).getMovelet().get(0).getQuestion().isEmpty(), is(false));
         assertThat(request.getMoveletSet().get(0).getMovelet().get(0).getQuestion().size(), is(1));
         assertThat(request.getMoveletSet().get(0).getMovelet().get(0).getQuestion().get(0).getTitle(),
-            is(testMoveletQuestionTitle));
+                is(testMoveletQuestionTitle));
     }
 
     @Test
     public void testLoadMoveletFromString() throws Exception {
         String moveletString = "" +
-            "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
-            "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
-            "    xmlns=\"http://movilitas.com/movilizer/v15\" >\n" +
-            "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
-            "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
-            "                    <text>This is a paragraph for the test movelet.</text>\n" +
-            "                </answer>\n" +
-            "                <text>Hi, this is a test movelet!</text>\n" +
-            "            </question>\n" +
-            "            <name>Create simple movelet test request</name>\n" +
-            "        </movelet>";
+                "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
+                "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
+                "    xmlns=\"http://movilitas.com/movilizer/v15\" >\n" +
+                "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
+                "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
+                "                    <text>This is a paragraph for the test movelet.</text>\n" +
+                "                </answer>\n" +
+                "                <text>Hi, this is a test movelet!</text>\n" +
+                "            </question>\n" +
+                "            <name>Create simple movelet test request</name>\n" +
+                "        </movelet>";
         MovilizerMovelet movelet = xmlParserService.getMovilizerElementFromString(moveletString, MovilizerMovelet.class);
         assertThat(movelet, is(notNullValue()));
         assertThat(movelet.getMoveletKey(), is(notNullValue()));

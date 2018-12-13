@@ -22,15 +22,15 @@ import com.movilizer.mds.webservice.services.MovilizerDistributionService;
 /**
  * Main class for the Movilizer webservice usage. It provides access to configuration builder for
  * the webservice and a shortcut for the webservice with default values.
- *
+ * <p>
  * Usage with defaults DEMO cloud values and UTF-8 for requests files:
- *
+ * <p>
  * <pre>
  * {@code
  * MovilizerDistributionService mds = Movilizer.getService();
  * }
  * </pre>
- *
+ * <p>
  * Usage giving your own values for private clouds:
  * <pre>
  * {@code
@@ -69,7 +69,7 @@ public final class Movilizer {
      * @since 12.11.1.0
      */
     public static MovilizerDistributionService getService() {
-        return (new MovilizerConfBuilder()).getService();
+        return new MovilizerConfBuilder().getService();
     }
 
     /**

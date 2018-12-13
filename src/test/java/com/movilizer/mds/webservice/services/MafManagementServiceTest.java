@@ -6,12 +6,12 @@ import com.movilizer.mds.webservice.models.maf.communications.MafGenericResponse
 import com.movilizer.mds.webservice.models.maf.communications.MafLibraryResponse;
 import com.movilizer.mds.webservice.models.maf.communications.MafResponse;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
-import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -31,6 +31,7 @@ public class MafManagementServiceTest {
     }
 
     @Test
+    @Ignore
     public void testDeployLibraryScriptSource() throws Exception {
         MafSource library = new MafLibraryScript(SYSTEM_ID, "", "Test library from J",
                 "com.movilizer.JTest", false, null);
@@ -45,6 +46,7 @@ public class MafManagementServiceTest {
     }
 
     @Test
+    @Ignore
     public void testLoadLibraryMeta() throws Exception {
         MafSource library = new MafLibraryScript(0L, "",
                 "Test library with valid syntax",
@@ -61,6 +63,7 @@ public class MafManagementServiceTest {
     }
 
     @Test
+    @Ignore
     public void testLoadEventScript() throws Exception {
         String scriptSrc = "import com.movilizer.ps.test.ValidLibraryScript\n\n"
                 + "ValidLibraryScript lib = new ValidLibraryScript(mafContext)";
@@ -79,6 +82,7 @@ public class MafManagementServiceTest {
     }
 
     @Test
+    @Ignore
     public void testDeployGenericScriptFile() throws Exception {
         MafSource generic = new MafGenericScript(SYSTEM_ID, "", "Test generic script for PS",
                 "", "");

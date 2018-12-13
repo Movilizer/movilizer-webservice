@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerMAFManagementException;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
+import com.movilizer.mds.webservice.messages.Messages;
 import com.movilizer.mds.webservice.models.maf.MafCliMetaFile;
 import com.movilizer.mds.webservice.models.maf.MafSource;
 import com.movilizer.mds.webservice.models.maf.communications.MafRequest;
@@ -77,7 +77,7 @@ class MafManagementService {
         String metaFileName = sourceFile.getName().replace(GROOVY_EXTENSION, META_FILE_EXTENSION);
         Path metaFilePath = sourceFile.toPath().resolveSibling(metaFileName);
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.LOADING_MAF_METADATA, metaFilePath.toString()));
+            logger.debug(String.format(Messages.LOADING_MAF_METADATA, metaFilePath.toString()));
         }
         return gson.fromJson(new FileReader(metaFilePath.toFile()), MafCliMetaFile.class);
     }
@@ -109,7 +109,7 @@ class MafManagementService {
                 MafResponseClassFactory.getInstance().getResponseClass(source));
 
         if (!result.getSuccessful()) {
-            throw new MovilizerWebServiceException(String.format(MESSAGES.MAF_UPLOAD_FAILED,
+            throw new MovilizerWebServiceException(String.format(Messages.MAF_UPLOAD_FAILED,
                     result.getErrorMessage()));
         }
 
@@ -127,7 +127,7 @@ class MafManagementService {
             if (!(HttpStatus.SC_OK <= statusCode && statusCode < HttpStatus.SC_MULTIPLE_CHOICES)) {
                 String errorMessage = response.getStatusLine().getReasonPhrase();
                 throw new MovilizerWebServiceException(String.format(
-                        MESSAGES.MAF_UPLOAD_FAILED_WITH_CODE, statusCode, errorMessage));
+                        Messages.MAF_UPLOAD_FAILED_WITH_CODE, statusCode, errorMessage));
             }
             return response.getEntity();
         } catch (IOException | URISyntaxException e) {

@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.movilizer.mds.webservice.exceptions.MovilizerIOException;
 import com.movilizer.mds.webservice.models.maf.MafSource;
@@ -31,8 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.movilitas.movilizer.v15.MovilizerRequest;
 import com.movilitas.movilizer.v15.MovilizerResponse;
-import com.movilizer.mds.webservice.messages.MESSAGES;
-import com.movilizer.mds.webservice.models.FutureCallback;
+import com.movilizer.mds.webservice.messages.Messages;
 import com.movilizer.mds.webservice.models.UploadResponse;
 
 class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
@@ -57,7 +57,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MovilizerRequest prepareUploadRequest(Long systemId, String password, MovilizerRequest request) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PREPARE_UPLOAD_REQUEST, systemId));
+            logger.debug(String.format(Messages.PREPARE_UPLOAD_REQUEST, systemId));
         }
         return webService.prepareUploadRequest(systemId, password, request);
     }
@@ -70,7 +70,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            logger.debug(String.format(Messages.PERFORMING_REQUEST, request.getSystemId()));
         }
         return webService.getReplyFromCloudSync(request);
     }
@@ -78,25 +78,25 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MovilizerResponse getReplyFromCloudSync(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            logger.debug(String.format(Messages.PERFORMING_REQUEST, request.getSystemId()));
         }
         return webService.getReplyFromCloudSync(request, connectionTimeoutInMillis, receiveTimeoutInMillis);
     }
 
     @Override
-    public void getReplyFromCloud(MovilizerRequest request, FutureCallback<MovilizerResponse> asyncHandler) {
+    public CompletableFuture<MovilizerResponse> getReplyFromCloud(MovilizerRequest request) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            logger.debug(String.format(Messages.PERFORMING_REQUEST, request.getSystemId()));
         }
-        webService.getReplyFromCloud(request, asyncHandler);
+        return webService.getReplyFromCloud(request);
     }
 
     @Override
-    public void getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis, FutureCallback<MovilizerResponse> asyncHandler) {
+    public CompletableFuture<MovilizerResponse> getReplyFromCloud(MovilizerRequest request, Integer connectionTimeoutInMillis, Integer receiveTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_REQUEST, request.getSystemId()));
+            logger.debug(String.format(Messages.PERFORMING_REQUEST, request.getSystemId()));
         }
-        webService.getReplyFromCloud(request, connectionTimeoutInMillis, receiveTimeoutInMillis, asyncHandler);
+        return webService.getReplyFromCloud(request, connectionTimeoutInMillis, receiveTimeoutInMillis);
     }
 
     @Override
@@ -127,7 +127,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
         return uploadFileService.uploadDocumentSync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
     }
@@ -135,7 +135,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
         return uploadFileService.uploadDocumentSync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
     }
@@ -143,55 +143,55 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public UploadResponse uploadDocumentSync(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
         return uploadFileService.uploadDocumentSync(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis);
     }
 
     @Override
-    public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) {
+    public CompletableFuture<UploadResponse> uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
-        uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
+        return uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey);
     }
 
     @Override
     public UploadResponse uploadDocumentSync(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
         return uploadFileService.uploadDocumentSync(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis);
     }
 
     @Override
-    public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, FutureCallback<UploadResponse> asyncHandler) {
+    public CompletableFuture<UploadResponse> uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
-        uploadFileService.uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, asyncHandler);
+        return uploadFileService.uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey);
     }
 
     @Override
-    public void uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) {
+    public CompletableFuture<UploadResponse> uploadDocument(InputStream documentInputStream, String filename, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
-        uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis, asyncHandler);
+        return uploadFileService.uploadDocument(documentInputStream, filename, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis);
     }
 
     @Override
-    public void uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis, FutureCallback<UploadResponse> asyncHandler) {
+    public CompletableFuture<UploadResponse> uploadDocument(Path documentFilePath, long systemId, String password, String documentPool, String documentKey, String language, String ackKey, Integer connectionTimeoutInMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PERFORMING_UPLOAD, systemId));
+            logger.debug(String.format(Messages.PERFORMING_UPLOAD, systemId));
         }
-        uploadFileService.uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis, asyncHandler);
+        return uploadFileService.uploadDocument(documentFilePath, systemId, password, documentPool, documentKey, language, ackKey, connectionTimeoutInMillis);
     }
 
     @Override
     public <T> T getElementFromString(String elementString, Class<T> movilizerElementClass) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PARSING_XML, movilizerElementClass.getName()));
+            logger.debug(String.format(Messages.PARSING_XML, movilizerElementClass.getName()));
         }
         return parserService.getMovilizerElementFromString(elementString, movilizerElementClass);
     }
@@ -199,7 +199,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public <T> String printMovilizerElementToString(T movilizerElement, Class<T> movilizerElementClass) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PRINTING_XML, movilizerElementClass.getName()));
+            logger.debug(String.format(Messages.PRINTING_XML, movilizerElementClass.getName()));
         }
         return parserService.printMovilizerElementToString(movilizerElement, movilizerElementClass);
     }
@@ -207,7 +207,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MovilizerRequest getRequestFromFile(Path filePath) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.READING_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
+            logger.debug(String.format(Messages.READING_REQUEST_FROM_FILE, filePath.toAbsolutePath().toString()));
         }
         return parserService.getRequestFromFile(filePath);
     }
@@ -215,7 +215,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MovilizerRequest getRequestFromString(String requestString) {
         if (logger.isDebugEnabled()) {
-            logger.debug(MESSAGES.READING_REQUEST_FROM_STRING);
+            logger.debug(Messages.READING_REQUEST_FROM_STRING);
         }
         return parserService.getRequestFromString(requestString);
     }
@@ -233,7 +233,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public void saveRequestToFile(MovilizerRequest request, Path filePath) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.SAVING_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
+            logger.debug(String.format(Messages.SAVING_REQUEST_TO_FILE, filePath.toAbsolutePath().toString()));
         }
         parserService.saveRequestToFile(request, filePath);
     }
@@ -241,7 +241,7 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MafSource readSource(File sourceFile) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.READ_MAF_SCRIPT_FILE, sourceFile.getPath()));
+            logger.debug(String.format(Messages.READ_MAF_SCRIPT_FILE, sourceFile.getPath()));
         }
         return this.mafService.readSource(sourceFile);
     }
@@ -249,11 +249,11 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MafResponse deploySourceSync(long systemId, String password, String token, MafSource source) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PROCESSING_MAF_SOURCE, source.getDescription()));
+            logger.debug(String.format(Messages.PROCESSING_MAF_SOURCE, source.getDescription()));
         }
         MafResponse response = this.mafService.deploySourceSync(systemId, password, token, source);
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.FINISHED_UPLOADING_MAF_SOURCE, source.getDescription(), systemId));
+            logger.debug(String.format(Messages.FINISHED_UPLOADING_MAF_SOURCE, source.getDescription(), systemId));
         }
         return response;
     }
@@ -261,11 +261,11 @@ class MovilizerDistributionServiceImpl implements MovilizerDistributionService {
     @Override
     public MafResponse deploySourceSync(long systemId, String password, String token, File sourceFile) {
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.PROCESSING_MAF_SOURCE_FILE, sourceFile.getPath()));
+            logger.debug(String.format(Messages.PROCESSING_MAF_SOURCE_FILE, sourceFile.getPath()));
         }
         MafResponse response = this.mafService.deploySourceSync(systemId, password, token, sourceFile);
         if (logger.isDebugEnabled()) {
-            logger.debug(String.format(MESSAGES.FINISHED_UPLOADING_MAF_SOURCE_FILE, sourceFile.getPath(), systemId));
+            logger.debug(String.format(Messages.FINISHED_UPLOADING_MAF_SOURCE_FILE, sourceFile.getPath(), systemId));
         }
         return response;
     }

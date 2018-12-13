@@ -19,17 +19,18 @@ package com.movilizer.mds.webservice.services;
 import com.movilitas.movilizer.v15.MovilizerRequest;
 import com.movilitas.movilizer.v15.MovilizerResponse;
 import com.movilizer.mds.webservice.exceptions.MovilizerXMLException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
+import com.movilizer.mds.webservice.messages.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.*;
-import javax.xml.namespace.QName;
-import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.xml.bind.*;
+import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamSource;
+
 
 class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
     private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
@@ -41,7 +42,8 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
         this.outputEncoding = outputEncoding;
         try {
 
-            // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version-of-jaxb-for-jax-ws-in-java-1-6
+            // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version
+            // -of-jaxb-for-jax-ws-in-java-1-6
             System.setProperty("javax.xml.bind.JAXBContext",
                     "com.sun.xml.internal.bind.v2.ContextFactory");
 
@@ -55,7 +57,7 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
                 @Override
                 public boolean handleEvent(final ValidationEvent event) {
                     if (logger.isErrorEnabled()) {
-                        logger.error(MESSAGES.UNMARSHALLING_XML_ERROR + event.getMessage());
+                        logger.error(Messages.UNMARSHALLING_XML_ERROR + event.getMessage());
                     }
                     return true;
                 }
@@ -77,11 +79,11 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
                                              final Class<T> movilizerElementClass) {
         if (!Files.exists(elementPath)) {
             if (logger.isErrorEnabled()) {
-                logger.error(MESSAGES.REQUEST_FILE_NOT_FOUND
-                        + elementPath.toAbsolutePath().toString());
+                logger.error(Messages.REQUEST_FILE_NOT_FOUND +
+                        elementPath.toAbsolutePath().toString());
             }
-            throw new MovilizerXMLException(MESSAGES.REQUEST_FILE_NOT_FOUND
-                    + elementPath.toAbsolutePath().toString());
+            throw new MovilizerXMLException(Messages.REQUEST_FILE_NOT_FOUND +
+                    elementPath.toAbsolutePath().toString());
         }
         JAXBElement<T> root;
         try {
@@ -97,9 +99,9 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
                                                final Class<T> movilizerElementClass) {
         if (elementString == null) {
             if (logger.isErrorEnabled()) {
-                logger.error(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+                logger.error(Messages.REQUEST_STRING_MUST_NOT_BE_NULL);
             }
-            throw new MovilizerXMLException(MESSAGES.REQUEST_STRING_MUST_NOT_BE_NULL);
+            throw new MovilizerXMLException(Messages.REQUEST_STRING_MUST_NOT_BE_NULL);
         }
         JAXBElement<T> root;
         try {
@@ -148,7 +150,7 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
     public void saveRequestToFile(final MovilizerRequest request, final Path filePath) {
         final boolean foldersHaveBeenCreated = filePath.toFile().getParentFile().mkdirs();
         if (foldersHaveBeenCreated && logger.isTraceEnabled()) {
-            logger.trace(String.format(MESSAGES.FOLDERS_CREATED, filePath));
+            logger.trace(String.format(Messages.FOLDERS_CREATED, filePath));
         }
         BufferedWriter fileWriter;
         try {
@@ -159,7 +161,7 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
         try {
             movilizerXMLMarshaller.marshal(request, fileWriter);
             if (logger.isInfoEnabled()) {
-                logger.info(String.format(MESSAGES.SUCCESSFUL_REQUEST_TO_FILE,
+                logger.info(String.format(Messages.SUCCESSFUL_REQUEST_TO_FILE,
                         filePath.toAbsolutePath().toString()));
             }
         } catch (JAXBException e) {
@@ -169,7 +171,7 @@ class MovilizerXMLParserServiceImpl implements MovilizerXMLParserService {
                 fileWriter.close();
             } catch (IOException e) {
                 if (logger.isErrorEnabled()) {
-                    logger.error(MESSAGES.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
+                    logger.error(Messages.CANNOT_CLOSE_FILE + filePath.toAbsolutePath());
                 }
             }
         }

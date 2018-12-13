@@ -17,8 +17,7 @@
 package com.movilizer.mds.webservice.adapters;
 
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
-import com.movilizer.mds.webservice.messages.MESSAGES;
-import com.movilizer.mds.webservice.models.FutureCallback;
+import com.movilizer.mds.webservice.messages.Messages;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ResponseHandler;
@@ -26,14 +25,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ResponseHandlerAdapter<T> implements ResponseHandler<T> {
     private static final Logger logger = LoggerFactory.getLogger(ResponseHandlerAdapter.class);
 
-    private FutureCallback<T> futureCallback;
+    private CompletableFuture<T> future;
 
-    public ResponseHandlerAdapter(FutureCallback<T> futureCallback) {
-        this.futureCallback = futureCallback;
+    public ResponseHandlerAdapter(CompletableFuture<T> future) {
+        this.future = future;
     }
 
     public abstract T convertHttpResponse(HttpResponse httpResponse);
@@ -41,28 +41,29 @@ public abstract class ResponseHandlerAdapter<T> implements ResponseHandler<T> {
     @Override
     public T handleResponse(HttpResponse httpResponse) throws IOException {
         if (logger.isTraceEnabled()) {
-            logger.trace(MESSAGES.HANDLING_HTTP_RESPONSE);
+            logger.trace(Messages.HANDLING_HTTP_RESPONSE);
         }
         if (!wasSuccessful(httpResponse)) {
             if (logger.isErrorEnabled()) {
-                logger.error(String.format(MESSAGES.FAILED_REQUEST_ERROR,
+                logger.error(String.format(Messages.FAILED_REQUEST_ERROR,
                         httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().getReasonPhrase()));
             }
             Exception exception = new MovilizerWebServiceException(
-                    String.format(MESSAGES.FAILED_REQUEST_ERROR,
+                    String.format(Messages.FAILED_REQUEST_ERROR,
                             httpResponse.getStatusLine().getStatusCode(),
                             httpResponse.getStatusLine().getReasonPhrase()));
-            futureCallback.onFailure(exception);
-            futureCallback.onComplete(null, exception);
+            future.completeExceptionally(exception);
             return null;
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug(String.format(MESSAGES.SUCCESSFUL_HTTP_RESPONSE,
+                logger.debug(String.format(Messages.SUCCESSFUL_HTTP_RESPONSE,
                         httpResponse.getStatusLine().getStatusCode()));
             }
         }
-        return convertHttpResponse(httpResponse);
+        T out = convertHttpResponse(httpResponse);
+        future.complete(out);
+        return out;
     }
 
     private boolean wasSuccessful(HttpResponse response) {
