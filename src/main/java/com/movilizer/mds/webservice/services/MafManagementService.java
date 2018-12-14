@@ -17,6 +17,7 @@
 package com.movilizer.mds.webservice.services;
 
 import com.google.gson.Gson;
+
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.exceptions.MovilizerMAFManagementException;
 import com.movilizer.mds.webservice.exceptions.MovilizerWebServiceException;
@@ -58,11 +59,11 @@ class MafManagementService {
         this.defaultConnectionTimeoutInMillis = defaultConnectionTimeoutInMillis;
     }
 
-    public void setMafBaseAddress(URL mafBaseAddress) {
+    protected void setMafBaseAddress(URL mafBaseAddress) {
         this.mafBaseAddress = mafBaseAddress;
     }
 
-    public MafSource readSource(File sourceFile) {
+    protected MafSource readSource(File sourceFile) {
         try {
             MafCliMetaFile meta = readMetaFile(sourceFile);
             String scriptSrc = new String(Files.readAllBytes(sourceFile.toPath()));
@@ -82,13 +83,13 @@ class MafManagementService {
         return gson.fromJson(new FileReader(metaFilePath.toFile()), MafCliMetaFile.class);
     }
 
-    public MafResponse deploySourceSync(long systemId, String password, String token,
+    protected MafResponse deploySourceSync(long systemId, String password, String token,
                                         File sourceFile) {
         MafSource source = readSource(sourceFile);
         return deploySourceSync(systemId, password, token, source);
     }
 
-    public MafResponse deploySourceSync(long systemId, String password, String token,
+    protected MafResponse deploySourceSync(long systemId, String password, String token,
                                         MafSource source) {
         // Override system id in meta file
         source.setScriptSystemId(systemId);

@@ -105,3 +105,8 @@ Minor fixes
 
 - Clean up code to comply with checkstyle and PMD
 
+## 15.11.2.3 (2018-12-xx)
+
+Minor fixes
+
+- Fix cloudBase URL settings ignoring any extra relative path

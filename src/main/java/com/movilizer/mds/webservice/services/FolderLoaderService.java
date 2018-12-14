@@ -44,7 +44,8 @@ class FolderLoaderService {
 
         Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
             @Override
-            public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs)
+                    throws IOException {
                 if (filePath.toString().endsWith(".mxml")) {
                     MovilizerRequest request = parserService.getRequestFromFile(filePath);
                     out.add(request);

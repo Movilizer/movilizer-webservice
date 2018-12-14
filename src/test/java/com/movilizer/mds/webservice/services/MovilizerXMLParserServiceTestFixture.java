@@ -98,17 +98,17 @@ public abstract class MovilizerXMLParserServiceTestFixture {
     @Test
     public void testPrintMoveletToString() throws Exception {
         String moveletString = "" +
-            "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
-            "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
-            "    xmlns=\"http://movilitas.com/movilizer/v15\" >\n" +
-            "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
-            "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
-            "                    <text>This is a paragraph for the test movelet.</text>\n" +
-            "                </answer>\n" +
-            "                <text>Hi, this is a test movelet!</text>\n" +
-            "            </question>\n" +
-            "            <name>Create simple movelet test request</name>\n" +
-            "        </movelet>";
+                "<movelet moveletKey=\"com.movilizer.mds.webservice.createMoveletTest\" moveletVersion=\"1\"" +
+                "    moveletKeyExtension=\"DEV\" moveletType=\"MULTI\" initialQuestionKey=\"#1\" " +
+                "    xmlns=\"http://movilitas.com/movilizer/v15\" >\n" +
+                "            <question type=\"0\" key=\"#1\" title=\"Create simple movelet test request\">\n" +
+                "                <answer key=\"#1_1\" nextQuestionKey=\"END\" position=\"0\" action=\"NONE\">\n" +
+                "                    <text>This is a paragraph for the test movelet.</text>\n" +
+                "                </answer>\n" +
+                "                <text>Hi, this is a test movelet!</text>\n" +
+                "            </question>\n" +
+                "            <name>Create simple movelet test request</name>\n" +
+                "        </movelet>";
         MovilizerMovelet movelet = xmlParserService.getMovilizerElementFromString(moveletString, MovilizerMovelet.class);
         String printedMovelet = xmlParserService.printMovilizerElementToString(movelet, MovilizerMovelet.class);
         assertThat(printedMovelet, is(notNullValue()));
@@ -117,7 +117,7 @@ public abstract class MovilizerXMLParserServiceTestFixture {
 
         //Double check!!
         MovilizerMovelet moveletFromOutput = xmlParserService.getMovilizerElementFromString(printedMovelet,
-            MovilizerMovelet.class);
+                MovilizerMovelet.class);
         assertThat(moveletFromOutput, is(notNullValue()));
         assertThat(moveletFromOutput.getMoveletKey(), is(notNullValue()));
         assertThat(moveletFromOutput.getMoveletKey(), is(testMoveletKey));

@@ -6,7 +6,6 @@ import com.movilitas.movilizer.v15.MovilizerWebServiceV15;
 import com.movilitas.movilizer.v15.MovilizerWebServiceV15Service;
 import com.movilizer.mds.webservice.defaults.DefaultValues;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

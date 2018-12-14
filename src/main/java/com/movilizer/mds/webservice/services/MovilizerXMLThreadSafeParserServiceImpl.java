@@ -23,17 +23,15 @@ import com.movilizer.mds.webservice.messages.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.*;
-import javax.xml.namespace.QName;
-import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.xml.bind.*;
+import javax.xml.namespace.QName;
+import javax.xml.transform.stream.StreamSource;
 
-/**
- * TODO: create real threadsafe implementation and test it accordingly
- */
+
 class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserService {
     private static final Logger logger = LoggerFactory.getLogger(MovilizerWebService.class);
     private final Charset outputEncoding;
@@ -54,11 +52,11 @@ class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserServi
                                              final Class<T> movilizerElementClass) {
         if (!Files.exists(filePath)) {
             if (logger.isErrorEnabled()) {
-                logger.error(Messages.REQUEST_FILE_NOT_FOUND
-                        + filePath.toAbsolutePath().toString());
+                logger.error(Messages.REQUEST_FILE_NOT_FOUND +
+                        filePath.toAbsolutePath().toString());
             }
-            throw new MovilizerXMLException(Messages.REQUEST_FILE_NOT_FOUND
-                    + filePath.toAbsolutePath().toString());
+            throw new MovilizerXMLException(Messages.REQUEST_FILE_NOT_FOUND +
+                    filePath.toAbsolutePath().toString());
         }
         JAXBElement<T> root;
         final Unmarshaller movilizerXMLUnmarshaller = getUnmarshaller();
@@ -133,13 +131,13 @@ class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserServi
             logger.trace(String.format(Messages.FOLDERS_CREATED, filePath));
         }
         BufferedWriter fileWriter;
-        final Marshaller movilizerXMLMarshaller = getMarshaller();
         try {
             fileWriter = Files.newBufferedWriter(filePath, outputEncoding);
         } catch (IOException e) {
             throw new MovilizerXMLException(e);
         }
         try {
+            Marshaller movilizerXMLMarshaller = getMarshaller();
             movilizerXMLMarshaller.marshal(request, fileWriter);
             if (logger.isInfoEnabled()) {
                 logger.info(String.format(Messages.SUCCESSFUL_REQUEST_TO_FILE,
@@ -159,7 +157,8 @@ class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserServi
     }
 
     private Unmarshaller getUnmarshaller() {
-        // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version-of-jaxb-for-jax-ws-in-java-1-6
+        // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version
+        // -of-jaxb-for-jax-ws-in-java-1-6
         System.setProperty("javax.xml.bind.JAXBContext",
                 "com.sun.xml.internal.bind.v2.ContextFactory");
         try {
@@ -182,7 +181,8 @@ class MovilizerXMLThreadSafeParserServiceImpl implements MovilizerXMLParserServi
     }
 
     private Marshaller getMarshaller() {
-        // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version-of-jaxb-for-jax-ws-in-java-1-6
+        // see: http://stackoverflow.com/questions/14162159/supplying-a-different-version
+        // -of-jaxb-for-jax-ws-in-java-1-6
         System.setProperty("javax.xml.bind.JAXBContext",
                 "com.sun.xml.internal.bind.v2.ContextFactory");
         try {

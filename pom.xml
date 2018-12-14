@@ -6,7 +6,7 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>15.11.2.2</version>
+    <version>15.11.2.3</version>
     <!-- Movilizer version v15 WSDL version 11 then internal java version 2.1 -->
 
     <name>Movilizer Web Service</name>
@@ -251,7 +251,7 @@
                 <version>0.7.9</version>
                 <configuration>
                     <excludes>
-                        <exclude>com/movilitas/movilizer/v15/**/*</exclude>
+                        <exclude>com.movilitas.movilizer.v15.**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>

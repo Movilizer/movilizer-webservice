@@ -4,7 +4,6 @@ import com.movilizer.mds.webservice.defaults.DefaultValues;
 import com.movilizer.mds.webservice.models.MovilizerUploadForm;
 import com.movilizer.mds.webservice.models.UploadResponse;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

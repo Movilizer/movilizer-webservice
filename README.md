@@ -18,7 +18,7 @@ Either use this as `jar` in your libs folder or add it using maven as follows:
     <dependency>
         <groupId>com.movilizer.mds</groupId>
         <artifactId>movilizer-webservice</artifactId>
-        <version>15.11.2.1</version>
+        <version>15.11.2.3</version>
     </dependency>
     <!-- Extra libs not included -->
     <!-- Upload documents -->
@@ -74,7 +74,7 @@ repositories {
 }
 
 ext {
-    movilizerWebserviceVersion = '15.11.2.1'
+    movilizerWebserviceVersion = '15.11.2.3'
     apacheHttpcomponentsVersion = '4.5.3'
     apacheCxfVersion = '3.2.0'
     gsonVersion = '2.8.2'
