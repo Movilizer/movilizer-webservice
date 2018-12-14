@@ -32,10 +32,10 @@ public enum EndPoint {
     DEMO("https://demo.movilizer.com"),
     PROD("https://movilizer.com");
 
-    public static final String WEBSERVICE_RELATIVE_PATH =
-            "/MovilizerDistributionService/WebService";
-    public static final String DOCUMENT_RELATIVE_PATH = "/MovilizerDistributionService/document";
-    public static final String MAF_RELATIVE_PATH = "/MovilizerDistributionService/maf";
+    public static final String MDS_RELATIVE_PATH = "MovilizerDistributionService/";
+    public static final String WEBSERVICE_RELATIVE_PATH = "WebService";
+    public static final String DOCUMENT_RELATIVE_PATH = "document";
+    public static final String MAF_RELATIVE_PATH =  "maf";
 
     private final URL mdsUrl;
     private final URL uploadUrl;
@@ -47,9 +47,9 @@ public enum EndPoint {
             if (!cloudBaseUrl.endsWith("/")) {
                 mdsBase = cloudBaseUrl + "/";
             }
-            mdsUrl = URI.create(mdsBase + WEBSERVICE_RELATIVE_PATH).toURL();
-            uploadUrl = URI.create(mdsBase + DOCUMENT_RELATIVE_PATH).toURL();
-            mafUrl = URI.create(mdsBase + MAF_RELATIVE_PATH).toURL();
+            mdsUrl = URI.create(mdsBase + MDS_RELATIVE_PATH + WEBSERVICE_RELATIVE_PATH).toURL();
+            uploadUrl = URI.create(mdsBase + MDS_RELATIVE_PATH + DOCUMENT_RELATIVE_PATH).toURL();
+            mafUrl = URI.create(mdsBase + MDS_RELATIVE_PATH + MAF_RELATIVE_PATH).toURL();
         } catch (MalformedURLException e) {
             throw new MovilizerWebServiceException(e);
         }
