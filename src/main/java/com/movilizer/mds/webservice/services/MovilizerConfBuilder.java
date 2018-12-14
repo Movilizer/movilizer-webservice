@@ -28,8 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
@@ -187,7 +185,11 @@ public class MovilizerConfBuilder {
      */
     public MovilizerConfBuilder setEndpoint(String cloudBaseAddress)
             throws MalformedURLException {
-        setEndpoint(URI.create(cloudBaseAddress));
+        String mdsBase = cloudBaseAddress;
+        if (!cloudBaseAddress.endsWith("/")) {
+            mdsBase = cloudBaseAddress + "/";
+        }
+        setEndpoint(URI.create(mdsBase));
         return this;
     }
 

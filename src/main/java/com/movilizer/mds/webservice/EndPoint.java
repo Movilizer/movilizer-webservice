@@ -43,11 +43,9 @@ public enum EndPoint {
 
     EndPoint(final String cloudBaseUrl) {
         try {
-            String mdsBase;
-            if (cloudBaseUrl.endsWith("/")) {
-                mdsBase = cloudBaseUrl.substring(0, cloudBaseUrl.length() - 1);
-            } else {
-                mdsBase = cloudBaseUrl;
+            String mdsBase = cloudBaseUrl;
+            if (!cloudBaseUrl.endsWith("/")) {
+                mdsBase = cloudBaseUrl + "/";
             }
             mdsUrl = URI.create(mdsBase + WEBSERVICE_RELATIVE_PATH).toURL();
             uploadUrl = URI.create(mdsBase + DOCUMENT_RELATIVE_PATH).toURL();
