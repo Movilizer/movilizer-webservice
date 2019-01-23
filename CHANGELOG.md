@@ -110,3 +110,9 @@ Minor fixes
 Minor fixes
 
 - Fix cloudBase URL settings ignoring any extra relative path
+
+## 15.11.2.4 (2019-01-23)
+
+Features
+
+- Add configurable MDS relative path

@@ -54,6 +54,7 @@ public class MovilizerConfBuilder {
     private Charset outputEncoding = DefaultValues.OUTPUT_ENCODING;
     private EndPoint endpoint = DefaultValues.MOVILIZER_ENDPOINT;
     private URI cloudBaseAddress;
+    private String mdsRelativePath;
     private Integer defaultConnectionTimeoutInMillis = DefaultValues.CONNECTION_TIMEOUT_IN_MILLIS;
     private Integer defaultReceiveTimeoutInMillis = DefaultValues.RECEIVE_TIMEOUT_IN_MILLIS;
     private String agentId = DefaultValues.AGENT_ID;
@@ -102,25 +103,8 @@ public class MovilizerConfBuilder {
         MafManagementService mafService = new MafManagementService(endpoint.getMafUrl(),
                 defaultConnectionTimeoutInMillis);
 
-        if (cloudBaseAddress != null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace(String.format(Messages.USING_PRIVATE_CONFIG,
-                        cloudBaseAddress.toString()));
-            }
-            try {
-                webService.setEndpoint(cloudBaseAddress.resolve(
-                        EndPoint.WEBSERVICE_RELATIVE_PATH).toURL());
-                uploadFileService.setDocumentUploadAddress(cloudBaseAddress.resolve(
-                        EndPoint.DOCUMENT_RELATIVE_PATH).toURL());
-                mafService.setMafBaseAddress(cloudBaseAddress.resolve(
-                        EndPoint.MAF_RELATIVE_PATH).toURL());
-            } catch (MalformedURLException e) {
-                throw new MovilizerWebServiceException(e);
-            }
-        } else {
-            if (logger.isTraceEnabled()) {
-                logger.trace(String.format(Messages.USING_PUBLIC_CONFIG, endpoint.name()));
-            }
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(Messages.USING_CLOUD_CONFIG, endpoint.toString()));
         }
 
         FolderLoaderService loaderService = new FolderLoaderService(parserService);
@@ -138,6 +122,10 @@ public class MovilizerConfBuilder {
         return cloudBaseAddress;
     }
 
+    protected String getMdsRelativePath() {
+        return mdsRelativePath;
+    }
+
     protected EndPoint getEndpoint() {
         return endpoint;
     }
@@ -153,7 +141,7 @@ public class MovilizerConfBuilder {
     public MovilizerConfBuilder setEndpoint(EndPoint endpoint) {
         this.endpoint = endpoint;
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(Messages.SET_ENDPOINT, endpoint.name()));
+            logger.trace(String.format(Messages.SET_ENDPOINT, endpoint.toString()));
         }
         return this;
     }
@@ -171,7 +159,7 @@ public class MovilizerConfBuilder {
         if (logger.isTraceEnabled()) {
             logger.trace(String.format(Messages.SET_PRIVATE_ENDPOINT, cloudBaseAddress.toString()));
         }
-        return this;
+        return setEndpoint(new EndPoint(cloudBaseAddress.toString()));
     }
 
     /**
@@ -190,6 +178,47 @@ public class MovilizerConfBuilder {
             mdsBase = cloudBaseAddress + "/";
         }
         setEndpoint(URI.create(mdsBase));
+        return this;
+    }
+
+    /**
+     * URLs to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param cloudBaseAddress the URI of the Movilizer cloud. I.e.: https//demo.movilizer.com
+     * @param mdsRelativePath  the relative URL of the Movilizer Distribution Service. I.e.: mds/
+     * @return this to be able to chain calls in a fluid API way.
+     * @see EndPoint
+     * @since 15.11.2.4
+     */
+    public MovilizerConfBuilder setEndpoint(URI cloudBaseAddress, String mdsRelativePath) {
+        this.cloudBaseAddress = cloudBaseAddress;
+        this.mdsRelativePath = mdsRelativePath;
+        if (logger.isTraceEnabled()) {
+            logger.trace(String.format(
+                    Messages.SET_PRIVATE_ENDPOINT_WITH_CUSTOM_MDS,
+                    cloudBaseAddress.toString(),
+                    mdsRelativePath));
+        }
+        return setEndpoint(new EndPoint(cloudBaseAddress.toString(), mdsRelativePath));
+    }
+
+    /**
+     * URLs to be used in the <tt>MovilizerDistributionService</tt> instance.
+     *
+     * @param cloudBaseAddress the URL of the Movilizer cloud. I.e.: https//demo.movilizer.com
+     * @param mdsRelativePath  the relative URL of the Movilizer Distribution Service. I.e.: mds/
+     * @return this to be able to chain calls in a fluid API way.
+     * @throws MalformedURLException when any url given is not valid
+     * @see EndPoint
+     * @since 15.11.2.4
+     */
+    public MovilizerConfBuilder setEndpoint(String cloudBaseAddress, String mdsRelativePath)
+            throws MalformedURLException {
+        String mdsBase = cloudBaseAddress;
+        if (!cloudBaseAddress.endsWith("/")) {
+            mdsBase = cloudBaseAddress + "/";
+        }
+        setEndpoint(URI.create(mdsBase), mdsRelativePath);
         return this;
     }
 

@@ -6,7 +6,7 @@
     <groupId>com.movilizer.mds</groupId>
     <artifactId>movilizer-webservice</artifactId>
     <packaging>jar</packaging>
-    <version>15.11.2.3</version>
+    <version>15.11.2.4</version>
     <!-- Movilizer version v15 WSDL version 11 then internal java version 2.1 -->
 
     <name>Movilizer Web Service</name>
@@ -175,7 +175,7 @@
                     <!--</dependency>-->
                 <!--</dependencies>-->
                 <configuration>
-                    <fork>once</fork>
+                    <fork>false</fork>
                     <defaultOptions>
                         <markGenerated>true</markGenerated>
                         <faultSerialVersionUID>1</faultSerialVersionUID>

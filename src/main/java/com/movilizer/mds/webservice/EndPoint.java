@@ -28,32 +28,39 @@ import java.net.URL;
  * @author Jesús de Mula Cano
  * @since 12.11.1.0
  */
-public enum EndPoint {
-    DEMO("https://demo.movilizer.com"),
-    PROD("https://movilizer.com");
+public class EndPoint {
+    public static final EndPoint DEMO = new EndPoint("https://demo.movilizer.com");
+    public static final EndPoint PROD = new EndPoint("https://movilizer.com");
 
     public static final String MDS_RELATIVE_PATH = "MovilizerDistributionService/";
     public static final String WEBSERVICE_RELATIVE_PATH = "WebService";
     public static final String DOCUMENT_RELATIVE_PATH = "document";
-    public static final String MAF_RELATIVE_PATH =  "maf";
+    public static final String MAF_RELATIVE_PATH = "maf";
 
     private final URL mdsUrl;
     private final URL uploadUrl;
     private final URL mafUrl;
 
-    EndPoint(final String cloudBaseUrl) {
+    public EndPoint(final String cloudBaseUrl) {
+        this(cloudBaseUrl, MDS_RELATIVE_PATH);
+    }
+
+    public EndPoint(final String cloudBaseUrl, final String mdsRelativePath) {
         try {
             String mdsBase = cloudBaseUrl;
             if (!cloudBaseUrl.endsWith("/")) {
                 mdsBase = cloudBaseUrl + "/";
             }
-            mdsUrl = URI.create(mdsBase + MDS_RELATIVE_PATH + WEBSERVICE_RELATIVE_PATH).toURL();
-            uploadUrl = URI.create(mdsBase + MDS_RELATIVE_PATH + DOCUMENT_RELATIVE_PATH).toURL();
-            mafUrl = URI.create(mdsBase + MDS_RELATIVE_PATH + MAF_RELATIVE_PATH).toURL();
+            String mds = mdsRelativePath;
+            if (!mdsRelativePath.endsWith("/")) {
+                mds = mdsRelativePath + "/";
+            }
+            mdsUrl = URI.create(mdsBase + mds + WEBSERVICE_RELATIVE_PATH).toURL();
+            uploadUrl = URI.create(mdsBase + mds + DOCUMENT_RELATIVE_PATH).toURL();
+            mafUrl = URI.create(mdsBase + mds + MAF_RELATIVE_PATH).toURL();
         } catch (MalformedURLException e) {
             throw new MovilizerWebServiceException(e);
         }
-
     }
 
     @Override

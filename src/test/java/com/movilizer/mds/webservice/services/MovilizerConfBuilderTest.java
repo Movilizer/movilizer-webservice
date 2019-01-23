@@ -18,7 +18,9 @@ import static org.hamcrest.Matchers.notNullValue;
 public class MovilizerConfBuilderTest {
 	private static long SYSTEM_ID = 0L;
 	private static String PASSWORD = "";
-	private static String cloudBaseAddress = "http://demo.movilizer.com/mds/";
+	private static String cloudBaseAddress = "https://demo.movilizer.com/";
+	private static String cloudBaseAddressCustomMds = "https://test.dev.movilizer.cloud/";
+	private static String mdsRelativePath = "op-main-mds/";
 	private MovilizerConfBuilder builder;
 	private MovilizerRequest request;
 
@@ -31,9 +33,22 @@ public class MovilizerConfBuilderTest {
 	}
 
 	@Test
-	public void testSetCustomMdsUrl() throws Exception {
+	public void testSetCustomCloudBaseAddress() throws Exception {
 		builder.setEndpoint(cloudBaseAddress);
 		assertThat(builder.getCloudBaseAddress(), is(URI.create(cloudBaseAddress)));
+
+		MovilizerDistributionService service = builder.getService();
+		MovilizerResponse response = service.getReplyFromCloudSync(request);
+		assertThat(response, is(notNullValue()));
+		assertThat(service.responseHasErrors(response), is(false));
+	}
+
+	@Test
+	public void testSetCustomMdsUrl() throws Exception {
+		builder.setEndpoint(cloudBaseAddressCustomMds, mdsRelativePath);
+		assertThat(builder.getCloudBaseAddress(), is(URI.create(cloudBaseAddressCustomMds)));
+		assertThat(builder.getMdsRelativePath(), is(mdsRelativePath));
+
 		MovilizerDistributionService service = builder.getService();
 		MovilizerResponse response = service.getReplyFromCloudSync(request);
 		assertThat(response, is(notNullValue()));

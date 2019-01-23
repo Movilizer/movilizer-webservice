@@ -59,11 +59,11 @@ public final class Messages {
             " done yet.";
     public static final String BUILDING_CONFIG = "Building service from configuration";
     public static final String USING_ENCODING = "Using encoding '%s'";
-    public static final String USING_PRIVATE_CONFIG = "Using private cloud configuration type" +
-            " with url '%s'";
-    public static final String USING_PUBLIC_CONFIG = "Using public '%s' cloud configuration";
+    public static final String USING_CLOUD_CONFIG = "Using cloud configuration: '%s'";
     public static final String SET_ENDPOINT = "Set endpoint to '%s'";
     public static final String SET_PRIVATE_ENDPOINT = "Set endpoint to private cloud '%s'";
+    public static final String SET_PRIVATE_ENDPOINT_WITH_CUSTOM_MDS = "Set endpoint to private cloud '%s' with mds" +
+            " '%s'";
     public static final String SET_ENCODING = "Set encoding '%s'";
     public static final String SET_CONNECTION_TIMEOUT = "Set default connection timeout to '%d'";
     public static final String SET_RECEIVE_TIMEOUT = "Set default receive timeout to '%d'";
