@@ -62,6 +62,7 @@
         <cxf.version>3.2.7</cxf.version>
         <java.version>1.8</java.version>
         <maven-plugins.version>3.7.0</maven-plugins.version>
+        <maven-surefire.version>2.12.4</maven-surefire.version>
         <checkstyle.version>8.3</checkstyle.version>
         <pmd.version>3.8</pmd.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -161,6 +162,16 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <configuration>
+                    <!-- CircleCI build workaround -->
+                    <forkMode>never</forkMode>
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
             <plugin>
@@ -345,11 +356,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.gavinmogan</groupId>
-                <artifactId>codacy-maven-plugin</artifactId>
-                <version>1.0.3</version>
             </plugin>
         </plugins>
     </build>
